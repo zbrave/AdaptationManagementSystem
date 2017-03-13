@@ -24,7 +24,7 @@ public class MyDBAuthenticationService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserInfo userInfo = userInfoDAO.findUserInfo(username);
         System.out.println("UserInfo= " + userInfo);
- 
+        
         if (userInfo == null) {
             throw new UsernameNotFoundException("User " + username + " was not found in the database");
         }
@@ -43,7 +43,7 @@ public class MyDBAuthenticationService implements UserDetailsService {
          
         UserDetails userDetails = (UserDetails) new User(userInfo.getUserName(), //
                 userInfo.getPassword(),grantList);
- 
+        
         return userDetails;
     }
      

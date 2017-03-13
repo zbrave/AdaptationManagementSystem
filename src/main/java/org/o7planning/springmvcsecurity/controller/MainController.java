@@ -12,8 +12,7 @@ public class MainController {
  
    @RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
    public String welcomePage(Model model) {
-       model.addAttribute("title", "Welcome");
-       model.addAttribute("message", "This is welcome page!");
+       model.addAttribute("title", "İntibak Yönetim Sistemi");
        return "welcomePage";
    }
  
@@ -39,10 +38,15 @@ public class MainController {
  
        // After user login successfully.
        String userName = principal.getName();
- 
-       System.out.println("User Name: "+ userName);
+
        model.addAttribute("message", userName);
        return "userInfoPage";
+   }
+   
+   @RequestMapping(value = "/newRule", method = RequestMethod.GET)
+   public String newRulePage(Model model) {
+	   
+       return "newRulePage";
    }
  
    @RequestMapping(value = "/403", method = RequestMethod.GET)

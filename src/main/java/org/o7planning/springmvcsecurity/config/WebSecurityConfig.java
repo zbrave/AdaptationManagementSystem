@@ -1,12 +1,15 @@
 package org.o7planning.springmvcsecurity.config;
- 
+
 import org.o7planning.springmvcsecurity.authentication.MyDBAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
  
 @Configuration
 // @EnableWebSecurity = @EnableWebMVCSecurity + Extra features
@@ -16,6 +19,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Autowired
     MyDBAuthenticationService myDBAauthenticationService;
+    
  
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -25,8 +29,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.inMemoryAuthentication().withUser("user1").password("12345").roles("USER");
         auth.inMemoryAuthentication().withUser("admin1").password("12345").roles("USER", "ADMIN");
  
-        // For User in database.
+        // For User in database without Bcrypt.
         auth.userDetailsService(myDBAauthenticationService);
+        
+        // Bcrypt
+        auth.userDetailsService(myDBAauthenticationService).passwordEncoder(passwordEncoder());
  
     }
  
@@ -63,4 +70,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/logoutSuccessful");
  
     }
+    
+    @Bean
+	public PasswordEncoder passwordEncoder(){
+		PasswordEncoder encoder = new BCryptPasswordEncoder();
+		return encoder;
+	}
 }

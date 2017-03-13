@@ -1,29 +1,47 @@
+<%@page session="true"%>
+<%@ page pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
- 
+<!DOCTYPE html>
 <html>
 <head>
 	<spring:url value="/resources/css/bootstrap.css" var="bootstrapCSS" />
 	<spring:url value="/resources/js/bootstrap.js" var="bootstrapJS" />
-	<spring:url value="/resources/others/login.css" var="loginCSS" />
-	<spring:url value="/resources/others/login.js" var="loginJS" />
-	<spring:url value="/resources/others/navbar.css" var="navbarCSS" />
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<spring:url value="/resources/others/ams.css" var="amsCSS" />
+	<spring:url value="/resources/others/ams.js" var="amsJS" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<link href="${bootstrapCSS}" rel="stylesheet" />
 	<script src="${bootstrapJS}"></script>
-	<link href="${loginCSS}" rel="stylesheet" />
-	<script src="${loginJS}"></script>
-	<link href="${navbarCSS}" rel="stylesheet" />
+	<link href="${amsCSS}" rel="stylesheet" />
+	<script src="${amsJS}"></script>
 	<title>Login</title>	
 </head>
 <body>
-   <jsp:include page="_menu.jsp" />
+	<nav class="navbar">
+	<div class="menu">
+	    <div class="container-fluid">
+			<div class="navbar-header">
+				<a href="#">Bootsnipp</a>
+			</div>
+			<div>
+				<ul class="nav navbar-nav navbar-right" id="nav">
+					<li><a href="${pageContext.request.contextPath}/welcome" ><span class="glyphicon glyphicon-user"></span> Home</a></li>
+					<li><a href="${pageContext.request.contextPath}/userInfo"><span class="glyphicon glyphicon-log-in"></span> User Info</a></li>
+					<li><a href="${pageContext.request.contextPath}/admin" ><span class="glyphicon glyphicon-user"></span> Admin</a></li>
+					<c:if test="${pageContext.request.userPrincipal.name != null}">
+						<li><a href="${pageContext.request.contextPath}/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+					</c:if>
+				</ul>
+			</div>
+		</div>
+	</div>
+	</nav>
     
      
       
   <div class="container">
   
-  <div class="row" id="pwd-container">
+  <div class="row" id="loginbox">
     <div class="col-md-4"></div>
     
     <div class="col-md-4">
@@ -48,7 +66,48 @@
           
           <button type="submit" name="go" class="btn btn-lg btn-primary btn-block">Giris Yap</button>
           <div>
-            <a href="#">Yeni hesap ac</a> yada <a href="#">Sifremi unuttum</a>
+            <a href="#" onclick="$('#loginbox').hide(); $('#signupbox').show()">Yeni hesap ac</a> yada <a href="#">Sifremi unuttum</a>
+          </div>
+          
+        </form>
+        
+        <div class="form-links">
+          <a href="#">www.website.com</a>
+        </div>
+      </section>  
+      </div>
+      
+      <div class="col-md-4"></div>
+      
+
+  </div>
+  <!-- Register Form -->
+  <div class="row" id="signupbox" style="display:none">
+    <div class="col-md-4"></div>
+    
+    <div class="col-md-4">
+      <section class="login-form">
+        <form method="post" action="${pageContext.request.contextPath}/j_spring_security_check" role="login" method='POST'>
+          <img src="http://www.yildiz.edu.tr/images/files/ytulogopng.png" class="img-responsive" alt="" style="width:50%"/>
+          <h3 class="text-center">Yildiz Teknik Universitesi</h3>
+		  <h4 class="text-center">Intibak Yönetim Sistemi</h4>
+		  <!-- /login?error=true -->
+     <c:if test="${param.error == 'true'}">
+        <div class="alert alert-danger" role="alert">
+  			<a href="#" class="alert-link">Login Failed!!!<br />
+                Reason :  ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</a>
+		</div>
+    </c:if>
+          <input type='text' class="form-control" id="username" placeholder="Username" name='username' value=''>          
+          <input type='password' class="form-control" id="password" placeholder="Password" name='password' />
+                    
+          
+          <div class="pwstrength_viewport_progress"></div>
+          
+          
+          <button type="submit" name="go" class="btn btn-lg btn-primary btn-block">Kayıt ol</button>
+          <div>
+            <a href="#" onclick="$('#signupbox').hide(); $('#loginbox').show()">Yeni hesap ac</a> yada <a href="#">Sifremi unuttum</a>
           </div>
           
         </form>
