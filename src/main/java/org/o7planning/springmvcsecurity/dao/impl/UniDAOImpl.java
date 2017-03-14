@@ -1,7 +1,6 @@
 package org.o7planning.springmvcsecurity.dao.impl;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -28,9 +27,11 @@ public class UniDAOImpl implements UniDAO {
 
 	@Override
 	public List<UniInfo> listUniInfos() {
+		// sql query has to have exact names from own class variable 
 		String sql = "Select new " + UniInfo.class.getName()//
                 + "(a.id, a.name) "//
                 + " from " + Uni.class.getName() + " a ";
+		System.out.println(sql.toString());
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery(sql);
         return query.list();
@@ -74,7 +75,10 @@ public class UniDAOImpl implements UniDAO {
 
 	@Override
 	public void deleteUni(Integer id) {
-		System.out.println("deleteUni worked. bla bla....");
+		Uni uni = this.findUni(id);
+        if (uni != null) {
+            this.sessionFactory.getCurrentSession().delete(uni);
+        }
 		
 	}
 

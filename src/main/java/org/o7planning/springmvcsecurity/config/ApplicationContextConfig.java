@@ -5,7 +5,13 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
+import org.o7planning.springmvcsecurity.dao.DeptDAO;
+import org.o7planning.springmvcsecurity.dao.SubstituteLessonDAO;
+import org.o7planning.springmvcsecurity.dao.TakingLessonDAO;
 import org.o7planning.springmvcsecurity.dao.UniDAO;
+import org.o7planning.springmvcsecurity.dao.impl.DeptDAOImpl;
+import org.o7planning.springmvcsecurity.dao.impl.SubstituteLessonDAOImpl;
+import org.o7planning.springmvcsecurity.dao.impl.TakingLessonDAOImpl;
 import org.o7planning.springmvcsecurity.dao.impl.UniDAOImpl;
 //import org.o7planning.springmvcsecurity.dao.UserInfoDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,6 +116,21 @@ public class ApplicationContextConfig {
   @Bean(name = "UniDAO")
   public UniDAO getUniDAO() {
       return new UniDAOImpl();
+  }
+  
+  @Bean(name = "DeptDAO")
+  public DeptDAO getDeptDAO() {
+      return new DeptDAOImpl();
+  }
+  
+  @Bean(name = "TakingLessonDAO")
+  public TakingLessonDAO getTakingLessonDAO() {
+      return new TakingLessonDAOImpl();
+  }
+  
+  @Bean(name = "SubstituteLessonDAO")
+  public SubstituteLessonDAO getSubstituteLessonDAO() {
+      return new SubstituteLessonDAOImpl();
   }
  
 }

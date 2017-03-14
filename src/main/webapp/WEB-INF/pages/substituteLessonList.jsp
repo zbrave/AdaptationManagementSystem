@@ -24,24 +24,29 @@
  
  
  
-<a href="${pageContext.request.contextPath}/createUni">Create Uni</a>
+<a href="${pageContext.request.contextPath}/createSubstituteLesson">Create SubstituteLesson</a>
  
 <br/>
  
  
 <table border="1">
  <tr>
-   <th>Name</th>
+ 	<th>TakingLesson Id</th>
+   <th>Code</th>
+   <th>Credit</th>
+   <th>AKTS</th>
    <th>Delete</th>
    <th>Edit</th>
  </tr>
- <c:forEach items="${uniInfos}" var="info">
- 
+ <c:forEach items="${substituteLessonInfos}" var="info">
  <tr>
-   <td> ${info.name}  </td>
-   <td> <a href="deleteUni?id=${info.id}">Delete</a> </td>
-   <td> <a href="editUni?id=${info.id}">Edit</a> </td>
- </tr>    
+ 	<td> ${info.takingLessonId}  </td>
+   <td> ${info.code}  </td>
+   <td> ${info.credit}  </td>
+   <td> ${info.akts}  </td>
+   <td> <a href="deleteSubstituteLesson?id=${info.id}">Delete</a> </td>
+   <td> <a href="editSubstituteLesson?id=${info.id}">Edit</a> </td>
+ </tr>   
  
  </c:forEach>
 </table>

@@ -1,17 +1,18 @@
 package org.o7planning.springmvcsecurity.model;
 
-public class UniInfo {
-	
+public class DeptInfo {
 	private Integer id;
+	private Integer uniId;
     private String name;
-	
-    public UniInfo() {
-    	
-    }
     
-    public UniInfo(Integer id, String name) {
+	public DeptInfo() {
+		super();
+	}
+
+	public DeptInfo(Integer id, Integer uniId, String name) {
 		super();
 		this.id = id;
+		this.uniId = uniId;
 		this.name = name;
 	}
 
@@ -23,6 +24,14 @@ public class UniInfo {
 		this.id = id;
 	}
 
+	public Integer getUniId() {
+		return uniId;
+	}
+
+	public void setUniId(Integer uniId) {
+		this.uniId = uniId;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -30,6 +39,7 @@ public class UniInfo {
 	public void setName(String name) {
 		this.name = name;
 	}
-    
+	
+	
     
 }

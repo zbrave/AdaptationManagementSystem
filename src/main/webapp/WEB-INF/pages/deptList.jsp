@@ -24,24 +24,25 @@
  
  
  
-<a href="${pageContext.request.contextPath}/createUni">Create Uni</a>
+<a href="${pageContext.request.contextPath}/createDept">Create Dept</a>
  
 <br/>
  
  
 <table border="1">
  <tr>
+ 	<th>Uni id</th>
    <th>Name</th>
    <th>Delete</th>
    <th>Edit</th>
  </tr>
- <c:forEach items="${uniInfos}" var="info">
- 
+ <c:forEach items="${deptInfos}" var="info">
  <tr>
+ 	<td> ${info.uniId}  </td>
    <td> ${info.name}  </td>
-   <td> <a href="deleteUni?id=${info.id}">Delete</a> </td>
-   <td> <a href="editUni?id=${info.id}">Edit</a> </td>
- </tr>    
+   <td> <a href="deleteDept?id=${info.id}">Delete</a> </td>
+   <td> <a href="editDept?id=${info.id}">Edit</a> </td>
+ </tr>   
  
  </c:forEach>
 </table>
