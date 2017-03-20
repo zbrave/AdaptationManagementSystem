@@ -7,15 +7,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.o7planning.springmvcsecurity.dao.DeptDAO;
+import org.o7planning.springmvcsecurity.dao.RulesDAO;
 import org.o7planning.springmvcsecurity.dao.SubstituteLessonDAO;
 import org.o7planning.springmvcsecurity.dao.TakingLessonDAO;
 import org.o7planning.springmvcsecurity.dao.UniDAO;
 import org.o7planning.springmvcsecurity.model.DeptInfo;
+import org.o7planning.springmvcsecurity.model.RulesInfo;
 import org.o7planning.springmvcsecurity.model.SubstituteLessonInfo;
 import org.o7planning.springmvcsecurity.model.TakingLessonInfo;
 import org.o7planning.springmvcsecurity.model.UniInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -47,6 +48,9 @@ public class MainController {
 
 	@Autowired
 	private SubstituteLessonDAO substituteLessonDAO;
+	
+	@Autowired
+	private RulesDAO rulesDAO;
 
 	/*	@Autowired
 	private UniValidator uniValidator;*/
@@ -328,7 +332,7 @@ public class MainController {
 		String res = "<option id=-1 value=-1>Alınan ders seçin.</option>";
 		List<TakingLessonInfo> list = this.takingLessonDAO.listTakingLessonFromDept(id);
 		for (TakingLessonInfo tmp : list) {
-			res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+">"+tmp.getCode()+"</option>");
+			res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+">"+tmp.getName()+"</option>");
 		}
 		return res;
 	}
@@ -407,6 +411,14 @@ public class MainController {
 		if (result.hasErrors()) {
 			return this.formTakingLesson(model, takingLessonInfo);
 		}
+		String decodedToUTF8;
+		try {
+			decodedToUTF8 = new String(takingLessonInfo.getName().getBytes("ISO-8859-1"), "UTF-8");
+			takingLessonInfo.setName(decodedToUTF8);
+		} catch (UnsupportedEncodingException e) {
+			System.out.println("Dept name cannot converted.");
+			e.printStackTrace();
+		}
 
 		this.takingLessonDAO.saveTakingLesson(takingLessonInfo);
 
@@ -424,6 +436,17 @@ public class MainController {
 		List<SubstituteLessonInfo> list = substituteLessonDAO.listSubstituteLessonInfos();
 		model.addAttribute("substituteLessonInfos", list);
 		return "substituteLessonList";
+	}
+	
+	@RequestMapping(value="/getSubstituteLesson",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
+	@ResponseBody
+	public String getSubstituteLesson() {
+		String res = "<option id=-1 value=-1>Ders seçin.</option>";
+		List<SubstituteLessonInfo> list = this.substituteLessonDAO.listSubstituteLessonInfos();
+		for (SubstituteLessonInfo tmp : list) {
+			res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+">"+tmp.getName()+"</option>");
+		}
+		return res;
 	}
 
 	private String formSubstituteLesson(Model model, SubstituteLessonInfo substituteLessonInfo) {
@@ -493,6 +516,14 @@ public class MainController {
 		if (result.hasErrors()) {
 			return this.formSubstituteLesson(model, substituteLessonInfo);
 		}
+		String decodedToUTF8;
+		try {
+			decodedToUTF8 = new String(substituteLessonInfo.getName().getBytes("ISO-8859-1"), "UTF-8");
+			substituteLessonInfo.setName(decodedToUTF8);
+		} catch (UnsupportedEncodingException e) {
+			System.out.println("Dept name cannot converted.");
+			e.printStackTrace();
+		}
 
 		this.substituteLessonDAO.saveSubstituteLesson(substituteLessonInfo);
 
@@ -501,6 +532,93 @@ public class MainController {
 		redirectAttributes.addFlashAttribute("message4", "Verilen Ders Eklendi.");
 
 //		return "redirect:/substituteLessonList";
+		return "redirect:/addRules";
+	}
+	
+	/* Rules Section */
+	
+	@RequestMapping("/rulesList")
+	public String rulesList(Model model) {
+		List<RulesInfo> list = rulesDAO.listRulesInfos();
+		model.addAttribute("rulesInfos", list);
+		return "rulesList";
+	}
+
+	private String formRules(Model model, RulesInfo rulesInfo) {
+		model.addAttribute("rulesForm", rulesInfo);
+
+		Map<Integer, String> uniMap = this.uniList();
+
+		model.addAttribute("uniMap", uniMap);
+		
+		Map<Integer, String> deptMap = this.deptList();
+
+		model.addAttribute("deptMap", deptMap);
+		
+		Map<Integer, String> takingLessonMap = this.takingLessonList();
+
+		model.addAttribute("takingLessonMap", takingLessonMap);
+		
+
+		//				       List<String> list = dataForSkills();
+		//				       model.addAttribute("skills", list);
+
+		if (rulesInfo.getId() == null) {
+			model.addAttribute("formTitle", "Create Rules");
+		} else {
+			model.addAttribute("formTitle", "Edit Rules");
+		}
+
+		return "formRules";
+	}
+
+	@RequestMapping("/createRules")
+	public String createRules(Model model) {
+
+		RulesInfo rulesInfo = new RulesInfo();
+
+		return this.formRules(model, rulesInfo);
+	}
+
+	@RequestMapping("/editRules")
+	public String editRules(Model model, @RequestParam("id") Integer id) {
+		RulesInfo rulesInfo = null;
+		if (id != null) {
+			rulesInfo = this.rulesDAO.findRulesInfo(id);
+		}
+		if (rulesInfo == null) {
+			return "redirect:/rulesList";
+		}
+
+		return this.formRules(model, rulesInfo);
+	}
+
+	@RequestMapping("/deleteRules")
+	public String deleteRules(Model model, @RequestParam("id") Integer id) {
+		if (id != null) {
+			this.rulesDAO.deleteRules(id);
+		}
+		return "redirect:/rulesList";
+	}
+
+	@RequestMapping(value = "/saveRules", method = RequestMethod.POST)
+	public String saveRules(Model model, //
+			@ModelAttribute("rulesForm") @Validated RulesInfo rulesInfo, //
+			BindingResult result, //
+			final RedirectAttributes redirectAttributes) {
+
+
+		if (result.hasErrors()) {
+			return this.formRules(model, rulesInfo);
+		}
+
+		this.rulesDAO.saveRules(rulesInfo);
+
+		// Important!!: Need @EnableWebMvc
+		// Add message to flash scope
+		redirectAttributes.addFlashAttribute("message5", "Verilen Kural Eklendi.");
+
+//		return "redirect:/rulesList";
 		return "redirect:/addRules";
 	}
 }

@@ -3,23 +3,30 @@ package org.o7planning.springmvcsecurity.model;
 public class SubstituteLessonInfo {
 	
 	private Integer id;
-	private Integer takingLessonId;
+	private String name;
 	private String code;
+	private String lang;
 	private Integer credit;
 	private Integer akts;
+	private Integer term;
 	
 	public SubstituteLessonInfo() {
 		super();
 	}
 
-	public SubstituteLessonInfo(Integer id, Integer takingLessonId, String code, Integer credit, Integer akts) {
+	public SubstituteLessonInfo(Integer id, String name, String code, String lang, Integer credit, Integer akts,
+			Integer term) {
 		super();
 		this.id = id;
-		this.takingLessonId = takingLessonId;
+		this.name = name;
 		this.code = code;
+		this.lang = lang;
 		this.credit = credit;
 		this.akts = akts;
+		this.term = term;
 	}
+
+
 
 	public Integer getId() {
 		return id;
@@ -29,12 +36,12 @@ public class SubstituteLessonInfo {
 		this.id = id;
 	}
 
-	public Integer getTakingLessonId() {
-		return takingLessonId;
+	public String getName() {
+		return name;
 	}
 
-	public void setTakingLessonId(Integer takingLessonId) {
-		this.takingLessonId = takingLessonId;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getCode() {
@@ -43,6 +50,14 @@ public class SubstituteLessonInfo {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public String getLang() {
+		return lang;
+	}
+
+	public void setLang(String lang) {
+		this.lang = lang;
 	}
 
 	public Integer getCredit() {
@@ -60,7 +75,13 @@ public class SubstituteLessonInfo {
 	public void setAkts(Integer akts) {
 		this.akts = akts;
 	}
-	
-	
+
+	public Integer getTerm() {
+		return term;
+	}
+
+	public void setTerm(Integer term) {
+		this.term = term;
+	}
 	
 }

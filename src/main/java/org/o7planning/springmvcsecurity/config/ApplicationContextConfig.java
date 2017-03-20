@@ -6,10 +6,12 @@ import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
 import org.o7planning.springmvcsecurity.dao.DeptDAO;
+import org.o7planning.springmvcsecurity.dao.RulesDAO;
 import org.o7planning.springmvcsecurity.dao.SubstituteLessonDAO;
 import org.o7planning.springmvcsecurity.dao.TakingLessonDAO;
 import org.o7planning.springmvcsecurity.dao.UniDAO;
 import org.o7planning.springmvcsecurity.dao.impl.DeptDAOImpl;
+import org.o7planning.springmvcsecurity.dao.impl.RulesDAOImpl;
 import org.o7planning.springmvcsecurity.dao.impl.SubstituteLessonDAOImpl;
 import org.o7planning.springmvcsecurity.dao.impl.TakingLessonDAOImpl;
 import org.o7planning.springmvcsecurity.dao.impl.UniDAOImpl;
@@ -131,6 +133,11 @@ public class ApplicationContextConfig {
   @Bean(name = "SubstituteLessonDAO")
   public SubstituteLessonDAO getSubstituteLessonDAO() {
       return new SubstituteLessonDAOImpl();
+  }
+  
+  @Bean(name = "RulesDAO")
+  public RulesDAO getRulesDAO() {
+      return new RulesDAOImpl();
   }
  
 }

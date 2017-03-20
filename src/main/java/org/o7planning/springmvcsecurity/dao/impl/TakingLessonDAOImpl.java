@@ -29,7 +29,7 @@ public class TakingLessonDAOImpl implements TakingLessonDAO {
 	public List<TakingLessonInfo> listTakingLessonInfos() {
 		// sql query has to have exact names from own class variable 
 		String sql = "Select new " + TakingLessonInfo.class.getName()//
-                + "(a.id, a.deptId, a.code, a.credit, a.akts) "//
+                + "(a.id, a.deptId, a.name, a.code, a.lang, a.credit, a.akts, a.term) "//
                 + " from " + TakingLesson.class.getName() + " a ";
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery(sql);
@@ -40,7 +40,7 @@ public class TakingLessonDAOImpl implements TakingLessonDAO {
 	public List<TakingLessonInfo> listTakingLessonFromDept(Integer id) {
 		// sql query has to have exact names from own class variable 
 		String sql = "Select new " + TakingLessonInfo.class.getName()//
-                + "(a.id, a.deptId, a.code, a.credit, a.akts) "//
+                + "(a.id, a.deptId, a.name, a.code, a.lang, a.credit, a.akts, a.term) "//
                 + " from " + TakingLesson.class.getName() + " a where a.deptId = :code";
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery(sql);
@@ -63,9 +63,16 @@ public class TakingLessonDAOImpl implements TakingLessonDAO {
             String sql = "SELECT MAX(id) FROM " + TakingLesson.class.getName();
             Session session = sessionFactory.getCurrentSession();
             Query query = session.createQuery(sql);
-            System.out.println(query.list().get(0).toString());
-            takingLesson.setId(Integer.parseInt(query.list().get(0).toString())+1);
+            if (query.list().get(0) == null){
+            	takingLesson.setId(1);
+            }
+            else {
+            	takingLesson.setId(Integer.parseInt(query.list().get(0).toString())+1);
+            }
         }
+        takingLesson.setName(takingLessonInfo.getName());
+        takingLesson.setLang(takingLessonInfo.getLang());
+        takingLesson.setTerm(takingLessonInfo.getTerm());
         takingLesson.setDeptId(takingLessonInfo.getDeptId());
         takingLesson.setCode(takingLessonInfo.getCode());
         takingLesson.setCredit(takingLessonInfo.getCredit());
@@ -84,7 +91,7 @@ public class TakingLessonDAOImpl implements TakingLessonDAO {
         if (takingLesson == null) {
             return null;
         }
-        return new TakingLessonInfo(takingLesson.getId(), takingLesson.getDeptId(), takingLesson.getCode(), takingLesson.getCredit(), takingLesson.getAkts());
+        return new TakingLessonInfo(takingLesson.getId(), takingLesson.getDeptId(), takingLesson.getName(), takingLesson.getCode(), takingLesson.getLang(), takingLesson.getCredit(), takingLesson.getAkts(), takingLesson.getTerm());
 	}
 
 	@Override

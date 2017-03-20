@@ -21,14 +21,23 @@ public class TakingLesson implements Serializable {
 	@Column(name = "dept_id", nullable = false)
 	private Integer deptId;
 	
-	@Column(name = "code", length = 45, nullable = false)
+	@Column(name = "name", length = 45, nullable = false)
+	private String name;
+	
+	@Column(name = "code", length = 10, nullable = false)
 	private String code;
+	
+	@Column(name = "language", length = 10, nullable = false)
+	private String lang;
 	
 	@Column(name = "credit", nullable = false)
 	private Integer credit;
 
 	@Column(name = "akts", nullable = false)
 	private Integer akts;
+	
+	@Column(name = "term", nullable = false)
+	private Integer term;
 
 	public Integer getId() {
 		return id;
@@ -68,6 +77,30 @@ public class TakingLesson implements Serializable {
 
 	public void setAkts(Integer akts) {
 		this.akts = akts;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getLang() {
+		return lang;
+	}
+
+	public void setLang(String lang) {
+		this.lang = lang;
+	}
+
+	public Integer getTerm() {
+		return term;
+	}
+
+	public void setTerm(Integer term) {
+		this.term = term;
 	}
 	
 	

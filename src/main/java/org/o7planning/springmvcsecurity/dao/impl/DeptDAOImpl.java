@@ -65,8 +65,12 @@ public class DeptDAOImpl implements DeptDAO {
             String sql = "SELECT MAX(id) FROM " + Dept.class.getName();
             Session session = sessionFactory.getCurrentSession();
             Query query = session.createQuery(sql);
-            System.out.println(query.list().get(0).toString());
-            dept.setId(Integer.parseInt(query.list().get(0).toString())+1);
+            if (query.list().get(0) == null){
+            	dept.setId(1);
+            }
+            else {
+            	dept.setId(Integer.parseInt(query.list().get(0).toString())+1);
+            }
         }
         dept.setUniId(deptInfo.getUniId());
         dept.setName(deptInfo.getName());

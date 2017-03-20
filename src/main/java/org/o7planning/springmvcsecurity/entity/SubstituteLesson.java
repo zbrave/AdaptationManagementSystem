@@ -17,17 +17,23 @@ public class SubstituteLesson implements Serializable {
 	@Column(name = "id", nullable = false)
 	private Integer id;
 	
-	@Column(name = "taking_lesson_id", nullable = false)
-	private Integer takingLessonId;
+	@Column(name = "name", length = 45, nullable = false)
+	private String name;
 	
-	@Column(name = "code", length = 45, nullable = false)
+	@Column(name = "code", length = 10, nullable = false)
 	private String code;
+	
+	@Column(name = "language", length = 10, nullable = false)
+	private String lang;
 	
 	@Column(name = "credit", nullable = false)
 	private Integer credit;
 
 	@Column(name = "akts", nullable = false)
 	private Integer akts;
+	
+	@Column(name = "term", nullable = false)
+	private Integer term;
 
 	public Integer getId() {
 		return id;
@@ -37,12 +43,12 @@ public class SubstituteLesson implements Serializable {
 		this.id = id;
 	}
 
-	public Integer getTakingLessonId() {
-		return takingLessonId;
+	public String getName() {
+		return name;
 	}
 
-	public void setTakingLessonId(Integer takingLessonId) {
-		this.takingLessonId = takingLessonId;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getCode() {
@@ -51,6 +57,14 @@ public class SubstituteLesson implements Serializable {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public String getLang() {
+		return lang;
+	}
+
+	public void setLang(String lang) {
+		this.lang = lang;
 	}
 
 	public Integer getCredit() {
@@ -68,6 +82,16 @@ public class SubstituteLesson implements Serializable {
 	public void setAkts(Integer akts) {
 		this.akts = akts;
 	}
+
+	public Integer getTerm() {
+		return term;
+	}
+
+	public void setTerm(Integer term) {
+		this.term = term;
+	}
+
+	
 	
 	
 }

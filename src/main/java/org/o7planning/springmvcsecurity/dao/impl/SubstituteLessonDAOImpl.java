@@ -29,7 +29,7 @@ public class SubstituteLessonDAOImpl implements SubstituteLessonDAO {
 	public List<SubstituteLessonInfo> listSubstituteLessonInfos() {
 		// sql query has to have exact names from own class variable 
 		String sql = "Select new " + SubstituteLessonInfo.class.getName()//
-                + "(a.id, a.takingLessonId, a.code, a.credit, a.akts) "//
+                + "(a.id, a.name, a.code, a.lang, a.credit, a.akts, a.term) "//
                 + " from " + SubstituteLesson.class.getName() + " a ";
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery(sql);
@@ -51,10 +51,16 @@ public class SubstituteLessonDAOImpl implements SubstituteLessonDAO {
             String sql = "SELECT MAX(id) FROM " + SubstituteLesson.class.getName();
             Session session = sessionFactory.getCurrentSession();
             Query query = session.createQuery(sql);
-            System.out.println(query.list().get(0).toString());
-            substituteLesson.setId(Integer.parseInt(query.list().get(0).toString())+1);
+            if (query.list().get(0) == null){
+            	substituteLesson.setId(1);
+            }
+            else {
+            	substituteLesson.setId(Integer.parseInt(query.list().get(0).toString())+1);
+            }
         }
-        substituteLesson.setTakingLessonId(substituteLessonInfo.getTakingLessonId());
+        substituteLesson.setName(substituteLessonInfo.getName());
+        substituteLesson.setLang(substituteLessonInfo.getLang());
+        substituteLesson.setTerm(substituteLessonInfo.getTerm());
         substituteLesson.setCode(substituteLessonInfo.getCode());
         substituteLesson.setCredit(substituteLessonInfo.getCredit());
         substituteLesson.setAkts(substituteLessonInfo.getAkts());
@@ -72,7 +78,7 @@ public class SubstituteLessonDAOImpl implements SubstituteLessonDAO {
         if (substituteLesson == null) {
             return null;
         }
-        return new SubstituteLessonInfo(substituteLesson.getId(), substituteLesson.getTakingLessonId(), substituteLesson.getCode(), substituteLesson.getCredit(), substituteLesson.getAkts());
+        return new SubstituteLessonInfo(substituteLesson.getId(), substituteLesson.getName(), substituteLesson.getCode(), substituteLesson.getLang(), substituteLesson.getCredit(), substituteLesson.getAkts(), substituteLesson.getTerm());
 	}
 
 	@Override

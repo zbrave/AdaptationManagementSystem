@@ -52,8 +52,13 @@ public class UniDAOImpl implements UniDAO {
             String sql = "SELECT MAX(id) FROM " + Uni.class.getName();
             Session session = sessionFactory.getCurrentSession();
             Query query = session.createQuery(sql);
-            System.out.println(query.list().get(0).toString());
-            uni.setId(Integer.parseInt(query.list().get(0).toString())+1);
+            if (query.list().get(0) == null){
+            	uni.setId(1);
+            }
+            else {
+            	uni.setId(Integer.parseInt(query.list().get(0).toString())+1);
+            }
+            
         }
         uni.setName(uniInfo.getName());
  
