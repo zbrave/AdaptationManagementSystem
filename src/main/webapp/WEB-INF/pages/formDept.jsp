@@ -28,9 +28,10 @@
        <table>
            <tr>
                <td>Uni-id</td>
-               <td><form:input path="uniId" /></td>
-               <td><form:errors path="uniId"
-                       class="error-message" /></td>      
+               <td><form:select path="uniId">
+                       <form:options items="${uniMap}" />
+                   </form:select></td>
+               <td><form:errors path="uniId" class="error-message" /></td>
            </tr>
            <tr>
                <td>Name</td>

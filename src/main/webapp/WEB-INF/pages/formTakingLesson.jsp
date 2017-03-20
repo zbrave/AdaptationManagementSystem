@@ -7,6 +7,18 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script
+  src="https://code.jquery.com/jquery-3.1.1.js"
+  integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
+  crossorigin="anonymous"></script>
+ <script type="text/javascript">
+$(document).ready(function(){
+	$('#uni').on('change',function(){
+		$.get("${pageContext.request.contextPath}/getDept?id="+ $(this).children("option").filter(":selected").attr("id"), null, function (data) {
+	        $("#deptId").html(data);
+	    });
+	});
+});</script>
 <title>Create takingLesson</title>
 <style>
 .error-message {
@@ -19,18 +31,26 @@
 <body>
  
    <h3>${formTitle}</h3>
- 
+ 	
    <form:form action="saveTakingLesson" method="POST"
        modelAttribute="takingLessonForm">
  
        <form:hidden path="id" />
  
        <table>
+       		<tr>
+               <td>Uni-id</td>
+               <td><select id="uni"><c:forEach items="${uniMap}" var="uni">
+                       <option class="ajx" id="${uni.key}" value="${uni.key}" label="${uni.value}" />
+                   </c:forEach></select></td>
+               <td><errors  class="error-message" /></td>
+           </tr>
            <tr>
-               <td>DeptID</td>
-               <td><form:input path="deptId" /></td>
-               <td><form:errors path="deptId"
-                       class="error-message" /></td>      
+               <td>Dept-id</td>
+               <td><form:select path="deptId">
+                       <form:options items="${deptMap}" />
+                   </form:select></td>
+               <td><form:errors path="deptId" class="error-message" /></td>
            </tr>
            <tr>
                <td>Code</td>

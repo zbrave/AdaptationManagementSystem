@@ -10,6 +10,8 @@ public interface DeptDAO {
 	public Dept findDept(Integer id);
 	 
     public List<DeptInfo> listDeptInfos();
+    
+    public List<DeptInfo> listDeptFromUni(Integer id);
  
     public void saveDept(DeptInfo deptInfo);
  

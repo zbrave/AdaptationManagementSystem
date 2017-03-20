@@ -24,11 +24,11 @@
 			</div>
 			<div>
 				<ul class="nav navbar-nav navbar-right" id="nav">
-					<li><a href="${pageContext.request.contextPath}/welcome" ><span class="glyphicon glyphicon-user"></span> Home</a></li>
+					<li><a href="${pageContext.request.contextPath}/welcome" ><span class="glyphicon glyphicon-user"></span> Anasayfa</a></li>
 					<li><a href="${pageContext.request.contextPath}/userInfo"><span class="glyphicon glyphicon-log-in"></span> User Info</a></li>
 					<li class="active"><a href="${pageContext.request.contextPath}/admin" ><span class="glyphicon glyphicon-user"></span> Admin</a></li>
 					<c:if test="${pageContext.request.userPrincipal.name != null}">
-						<li><a href="${pageContext.request.contextPath}/newRule" ><span class="glyphicon glyphicon-plus"></span> Yeni Kural</a></li>
+						<li><a href="${pageContext.request.contextPath}/addRules" ><span class="glyphicon glyphicon-plus"></span> Yeni Kural</a></li>
 						<li><a href="${pageContext.request.contextPath}/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
 					</c:if>
 				</ul>

@@ -35,6 +35,18 @@ public class TakingLessonDAOImpl implements TakingLessonDAO {
         Query query = session.createQuery(sql);
         return query.list();
 	}
+	
+	@Override
+	public List<TakingLessonInfo> listTakingLessonFromDept(Integer id) {
+		// sql query has to have exact names from own class variable 
+		String sql = "Select new " + TakingLessonInfo.class.getName()//
+                + "(a.id, a.deptId, a.code, a.credit, a.akts) "//
+                + " from " + TakingLesson.class.getName() + " a where a.deptId = :code";
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(sql);
+        query.setParameter("code", id);
+        return query.list();
+	}
 
 	@Override
 	public void saveTakingLesson(TakingLessonInfo takingLessonInfo) {

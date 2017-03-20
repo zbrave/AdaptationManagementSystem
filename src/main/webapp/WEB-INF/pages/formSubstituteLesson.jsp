@@ -7,6 +7,26 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script
+  src="https://code.jquery.com/jquery-3.1.1.js"
+  integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
+  crossorigin="anonymous"></script>
+ <script type="text/javascript">
+$(document).ready(function(){
+	$('#uni').on('change',function(){
+		$.get("${pageContext.request.contextPath}/getDept?id="+ $(this).children("option").filter(":selected").attr("id"), null, function (data) {
+	        $("#dept").html(data);
+	    });
+	});
+});</script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#dept').on('change',function(){
+		$.get("${pageContext.request.contextPath}/getTakingLesson?id="+ $(this).children("option").filter(":selected").attr("id"), null, function (data) {
+	        $("#takingLessonId").html(data);
+	    });
+	});
+});</script>
 <title>Create substituteLesson</title>
 <style>
 .error-message {
@@ -26,11 +46,26 @@
        <form:hidden path="id" />
  
        <table>
+       		<tr>
+               <td>Uni-id</td>
+               <td><select id="uni"><c:forEach items="${uniMap}" var="uni">
+                       <option id="${uni.key}" value="${uni.key}" label="${uni.value}" />
+                   </c:forEach></select></td>
+               <td><errors  class="error-message" /></td>
+           </tr>
            <tr>
-               <td>TakingLessonID</td>
-               <td><form:input path="takingLessonId" /></td>
-               <td><form:errors path="takingLessonId"
-                       class="error-message" /></td>      
+               <td>Dept-id</td>
+               <td><select id="dept"><c:forEach items="${deptMap}" var="dept">
+                       <option id="${dept.key}" value="${dept.key}" label="${dept.value}" />
+                   </c:forEach></select></td>
+               <td><errors  class="error-message" /></td>
+           </tr>
+           <tr>
+               <td>TakingLesson</td>
+               <td><form:select path="takingLessonId">
+                       <form:options items="${takingLessonMap}" />
+                   </form:select></td>
+               <td><form:errors path="takingLessonId" class="error-message" /></td>
            </tr>
            <tr>
                <td>Code</td>

@@ -10,6 +10,8 @@ public interface TakingLessonDAO {
 	public TakingLesson findTakingLesson(Integer id);
 	 
     public List<TakingLessonInfo> listTakingLessonInfos();
+    
+    public List<TakingLessonInfo> listTakingLessonFromDept(Integer id);
  
     public void saveTakingLesson(TakingLessonInfo takingLessonInfo);
  

@@ -36,6 +36,19 @@ public class DeptDAOImpl implements DeptDAO {
         Query query = session.createQuery(sql);
         return query.list();
 	}
+	
+	@Override
+	public List<DeptInfo> listDeptFromUni(Integer id) {
+		// sql query has to have exact names from own class variable 
+		String sql = "Select new " + DeptInfo.class.getName()//
+                + "(a.id, a.uniId, a.name) "//
+                + " from " + Dept.class.getName() + " a where a.uniId = :code";
+//		System.out.println(sql.toString());
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(sql);
+        query.setParameter("code", id);
+        return query.list();
+	}
 
 	@Override
 	public void saveDept(DeptInfo deptInfo) {
