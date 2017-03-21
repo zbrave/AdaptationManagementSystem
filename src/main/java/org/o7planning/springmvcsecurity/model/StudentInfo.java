@@ -6,18 +6,22 @@ public class StudentInfo {
 	private String name;
 	private String surname;
 	private String no;
+	private Integer adpScore;
+	private Integer recordYear;
 	
 	public StudentInfo(){
 		
 	}
 
-	public StudentInfo(Integer id, Integer deptId, String name, String surname, String no) {
+	public StudentInfo(Integer id, Integer deptId, String name, String surname, String no, Integer adpScore, Integer recordYear) {
 		super();
 		this.id = id;
 		this.deptId = deptId;
 		this.name = name;
 		this.surname = surname;
 		this.no = no;
+		this.adpScore = adpScore;
+		this.recordYear = recordYear;
 	}
 
 	public Integer getId() {
@@ -58,6 +62,22 @@ public class StudentInfo {
 
 	public void setNo(String no) {
 		this.no = no;
+	}
+
+	public Integer getAdpScore() {
+		return adpScore;
+	}
+
+	public void setAdpScore(Integer adpScore) {
+		this.adpScore = adpScore;
+	}
+
+	public Integer getRecordYear() {
+		return recordYear;
+	}
+
+	public void setRecordYear(Integer recordYear) {
+		this.recordYear = recordYear;
 	}
 	
 	

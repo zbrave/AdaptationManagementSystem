@@ -25,6 +25,7 @@ public class TakingLessonDAOImpl implements TakingLessonDAO {
         return (TakingLesson) crit.uniqueResult();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<TakingLessonInfo> listTakingLessonInfos() {
 		// sql query has to have exact names from own class variable 
@@ -36,6 +37,7 @@ public class TakingLessonDAOImpl implements TakingLessonDAO {
         return query.list();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<TakingLessonInfo> listTakingLessonFromDept(Integer id) {
 		// sql query has to have exact names from own class variable 

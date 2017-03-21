@@ -25,11 +25,12 @@ public class StudentDAOImpl implements StudentDAO {
         return (Student) crit.uniqueResult();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<StudentInfo> listStudentInfos() {
 		// sql query has to have exact names from own class variable 
 		String sql = "Select new " + StudentInfo.class.getName()//
-                + "(a.id, a.studentId, a.name, a.surname, a.no) "//
+                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear) "//
                 + " from " + Student.class.getName() + " a ";
 		System.out.println(sql.toString());
         Session session = sessionFactory.getCurrentSession();
@@ -63,6 +64,8 @@ public class StudentDAOImpl implements StudentDAO {
         student.setName(studentInfo.getName());
         student.setNo(studentInfo.getNo());
         student.setSurname(studentInfo.getSurname());
+        student.setAdpScore(studentInfo.getAdpScore());
+        student.setRecordYear(studentInfo.getRecordYear());
  
         if (isNew) {
             Session session = this.sessionFactory.getCurrentSession();
@@ -77,7 +80,7 @@ public class StudentDAOImpl implements StudentDAO {
         if (student == null) {
             return null;
         }
-        return new StudentInfo(student.getId(), student.getDeptId(), student.getName(), student.getSurname(), student.getNo());
+        return new StudentInfo(student.getId(), student.getDeptId(), student.getName(), student.getSurname(), student.getNo(), student.getAdpScore(), student.getRecordYear());
 	}
 
 	@Override
@@ -87,6 +90,20 @@ public class StudentDAOImpl implements StudentDAO {
             this.sessionFactory.getCurrentSession().delete(student);
         }
 		
+	}
+	
+	@Override
+	public boolean isDuplicate(StudentInfo studentInfo) {
+//		String sql = "SELECT new "+RulesInfo.class.getName()+"(a.takingLessonId, a.substituteLessonId) FROM " + Rules.class.getName() + " a WHERE takingLessonID="+rulesInfo.getTakingLessonId()+" AND substituteLessonId="+rulesInfo.getSubstituteLessonId();
+        Session session = sessionFactory.getCurrentSession();
+//        Query query = session.createQuery(sql);
+		Query query = session.createQuery("from Student where no = "+studentInfo.getNo());
+		if (query.list().isEmpty()){
+        	return false;
+        }
+        else {
+        	return true;
+        }
 	}
 
 }

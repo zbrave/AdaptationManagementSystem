@@ -25,6 +25,7 @@ public class SubstituteLessonDAOImpl implements SubstituteLessonDAO {
         return (SubstituteLesson) crit.uniqueResult();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<SubstituteLessonInfo> listSubstituteLessonInfos() {
 		// sql query has to have exact names from own class variable 

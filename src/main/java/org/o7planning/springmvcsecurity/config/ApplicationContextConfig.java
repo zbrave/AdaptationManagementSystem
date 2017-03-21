@@ -7,11 +7,15 @@ import javax.sql.DataSource;
 import org.hibernate.SessionFactory;
 import org.o7planning.springmvcsecurity.dao.DeptDAO;
 import org.o7planning.springmvcsecurity.dao.RulesDAO;
+import org.o7planning.springmvcsecurity.dao.StudentDAO;
+import org.o7planning.springmvcsecurity.dao.StudentLessonDAO;
 import org.o7planning.springmvcsecurity.dao.SubstituteLessonDAO;
 import org.o7planning.springmvcsecurity.dao.TakingLessonDAO;
 import org.o7planning.springmvcsecurity.dao.UniDAO;
 import org.o7planning.springmvcsecurity.dao.impl.DeptDAOImpl;
 import org.o7planning.springmvcsecurity.dao.impl.RulesDAOImpl;
+import org.o7planning.springmvcsecurity.dao.impl.StudentDAOImpl;
+import org.o7planning.springmvcsecurity.dao.impl.StudentLessonDAOImpl;
 import org.o7planning.springmvcsecurity.dao.impl.SubstituteLessonDAOImpl;
 import org.o7planning.springmvcsecurity.dao.impl.TakingLessonDAOImpl;
 import org.o7planning.springmvcsecurity.dao.impl.UniDAOImpl;
@@ -24,7 +28,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -138,6 +141,16 @@ public class ApplicationContextConfig {
   @Bean(name = "RulesDAO")
   public RulesDAO getRulesDAO() {
       return new RulesDAOImpl();
+  }
+  
+  @Bean(name = "StudentDAO")
+  public StudentDAO getStudentDAO() {
+      return new StudentDAOImpl();
+  }
+  
+  @Bean(name = "StudentLessonDAO")
+  public StudentLessonDAO getStudentLessonDAO() {
+      return new StudentLessonDAOImpl();
   }
  
 }

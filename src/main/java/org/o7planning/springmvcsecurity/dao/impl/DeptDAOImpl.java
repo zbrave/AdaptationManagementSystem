@@ -25,6 +25,7 @@ public class DeptDAOImpl implements DeptDAO {
         return (Dept) crit.uniqueResult();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<DeptInfo> listDeptInfos() {
 		// sql query has to have exact names from own class variable 
@@ -37,6 +38,7 @@ public class DeptDAOImpl implements DeptDAO {
         return query.list();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<DeptInfo> listDeptFromUni(Integer id) {
 		// sql query has to have exact names from own class variable 

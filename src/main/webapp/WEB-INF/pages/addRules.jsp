@@ -28,7 +28,9 @@ $(document).ready(function(){
 	        $("#uniId2").html(data);
 	        $("#uniId3").html(data);
 	    });
-	
+	$.get("${pageContext.request.contextPath}/getSubstituteLesson", null, function (data) {
+        $("#substituteLessonId").html(data);
+    });
 });</script>
  <script type="text/javascript">
 $(document).ready(function(){
@@ -81,24 +83,60 @@ $(document).ready(function(){
 		</div>
 	</div>
 	</nav>
-
+	<div class="col-lg-1"></div>
 	<!-- Forms -->
-	<div class="col-lg-8"></div>
+	<div class="col-lg-5">
+		<div class="row">
+            <div class="panel panel-default">
+	            <div class="panel-body">
+	            <form:form action="saveRules" method="POST" modelAttribute="rulesForm">
+					<div class="form-group">
+						<input id="id" name="id" type="hidden" value=""/>
+						
+						<label class="control-label">Üniversite Adı</label>
+									 			
+				   		<select id="uniId3" class="form-control" name="uniId3" ></select>
+				    
+				    	<label class="control-label">Bölüm Adı</label>
+				                       
+				        <select id="deptId2" class="form-control" name="deptId2" ></select>
+				          
+				        <label class="control-label">Alınan Ders Adı</label>
+				                       
+				        <select id="takingLessonId" class="form-control" name="takingLessonId" ></select>
+				        
+				        <label class="control-label">Sayılan Ders Adı</label>
+				                       
+				        <select id="substituteLessonId" class="form-control" name="substituteLessonId" ></select>
+				        
+				        <button type="submit" class="btn btn-default" value="Ekle" >Ekle</button>
+							        
+				        <c:if test="${not empty message5}">
+						   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message5}
+						   </div>
+						</c:if> 
+			        </div>
+		        </form:form>
+		        </div>
+	        </div>
+        </div>
+	</div>
+	<div class="col-lg-1"></div>
 	<!-- Uni Form(Right Panel) -->
 	<div class="col-lg-4">
 		<div class="row">
             <div class="panel with-nav-tabs panel-default">
                 <div class="panel-heading">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#tab1default" data-toggle="tab">Üniversite</a></li>
-                            <li><a href="#tab2default" data-toggle="tab">Bölüm</a></li>
-                            <li><a href="#tab3default" data-toggle="tab">Alınan Ders</a></li>
-                            <li><a href="#tab3default" data-toggle="tab">Sayılan Ders</a></li>
+                            <li class="active"><a href="#uniTab" data-toggle="tab">Üniversite</a></li>
+                            <li><a href="#deptTab" data-toggle="tab">Bölüm</a></li>
+                            <li><a href="#takingLessonTab" data-toggle="tab">Alınan Ders</a></li>
+                            <li><a href="#substituteLessonTab" data-toggle="tab">Sayılan Ders</a></li>
                         </ul>
                 </div>
                 <div class="panel-body">
                     <div class="tab-content">
-                        <div class="tab-pane fade in active" id="tab1default">
+                        <div class="tab-pane fade in active" id="uniTab">
 							<form:form action="saveUni" method="POST" modelAttribute="uniForm">
 							  	<div class="form-group">
 							   		<input id="id" name="id" type="hidden" value=""/>
@@ -117,7 +155,7 @@ $(document).ready(function(){
 					  			</div>
 							</form:form>
 						</div>
-                        <div class="tab-pane fade" id="tab2default">
+                        <div class="tab-pane fade" id="deptTab">
 							<form:form action="saveDept" method="POST" modelAttribute="deptForm">
 								<div class="form-group">
 					 				
@@ -141,7 +179,7 @@ $(document).ready(function(){
 					       		</div>
 					   		</form:form>
 						</div>
-                        <div class="tab-pane fade" id="tab3default">
+                        <div class="tab-pane fade" id="takingLessonTab">
 							<form:form action="saveTakingLesson" method="POST" modelAttribute="takingLessonForm">
    			
 					   			<input id="id" name="id" type="hidden" value=""/>
@@ -154,9 +192,17 @@ $(document).ready(function(){
 							                       
 					            <select id="deptId" class="form-control" name="deptId" ></select>
 					            
+					            <label class="control-label">Ders Adı</label>
+					                       
+					            <input id="name" class="form-control input-sm" name="name" type="text" value="" style="height: 35px!important"/>
+					            
 					            <label class="control-label">Ders Kodu</label>
 					                       
 					            <input id="code" class="form-control input-sm" name="code" type="text" value="" style="height: 35px!important"/>
+					            
+					            <label class="control-label">Ders Dili</label>
+					                       
+					            <input id="lang" class="form-control input-sm" name="lang" type="text" value="" style="height: 35px!important"/>
 					            
 					            <label class="control-label">Kredi</label>
 					            
@@ -165,7 +211,11 @@ $(document).ready(function(){
 					            <label class="control-label">AKTS</label>
 					            
 					            <input id="akts" class="form-control input-sm" name="akts" type="text" value="" style="height: 35px!important"/>
-					 
+					 			
+					 			<label class="control-label">Ders Dönemi</label>
+					                       
+					            <input id="term" class="form-control input-sm" name="term" type="text" value="" style="height: 35px!important"/>
+					 			
 					           	<button type="submit" class="btn btn-default" value="Ekle" >Ekle</button>
 							        
 						        <c:if test="${not empty message3}">
@@ -174,26 +224,22 @@ $(document).ready(function(){
 								</c:if>
 					   		</form:form>
 						</div>
-                        <div class="tab-pane fade" id="tab4default">
+                        <div class="tab-pane fade" id="substituteLessonTab">
                         	<form:form action="saveSubstituteLesson" method="POST" modelAttribute="substituteLessonForm">
 					   			
 					   			<input id="id" name="id" type="hidden" value=""/>
-					 			
-					 			<label class="control-label">Üniversite Adı</label>
-					 			
-					       		<select id="uniId3" class="form-control" name="uniId2" ></select>
-							    
-							    <label class="control-label">Bölüm Adı</label>
-							                       
-					            <select id="deptId2" class="form-control" name="deptId" ></select>
 					            
-					            <label class="control-label">Alınan Ders Adı</label>
-							                       
-					            <select id="takingLessonId" class="form-control" name="takingLessonId" ></select>
+					            <label class="control-label">Ders Adı</label>
+					                       
+					            <input id="name" class="form-control input-sm" name="name" type="text" value="" style="height: 35px!important"/>
 					            
 					            <label class="control-label">Ders Kodu</label>
 					                       
 					            <input id="code" class="form-control input-sm" name="code" type="text" value="" style="height: 35px!important"/>
+					            
+					            <label class="control-label">Ders Dili</label>
+					                       
+					            <input id="lang" class="form-control input-sm" name="lang" type="text" value="" style="height: 35px!important"/>
 					            
 					            <label class="control-label">Kredi</label>
 					            
@@ -202,6 +248,10 @@ $(document).ready(function(){
 					            <label class="control-label">AKTS</label>
 					            
 					            <input id="akts" class="form-control input-sm" name="akts" type="text" value="" style="height: 35px!important"/>
+					 			
+					 			<label class="control-label">Ders Dönemi</label>
+					                       
+					            <input id="term" class="form-control input-sm" name="term" type="text" value="" style="height: 35px!important"/>
 					 			<div class="clearfix"></div><br/>
 					           	<button type="submit" class="btn btn-primary" value="Ekle">Ekle</button>
 							        

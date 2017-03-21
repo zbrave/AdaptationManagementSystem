@@ -11,11 +11,13 @@ public interface RulesDAO {
 	 
     public List<RulesInfo> listRulesInfos();
     
-    public List<RulesInfo> listRulesForStu(Integer id);
+    public List<RulesInfo> listRulesForLesson(Integer id);
  
-    public void saveRules(RulesInfo deptInfo);
+    public void saveRules(RulesInfo rulesInfo);
  
     public RulesInfo findRulesInfo(Integer id);
  
     public void deleteRules(Integer id);
+    
+    public boolean isDuplicate(RulesInfo rulesInfo);
 }

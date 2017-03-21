@@ -25,6 +25,7 @@ public class StudentLessonDAOImpl implements StudentLessonDAO {
         return (StudentLesson) crit.uniqueResult();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<StudentLessonInfo> listStudentLessonInfos() {
 		// sql query has to have exact names from own class variable 

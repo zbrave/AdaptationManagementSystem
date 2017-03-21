@@ -25,6 +25,7 @@ public class RulesDAOImpl implements RulesDAO {
         return (Rules) crit.uniqueResult();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<RulesInfo> listRulesInfos() {
 		// sql query has to have exact names from own class variable 
@@ -37,12 +38,13 @@ public class RulesDAOImpl implements RulesDAO {
         return query.list();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<RulesInfo> listRulesForStu(Integer id) {
+	public List<RulesInfo> listRulesForLesson(Integer id) {
 		// sql query has to have exact names from own class variable 
 		String sql = "Select new " + RulesInfo.class.getName()//
                 + "(a.id, a.takingLessonId, a.substituteLessonId) "//
-                + " from " + Rules.class.getName() + " a where a.uniId = :code";
+                + " from " + Rules.class.getName() + " a where a.takingLessonId = :code";
 //		System.out.println(sql.toString());
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery(sql);
@@ -98,6 +100,20 @@ public class RulesDAOImpl implements RulesDAO {
             this.sessionFactory.getCurrentSession().delete(rules);
         }
 		
+	}
+
+	@Override
+	public boolean isDuplicate(RulesInfo rulesInfo) {
+//		String sql = "SELECT new "+RulesInfo.class.getName()+"(a.takingLessonId, a.substituteLessonId) FROM " + Rules.class.getName() + " a WHERE takingLessonID="+rulesInfo.getTakingLessonId()+" AND substituteLessonId="+rulesInfo.getSubstituteLessonId();
+        Session session = sessionFactory.getCurrentSession();
+//        Query query = session.createQuery(sql);
+		Query query = session.createQuery("from Rules where takingLessonId = "+rulesInfo.getTakingLessonId()+" AND substituteLessonId="+rulesInfo.getSubstituteLessonId());
+		if (query.list().isEmpty()){
+        	return false;
+        }
+        else {
+        	return true;
+        }
 	}
 
 }

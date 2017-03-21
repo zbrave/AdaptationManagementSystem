@@ -27,6 +27,12 @@ public class Student implements Serializable {
 	
 	@Column(name = "no", length = 10, nullable = false)
 	private String no;
+	
+	@Column(name = "adp_score", nullable = false)
+	private Integer adpScore;
+	
+	@Column(name = "record_year", nullable = false)
+	private Integer recordYear;
 
 	public Integer getId() {
 		return id;
@@ -66,6 +72,22 @@ public class Student implements Serializable {
 
 	public void setNo(String no) {
 		this.no = no;
+	}
+
+	public Integer getAdpScore() {
+		return adpScore;
+	}
+
+	public void setAdpScore(Integer adpScore) {
+		this.adpScore = adpScore;
+	}
+
+	public Integer getRecordYear() {
+		return recordYear;
+	}
+
+	public void setRecordYear(Integer recordYear) {
+		this.recordYear = recordYear;
 	}
 	
 	

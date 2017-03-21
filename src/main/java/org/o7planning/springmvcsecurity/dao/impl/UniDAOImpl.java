@@ -25,6 +25,7 @@ public class UniDAOImpl implements UniDAO {
         return (Uni) crit.uniqueResult();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<UniInfo> listUniInfos() {
 		// sql query has to have exact names from own class variable 

@@ -25,6 +25,7 @@ public class ReportDAOImpl implements ReportDAO {
         return (Report) crit.uniqueResult();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<ReportInfo> listReportInfos() {
 		// sql query has to have exact names from own class variable 
