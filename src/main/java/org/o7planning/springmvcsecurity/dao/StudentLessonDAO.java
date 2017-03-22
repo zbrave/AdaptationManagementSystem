@@ -9,7 +9,9 @@ public interface StudentLessonDAO {
 	public StudentLesson findStudentLesson(Integer id);
 	 
     public List<StudentLessonInfo> listStudentLessonInfos();
- 
+    
+    public List<StudentLessonInfo> listStudentLessonInfosForStudent(Integer id);
+    
     public void saveStudentLesson(StudentLessonInfo studentLessonInfo);
  
     public StudentLessonInfo findStudentLessonInfo(Integer id);

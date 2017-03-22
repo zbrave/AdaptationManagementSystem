@@ -1,5 +1,6 @@
 package org.o7planning.springmvcsecurity.controller;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,12 +8,15 @@ import java.util.Map;
 import org.o7planning.springmvcsecurity.dao.DeptDAO;
 import org.o7planning.springmvcsecurity.dao.RulesDAO;
 import org.o7planning.springmvcsecurity.dao.StudentDAO;
+import org.o7planning.springmvcsecurity.dao.StudentLessonDAO;
 import org.o7planning.springmvcsecurity.dao.SubstituteLessonDAO;
 import org.o7planning.springmvcsecurity.dao.TakingLessonDAO;
 import org.o7planning.springmvcsecurity.dao.UniDAO;
 import org.o7planning.springmvcsecurity.model.DeptInfo;
+import org.o7planning.springmvcsecurity.model.JSPLessonFormat;
 import org.o7planning.springmvcsecurity.model.RulesInfo;
 import org.o7planning.springmvcsecurity.model.StudentInfo;
+import org.o7planning.springmvcsecurity.model.StudentLessonInfo;
 import org.o7planning.springmvcsecurity.model.SubstituteLessonInfo;
 import org.o7planning.springmvcsecurity.model.TakingLessonInfo;
 import org.o7planning.springmvcsecurity.model.UniInfo;
@@ -55,6 +59,9 @@ public class StudentController {
 	@Autowired
 	private StudentDAO studentDAO;
 	
+	@Autowired
+	private StudentLessonDAO studentLessonDAO;
+	
 /* Student Section */
 	
 	@RequestMapping(value="/getStudent",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
@@ -72,21 +79,31 @@ public class StudentController {
 	public String getStudentData(Model model, @RequestParam("id") Integer id) {
 		StudentInfo stu = this.studentDAO.findStudentInfo(id);
 		DeptInfo dept = null;
-		UniInfo uni = null;
+		UniInfo uni = null; 
+		List<StudentLessonInfo> listStuLes = this.studentLessonDAO.listStudentLessonInfosForStudent(id);
 		List<SubstituteLessonInfo> listSubstituteLesson = this.substituteLessonDAO.listSubstituteLessonInfos();
+		List<JSPLessonFormat> list = new ArrayList<JSPLessonFormat>();
 		if (id != null) {
 			 dept = this.deptDAO.findDeptInfo(stu.getDeptId());
 			 uni = this.uniDAO.findUniInfo(dept.getUniId());
 			 model.addAttribute("id", stu.getId());
 			 model.addAttribute("uni", uni.getName());
 			 model.addAttribute("dept", dept.getName());
+			 model.addAttribute("deptId", dept.getId());
 			 model.addAttribute("name", stu.getName());
 			 model.addAttribute("surname", stu.getSurname());
 			 model.addAttribute("no", stu.getNo());
 			 model.addAttribute("recordYear", stu.getRecordYear());
 			 model.addAttribute("adpScore", stu.getAdpScore());
+			 for (StudentLessonInfo tmp : listStuLes){
+				 SubstituteLessonInfo tmpSub = this.substituteLessonDAO.findSubstituteLessonInfo(tmp.getSubstituteLessonId());
+				 TakingLessonInfo tmpTak = this.takingLessonDAO.findTakingLessonInfo(tmp.getTakingLessonId());
+				 JSPLessonFormat temp = new JSPLessonFormat(tmpSub, tmpTak, tmp.getOrgMark(), tmp.getConvMark());
+				 list.add(temp);
+			 }
 		}
-		List<TakingLessonInfo> listTakingLesson = this.takingLessonDAO.listTakingLessonFromDept(dept.getId());
+		model.addAttribute("lessons", list);
+/*		List<TakingLessonInfo> listTakingLesson = this.takingLessonDAO.listTakingLessonFromDept(dept.getId());
 		for (TakingLessonInfo tmp : listTakingLesson){
 			List<RulesInfo> listRules = this.rulesDAO.listRulesForLesson(tmp.getId());
 			if (listRules.get(0) == null){
@@ -98,7 +115,7 @@ public class StudentController {
 					System.out.println("Dönem: "+tmp.getTerm()+"Sayılan: "+tmp2.getSubstituteLessonId()+" Alınan: "+tmp.getName());
 				}
 			}
-		}
+		}*/
 		model.addAttribute("subLes", listSubstituteLesson);
 		return "addStudentLesson";
 	}

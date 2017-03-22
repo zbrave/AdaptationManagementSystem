@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.o7planning.springmvcsecurity.dao.DeptDAO;
+import org.o7planning.springmvcsecurity.dao.StudentDAO;
 import org.o7planning.springmvcsecurity.dao.StudentLessonDAO;
 import org.o7planning.springmvcsecurity.dao.TakingLessonDAO;
 import org.o7planning.springmvcsecurity.dao.UniDAO;
 import org.o7planning.springmvcsecurity.model.DeptInfo;
+import org.o7planning.springmvcsecurity.model.StudentInfo;
 import org.o7planning.springmvcsecurity.model.StudentLessonInfo;
 import org.o7planning.springmvcsecurity.model.TakingLessonInfo;
 import org.o7planning.springmvcsecurity.model.UniInfo;
@@ -23,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 //Enable Hibernate Transaction.
@@ -37,6 +38,9 @@ public class StudentLessonController {
 
 	@Autowired
 	private DeptDAO deptDAO;
+	
+	@Autowired
+	private StudentDAO studentDAO;
 
 	@Autowired
 	private TakingLessonDAO takingLessonDAO;
@@ -149,8 +153,7 @@ public class StudentLessonController {
 	@RequestMapping(value = "/saveStudentLesson", method = RequestMethod.POST)
 	public String saveStudentLesson(Model model, //
 			@ModelAttribute("studentLessonForm") @Validated StudentLessonInfo studentLessonInfo, //
-			BindingResult result, //
-			final RedirectAttributes redirectAttributes) {
+			BindingResult result) {
 
 
 		if (result.hasErrors()) {
@@ -158,13 +161,23 @@ public class StudentLessonController {
 		}
 		this.studentLessonDAO.saveStudentLesson(studentLessonInfo);
 
-		// Important!!: Need @EnableWebMvc
-		// Add message to flash scope
-		redirectAttributes.addFlashAttribute("message5", "Öğrenci Eklendi.");
+		StudentInfo stu = this.studentDAO.findStudentInfo(studentLessonInfo.getStudentId());
+		DeptInfo dept = this.deptDAO.findDeptInfo(stu.getDeptId());
+		UniInfo uni = this.uniDAO.findUniInfo(dept.getUniId());
+		model.addAttribute("message5", "Öğrencinin Dersi Eklendi.");
+		model.addAttribute("id", stu.getId());
+		model.addAttribute("uni", uni.getName());
+		model.addAttribute("dept", dept.getName());
+		model.addAttribute("deptId", dept.getId());
+		model.addAttribute("name", stu.getName());
+		model.addAttribute("surname", stu.getSurname());
+		model.addAttribute("no", stu.getNo());
+		model.addAttribute("recordYear", stu.getRecordYear());
+		model.addAttribute("adpScore", stu.getAdpScore());
 		
 		
 
 //		return "redirect:/studentLessonList";
-		return "redirect:/addStudentLesson";
+		return "addStudentLesson";
 	}
 }

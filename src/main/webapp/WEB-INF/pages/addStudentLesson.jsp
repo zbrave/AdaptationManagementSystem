@@ -19,11 +19,20 @@
   integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
   crossorigin="anonymous"></script>
   
-   <script type="text/javascript">
+<script type="text/javascript">
 $(document).ready(function(){
 	$.get("${pageContext.request.contextPath}/getStudent", null, function (data) {
 	        $("#id").html(data);
 	    });
+});</script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$.get("${pageContext.request.contextPath}/getTakingLesson?id=${deptId}" , null, function (data) {
+        $("#takingLessonId").html(data);
+    });
+	$.get("${pageContext.request.contextPath}/getSubstituteLesson", null, function (data) {
+        $("#substituteLessonId").html(data);
+    });
 });</script>
 <title>Create substituteLesson</title>
 <style>
@@ -102,13 +111,51 @@ $(document).ready(function(){
 							<td>${recordYear}</td>
 						</tr>
 					</tbody>
-				</table>				
+				</table>
+				<form:form action="saveStudentLesson" method="POST" modelAttribute="studentLessonForm">
+					<div class="form-group">
+						<input id="id" name="id" type="hidden" value=""/>
+						
+						<input id="studentId" name="studentId" type="hidden" value="${id}"/>
+						
+						<label class="control-label">Alınan Ders</label>
+									 			
+				   		<select id="takingLessonId" class="form-control" name="takingLessonId" ></select>
+
+						<label class="control-label">Sayılan Ders</label>
+									 			
+				   		<select id="substituteLessonId" class="form-control" name="substituteLessonId" ></select>
+				   		
+				   		<label class="control-label">Not</label>
+				   		
+				   		<input id="orgMark" name="orgMark" type="text" value=""/>
+				   		
+				   		<input id="convMark" name="convMark" type="hidden" value=""/>
+				   		
+				   		<button type="submit" class="btn btn-default" value="Ekle" >Ekle</button>
+							        
+				        <c:if test="${not empty message5}">
+						   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message}
+						   </div>
+						</c:if> 
+			        </div>
+		        </form:form>			
 			</div>
         </div>
 	</div>
 	<div class="col-lg-6">
-		<div class="panel-body">
-		<h5 class="sub-header">1.Yarıyıl</h5>
+		<div class="panel panel-default panel-table">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col col-xs-6">
+                    <h3 class="panel-title">1.Yarıyıl</h3>
+                  </div>
+                  <div class="col col-xs-6 text-right">
+                    <h5 class="sub-header">Sayılan Dersler</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-body">
 		        <table class="table table-striped table-bordered table-list">
 		        	<thead>
 						<tr class="active">
@@ -121,23 +168,36 @@ $(document).ready(function(){
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${subLes}" var="info">
-							<tr>
-							 	<td> ${info.code}  </td>
-							   	<td> ${info.name}  </td>
-							  	<td> ${info.lang}  </td>
-							   	<td> ${info.credit}  </td>
-							   	<td> ${info.akts}  </td>
-							   	<td>   </td>
-							</tr>
+						<c:forEach items="${lessons}" var="info">
+							<c:if test="${info.subTerm == 1}">
+								<tr>
+								 	<td> ${info.subCode}  </td>
+								   	<td> ${info.subName}  </td>
+								  	<td> ${info.subLang}  </td>
+								   	<td> ${info.subCredit}  </td>
+								   	<td> ${info.subAkts}  </td>
+								   	<td> ${info.subMark}  </td>
+								</tr>
+							</c:if>
 						 </c:forEach>
 					</tbody>
 				</table>				
 			</div>
+			</div>
 	</div>
 	<div class="col-lg-6">
-		<div class="panel-body">
-		<h5 class="sub-header">2.Yarıyıl</h5>
+		<div class="panel panel-default panel-table">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col col-xs-6">
+                    <h3 class="panel-title">1.Yarıyıl</h3>
+                  </div>
+                  <div class="col col-xs-6 text-right">
+                    <h5 class="sub-header">Alınan Dersler</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-body">
 		        <table class="table table-striped table-bordered table-list">
 		        	<thead>
 						<tr class="active">
@@ -150,17 +210,106 @@ $(document).ready(function(){
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>${uni}</td>
-							<td>${dept}</td>
-							<td>${no}</td>
-							<td>${name}</td>
-							<td>${surname}</td>
-							<td>${adpScore}</td>
-						</tr>
+						<c:forEach items="${lessons}" var="info">
+							<c:if test="${info.subTerm == 1}">
+								<tr>
+								   	<td> ${info.takCode}  </td>
+								   	<td> ${info.takName}  </td>
+								  	<td> ${info.takLang}  </td>
+								   	<td> ${info.takCredit}  </td>
+								   	<td> ${info.takAkts}  </td>
+								   	<td> ${info.takMark}  </td>
+								</tr>
+							</c:if>
+						 </c:forEach>
 					</tbody>
 				</table>				
 			</div>
-	</div>            
+		</div>
+	</div>
+	<div class="col-lg-6">
+		<div class="panel panel-default panel-table">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col col-xs-6">
+                    <h3 class="panel-title">2.Yarıyıl</h3>
+                  </div>
+                  <div class="col col-xs-6 text-right">
+                    <h5 class="sub-header">Sayılan Dersler</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-body">
+		        <table class="table table-striped table-bordered table-list">
+		        	<thead>
+						<tr class="active">
+							<th>Ders kodu</th>
+							<th>Ders adı</th>
+							<th>Dersin dili</th>
+							<th>Kredi</th>
+							<th>AKTS</th>
+							<th>Başarı notu</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${lessons}" var="info">
+							<c:if test="${info.subTerm == 2}">
+								<tr>
+								 	<td> ${info.subCode}  </td>
+								   	<td> ${info.subName}  </td>
+								  	<td> ${info.subLang}  </td>
+								   	<td> ${info.subCredit}  </td>
+								   	<td> ${info.subAkts}  </td>
+								   	<td> ${info.subMark}  </td>
+								</tr>
+							</c:if>
+						 </c:forEach>
+					</tbody>
+				</table>				
+			</div>
+			</div>
+	</div>
+	<div class="col-lg-6">
+		<div class="panel panel-default panel-table">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col col-xs-6">
+                    <h3 class="panel-title">2.Yarıyıl</h3>
+                  </div>
+                  <div class="col col-xs-6 text-right">
+                    <h5 class="sub-header">Alınan Dersler</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-body">
+		        <table class="table table-striped table-bordered table-list">
+		        	<thead>
+						<tr class="active">
+							<th>Ders kodu</th>
+							<th>Ders adı</th>
+							<th>Dersin dili</th>
+							<th>Kredi</th>
+							<th>AKTS</th>
+							<th>Başarı notu</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${lessons}" var="info">
+							<c:if test="${info.subTerm == 2}">
+								<tr>
+								   	<td> ${info.takCode}  </td>
+								   	<td> ${info.takName}  </td>
+								  	<td> ${info.takLang}  </td>
+								   	<td> ${info.takCredit}  </td>
+								   	<td> ${info.takAkts}  </td>
+								   	<td> ${info.takMark}  </td>
+								</tr>
+							</c:if>
+						 </c:forEach>
+					</tbody>
+				</table>				
+			</div>
+		</div>
+	</div>         
 </body>
 </html>

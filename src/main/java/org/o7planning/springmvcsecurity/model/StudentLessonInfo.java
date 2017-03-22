@@ -2,8 +2,9 @@ package org.o7planning.springmvcsecurity.model;
 
 public class StudentLessonInfo {
 	private Integer id;
-	private Integer reportId;
+	private Integer studentId;
 	private Integer takingLessonId;
+	private Integer substituteLessonId;
     private String orgMark;
     private String convMark;
     
@@ -11,11 +12,13 @@ public class StudentLessonInfo {
     	
     }
 
-	public StudentLessonInfo(Integer id, Integer reportId, Integer takingLessonId, String orgMark, String convMark) {
+	public StudentLessonInfo(Integer id, Integer studentId, Integer takingLessonId, Integer substituteLessonId,
+			String orgMark, String convMark) {
 		super();
 		this.id = id;
-		this.reportId = reportId;
+		this.studentId = studentId;
 		this.takingLessonId = takingLessonId;
+		this.substituteLessonId = substituteLessonId;
 		this.orgMark = orgMark;
 		this.convMark = convMark;
 	}
@@ -28,12 +31,12 @@ public class StudentLessonInfo {
 		this.id = id;
 	}
 
-	public Integer getReportId() {
-		return reportId;
+	public Integer getStudentId() {
+		return studentId;
 	}
 
-	public void setReportId(Integer reportId) {
-		this.reportId = reportId;
+	public void setStudentId(Integer studentId) {
+		this.studentId = studentId;
 	}
 
 	public Integer getTakingLessonId() {
@@ -42,6 +45,14 @@ public class StudentLessonInfo {
 
 	public void setTakingLessonId(Integer takingLessonId) {
 		this.takingLessonId = takingLessonId;
+	}
+
+	public Integer getSubstituteLessonId() {
+		return substituteLessonId;
+	}
+
+	public void setSubstituteLessonId(Integer substituteLessonId) {
+		this.substituteLessonId = substituteLessonId;
 	}
 
 	public String getOrgMark() {
@@ -59,6 +70,6 @@ public class StudentLessonInfo {
 	public void setConvMark(String convMark) {
 		this.convMark = convMark;
 	}
-    
-    
+
+	
 }

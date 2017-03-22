@@ -30,11 +30,25 @@ public class StudentLessonDAOImpl implements StudentLessonDAO {
 	public List<StudentLessonInfo> listStudentLessonInfos() {
 		// sql query has to have exact names from own class variable 
 		String sql = "Select new " + StudentLessonInfo.class.getName()//
-                + "(a.id, a.reportId, a.takingLessonId, a.orgMark, a.convMark) "//
+                + "(a.id, a.studentId, a.takingLessonId, a.substituteLessonId, a.orgMark, a.convMark) "//
                 + " from " + StudentLesson.class.getName() + " a ";
 		System.out.println(sql.toString());
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery(sql);
+        return query.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<StudentLessonInfo> listStudentLessonInfosForStudent(Integer id) {
+		// sql query has to have exact names from own class variable 
+		String sql = "Select new " + StudentLessonInfo.class.getName()//
+                + "(a.id, a.studentId, a.takingLessonId, a.substituteLessonId, a.orgMark, a.convMark) "//
+                + " from " + StudentLesson.class.getName() + " a Where a.studentId = :code";
+		System.out.println(sql.toString());
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(sql);
+        query.setParameter("code", id);
         return query.list();
 	}
 
@@ -60,7 +74,8 @@ public class StudentLessonDAOImpl implements StudentLessonDAO {
             	studentLesson.setId(Integer.parseInt(query.list().get(0).toString())+1);
             }
         }
-        studentLesson.setReportId(studentLessonInfo.getReportId());
+        studentLesson.setSubstituteLessonId(studentLessonInfo.getSubstituteLessonId());
+        studentLesson.setStudentId(studentLessonInfo.getStudentId());
         studentLesson.setConvMark(studentLessonInfo.getConvMark());
         studentLesson.setOrgMark(studentLessonInfo.getOrgMark());
         studentLesson.setTakingLessonId(studentLessonInfo.getTakingLessonId());
@@ -78,7 +93,7 @@ public class StudentLessonDAOImpl implements StudentLessonDAO {
         if (studentLesson == null) {
             return null;
         }
-        return new StudentLessonInfo(studentLesson.getId(), studentLesson.getReportId(), studentLesson.getTakingLessonId(), studentLesson.getOrgMark(), studentLesson.getConvMark());
+        return new StudentLessonInfo(studentLesson.getId(), studentLesson.getStudentId(), studentLesson.getTakingLessonId(), studentLesson.getSubstituteLessonId(), studentLesson.getOrgMark(), studentLesson.getConvMark());
 	}
 
 	@Override

@@ -16,11 +16,14 @@ public class StudentLesson implements Serializable {
 	@Column(name = "id", nullable = false)
 	private Integer id;
 	
-	@Column(name = "report_id", nullable = false)
-	private Integer reportId;
+	@Column(name = "student_id", nullable = false)
+	private Integer studentId;
 	
 	@Column(name = "taking_lesson_id", nullable = false)
 	private Integer takingLessonId;
+	
+	@Column(name = "substitute_lesson_id", nullable = false)
+	private Integer substituteLessonId;
 	
 	@Column(name = "org_mark", length = 5, nullable = false)
 	private String orgMark;
@@ -34,14 +37,6 @@ public class StudentLesson implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Integer getReportId() {
-		return reportId;
-	}
-
-	public void setReportId(Integer reportId) {
-		this.reportId = reportId;
 	}
 
 	public Integer getTakingLessonId() {
@@ -67,6 +62,20 @@ public class StudentLesson implements Serializable {
 	public void setConvMark(String convMark) {
 		this.convMark = convMark;
 	}
-	
-	
+
+	public Integer getStudentId() {
+		return studentId;
+	}
+
+	public void setStudentId(Integer studentId) {
+		this.studentId = studentId;
+	}
+
+	public Integer getSubstituteLessonId() {
+		return substituteLessonId;
+	}
+
+	public void setSubstituteLessonId(Integer substituteLessonId) {
+		this.substituteLessonId = substituteLessonId;
+	}
 }
