@@ -14,6 +14,7 @@ import org.o7planning.springmvcsecurity.dao.TakingLessonDAO;
 import org.o7planning.springmvcsecurity.dao.UniDAO;
 import org.o7planning.springmvcsecurity.model.DeptInfo;
 import org.o7planning.springmvcsecurity.model.JSPLessonFormat;
+import org.o7planning.springmvcsecurity.model.JSPStudentFormat;
 import org.o7planning.springmvcsecurity.model.RulesInfo;
 import org.o7planning.springmvcsecurity.model.StudentInfo;
 import org.o7planning.springmvcsecurity.model.StudentLessonInfo;
@@ -66,7 +67,7 @@ public class StudentController {
 	
 	@RequestMapping(value="/getStudent",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
 	@ResponseBody
-	public String getUni() {
+	public String getStudent() {
 		String res = "<option id=-1 value=-1>Öğrenci seçin.</option>";
 		List<StudentInfo> list = this.studentDAO.listStudentInfos();
 		for (StudentInfo tmp : list) {
@@ -74,6 +75,40 @@ public class StudentController {
 		}
 		return res;
 	}
+	
+	@RequestMapping(value="/getUniDept",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
+	@ResponseBody
+	public String getUniDept(@RequestParam("id") Integer id) {
+		
+		StudentInfo stu = this.studentDAO.findStudentInfo(id);
+		DeptInfo dept = this.deptDAO.findDeptInfo(stu.getDeptId());
+		UniInfo uni = this.uniDAO.findUniInfo(dept.getUniId());
+		
+		String res = "<label class=\"control-label\">Üniversite</label><select id=\"uniId\" class=\"form-control\" name=\"uniId\" ><option id=-1 value=-1>Üniversite seçin.</option>";
+		List<UniInfo> list = this.uniDAO.listUniInfos();
+		for (UniInfo tmp : list) {
+			if (tmp.getId() == uni.getId()) {
+				res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+" selected>"+tmp.getName()+"</option>");
+			}
+			else {
+				res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+">"+tmp.getName()+"</option>");
+			}
+		}
+		res = res.concat("</select>");
+		res = res.concat("<label class=\"control-label\">Bölüm</label><select id=\"deptId\" class=\"form-control\" name=\"deptId\" ><option id=-1 value=-1>Bölüm seçin.</option>");
+		List<DeptInfo> list2 = this.deptDAO.listDeptFromUni(dept.getUniId());
+		for (DeptInfo tmp : list2) {
+			if (tmp.getId() == dept.getId()) {
+				res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+" selected>"+tmp.getName()+"</option>");
+			}
+			else {
+				res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+">"+tmp.getName()+"</option>");
+			}
+		}
+		res = res.concat("</select>");
+		return res;
+	}
+	
 	
 	@RequestMapping("/getStudentData")
 	public String getStudentData(Model model, @RequestParam("id") Integer id) {
@@ -103,27 +138,31 @@ public class StudentController {
 			 }
 		}
 		model.addAttribute("lessons", list);
-/*		List<TakingLessonInfo> listTakingLesson = this.takingLessonDAO.listTakingLessonFromDept(dept.getId());
-		for (TakingLessonInfo tmp : listTakingLesson){
-			List<RulesInfo> listRules = this.rulesDAO.listRulesForLesson(tmp.getId());
-			if (listRules.get(0) == null){
-				System.out.println("Kural yok.Ders: "+tmp.getName());
-			}
-			else {
-				for (RulesInfo tmp2 : listRules){
-					
-					System.out.println("Dönem: "+tmp.getTerm()+"Sayılan: "+tmp2.getSubstituteLessonId()+" Alınan: "+tmp.getName());
-				}
-			}
-		}*/
+
 		model.addAttribute("subLes", listSubstituteLesson);
 		return "addStudentLesson";
 	}
 	
 	@RequestMapping(value = "/addStudent", method = RequestMethod.GET)
 	public String addStudent(Model model) {
-
+		
 		return "addStudent";
+	}
+	
+	@RequestMapping(value = "/Student", method = RequestMethod.GET)
+	public String Student(Model model) {
+		
+		List<JSPStudentFormat> list = new ArrayList<JSPStudentFormat>();
+		List<StudentInfo> listStu = studentDAO.listStudentInfos();
+		
+		for (StudentInfo tmp : listStu){
+			 DeptInfo dept = this.deptDAO.findDeptInfo(tmp.getDeptId());
+			 UniInfo uni = this.uniDAO.findUniInfo(dept.getUniId());
+			 JSPStudentFormat temp = new JSPStudentFormat(tmp.getId(), uni.getId(), uni.getName(), dept.getId(), dept.getName(), tmp.getName(), tmp.getSurname(), tmp.getNo(), tmp.getAdpScore(), tmp.getRecordYear() );
+			 list.add(temp);
+		 }
+		model.addAttribute("students", list);
+		return "Student";
 	}
 	
 	@RequestMapping("/studentList")
@@ -206,6 +245,7 @@ public class StudentController {
 			studentInfo = this.studentDAO.findStudentInfo(id);
 		}
 		if (studentInfo == null) {
+			System.out.println("Bu id li öğrenci yok.");
 			return "redirect:/studentList";
 		}
 
@@ -217,7 +257,7 @@ public class StudentController {
 		if (id != null) {
 			this.studentDAO.deleteStudent(id);
 		}
-		return "redirect:/studentList";
+		return "redirect:/Student";
 	}
 
 	@RequestMapping(value = "/saveStudent", method = RequestMethod.POST)
@@ -230,20 +270,20 @@ public class StudentController {
 		if (result.hasErrors()) {
 			return this.formStudent(model, studentInfo);
 		}
-		if (studentDAO.isDuplicate(studentInfo)){
-			redirectAttributes.addFlashAttribute("message5", "Öğrenci zaten eklenmiş.");
-		}
-		else {
+//		if (studentDAO.isDuplicate(studentInfo)){
+//			redirectAttributes.addFlashAttribute("message5", "Öğrenci zaten eklenmiş.");
+//		}
+//		else {
 			this.studentDAO.saveStudent(studentInfo);
 
 			// Important!!: Need @EnableWebMvc
 			// Add message to flash scope
 			redirectAttributes.addFlashAttribute("message5", "Öğrenci Eklendi.");
-		}
+//		}
 		
 
 //		return "redirect:/studentList";
-		return "redirect:/addStudent";
+		return "redirect:/Student";
 	}
 	
 }

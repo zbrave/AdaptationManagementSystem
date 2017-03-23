@@ -34,6 +34,14 @@ $(document).ready(function(){
         $("#substituteLessonId").html(data);
     });
 });</script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#takingLessonId").change(function(){
+    $.get("${pageContext.request.contextPath}/getSubstituteLessonById?id="+$(this).children("option").filter(":selected").attr("id") , null, function (data) {
+        $("#substituteLessonId").html(data);
+    });
+});
+});</script>
 <title>Create substituteLesson</title>
 <style>
 .error-message {
@@ -44,26 +52,7 @@ $(document).ready(function(){
 </style>
 </head>
 <body>
-	<nav class="navbar">
-	<div class="menu">
-	    <div class="container-fluid">
-			<div class="navbar-header">
-				<a href="#">IYS</a>
-			</div>
-			<div>
-				<ul class="nav navbar-nav navbar-right" id="nav">
-					<li><a href="${pageContext.request.contextPath}/welcome" ><span class="glyphicon glyphicon-user"></span> Anasayfa</a></li>
-					<li><a href="${pageContext.request.contextPath}/userInfo"><span class="glyphicon glyphicon-log-in"></span> User Info</a></li>
-					<li><a href="${pageContext.request.contextPath}/admin" ><span class="glyphicon glyphicon-user"></span> Admin</a></li>
-					<c:if test="${pageContext.request.userPrincipal.name != null}">
-						<li class="active"><a href="${pageContext.request.contextPath}/addRules" ><span class="glyphicon glyphicon-plus"></span> Yeni Kural</a></li>
-						<li><a href="${pageContext.request.contextPath}/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-					</c:if>
-				</ul>
-			</div>
-		</div>
-	</div>
-	</nav>
+	<%@include file="navbar.jsp" %>
 	<div class="col-lg-1"></div>
 	<!-- Forms -->
 	<div class="col-lg-10">
@@ -112,34 +101,38 @@ $(document).ready(function(){
 						</tr>
 					</tbody>
 				</table>
-				<form:form action="saveStudentLesson" method="POST" modelAttribute="studentLessonForm">
-					<div class="form-group">
-						<input id="id" name="id" type="hidden" value=""/>
-						
-						<input id="studentId" name="studentId" type="hidden" value="${id}"/>
-						
-						<label class="control-label">Alınan Ders</label>
-									 			
-				   		<select id="takingLessonId" class="form-control" name="takingLessonId" ></select>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<form:form action="saveStudentLesson" method="POST" modelAttribute="studentLessonForm">
+							<div class="form-group">
+								<input id="id" name="id" type="hidden" value=""/>
+								
+								<input id="studentId" name="studentId" type="hidden" value="${id}"/>
+								
+								<label class="control-label">Alınan Ders</label>
+											 			
+						   		<select id="takingLessonId" class="form-control" name="takingLessonId" ></select>
 
-						<label class="control-label">Sayılan Ders</label>
-									 			
-				   		<select id="substituteLessonId" class="form-control" name="substituteLessonId" ></select>
-				   		
-				   		<label class="control-label">Not</label>
-				   		
-				   		<input id="orgMark" name="orgMark" type="text" value=""/>
-				   		
-				   		<input id="convMark" name="convMark" type="hidden" value=""/>
-				   		
-				   		<button type="submit" class="btn btn-default" value="Ekle" >Ekle</button>
-							        
-				        <c:if test="${not empty message5}">
-						   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message}
-						   </div>
-						</c:if> 
-			        </div>
-		        </form:form>			
+								<label class="control-label">Sayılan Ders</label>
+											 			
+						   		<select id="substituteLessonId" class="form-control" name="substituteLessonId" ></select>
+						   		
+						   		<label class="control-label">Not</label>
+						   		
+						   		<input id="orgMark" class="form-control" name="orgMark" type="text" value=""/>
+						   		
+						   		<input id="convMark" name="convMark" type="hidden" value=""/>
+						   		
+						   		<button type="submit" class="btn btn-default" value="Ekle" >Ekle</button>
+									        
+						        <c:if test="${not empty message5}">
+								   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message}
+								   </div>
+								</c:if> 
+					        </div>
+				        </form:form>
+		        	</div>
+		        </div>
 			</div>
         </div>
 	</div>

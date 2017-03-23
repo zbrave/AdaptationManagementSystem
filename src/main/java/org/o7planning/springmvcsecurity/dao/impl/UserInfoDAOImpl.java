@@ -25,8 +25,8 @@ public class UserInfoDAOImpl extends JdbcDaoSupport implements UserInfoDAO {
  
     @Override
     public UserInfo findUserInfo(String userName) {
-        String sql = "Select u.Username,u.Password "//
-                + " from Users u where u.Username = ? ";
+        String sql = "Select u.username, u.password, u.std_id, u.enabled  "//
+                + " from user u where u.username = ? ";
  
         Object[] params = new Object[] { userName };
         UserInfoMapper mapper = new UserInfoMapper();
@@ -41,8 +41,8 @@ public class UserInfoDAOImpl extends JdbcDaoSupport implements UserInfoDAO {
  
     @Override
     public List<String> getUserRoles(String userName) {
-        String sql = "Select r.User_Role "//
-                + " from User_Roles r where r.Username = ? ";
+        String sql = "Select r.user_role "//
+                + " from user_roles r where r.user_username = ? ";
          
         Object[] params = new Object[] { userName };
          

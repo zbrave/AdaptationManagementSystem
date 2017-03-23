@@ -43,31 +43,15 @@ $(document).ready(function(){
 </style>
 </head>
 <body>
-	<nav class="navbar">
-	<div class="menu">
-	    <div class="container-fluid">
-			<div class="navbar-header">
-				<a href="#">IYS</a>
-			</div>
-			<div>
-				<ul class="nav navbar-nav navbar-right" id="nav">
-					<li><a href="${pageContext.request.contextPath}/welcome" ><span class="glyphicon glyphicon-user"></span> Anasayfa</a></li>
-					<li><a href="${pageContext.request.contextPath}/userInfo"><span class="glyphicon glyphicon-log-in"></span> User Info</a></li>
-					<li><a href="${pageContext.request.contextPath}/admin" ><span class="glyphicon glyphicon-user"></span> Admin</a></li>
-					<c:if test="${pageContext.request.userPrincipal.name != null}">
-						<li class="active"><a href="${pageContext.request.contextPath}/addRules" ><span class="glyphicon glyphicon-plus"></span> Yeni Kural</a></li>
-						<li><a href="${pageContext.request.contextPath}/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-					</c:if>
-				</ul>
-			</div>
-		</div>
-	</div>
-	</nav>
-	<div class="col-lg-1"></div>
+	<%@include file="navbar.jsp" %>
+	
 	<!-- Forms -->
-	<div class="col-lg-10">
+	<div id="newStu" class="container modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none; margin-top: 50px;">
 		<div class="row">
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
+            <div class="panel-heading">Yeni Öğrenci Ekle<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</button></div>
 	            <div class="panel-body">
 	            <form:form action="saveStudent" method="POST" modelAttribute="studentForm">
 					<div class="form-group">
@@ -98,8 +82,8 @@ $(document).ready(function(){
 				        <label class="control-label">Kayıt Yılı</label>
 				                       
 				        <input id="recordYear" class="form-control" name="recordYear" />
-				        
-				        <button type="submit" class="btn btn-default" value="Ekle" >Ekle</button>
+				        <br/>
+				        <button type="submit" class="btn btn-primary" value="Ekle" >Ekle</button>
 							        
 				        <c:if test="${not empty message5}">
 						   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message5}
@@ -110,6 +94,42 @@ $(document).ready(function(){
 		        </div>
 	        </div>
         </div>
-	</div>                     
+	</div>
+	
+	<div class="container">
+    <div class="row custyle">
+    <table class="table table-striped custab" style="background-color: #FFF;">
+    <thead>
+    <a href="#" class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#newStu" onclick="$('#newStu').show();"><b>+</b> Yeni Öğrenci Ekle</a>
+        <tr>
+            <th>ID</th>
+            <th>Geldiği Üniversite</th>
+            <th>Bölüm</th>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Numara</th>
+            <th>İntibak Notu</th>
+            <th>Kayıt Yılı</th>
+            <th class="text-center">Action</th>
+        </tr>
+    </thead>
+    	 <c:forEach items="${students}" var="info">
+            <tr>
+                <td>${info.id}</td>
+                <td>${info.uniName}</td>
+                <td>${info.deptName}</td>
+                <td>${info.name}</td>
+                <td>${info.surname}</td>
+                <td>${info.no}</td>
+                <td>${info.adpScore}</td>
+                <td>${info.recordYear}</td>
+                <td class="text-center"><a class='btn btn-info btn-xs' href="editStudent?id=${info.id}"><span class="glyphicon glyphicon-edit"></span> Edit</a> 
+                <a href="deleteStudent?id=${info.id}" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Del</a></td>
+            </tr>
+        </c:forEach>
+    </table>
+    </div>
+</div>
+
 </body>
 </html>

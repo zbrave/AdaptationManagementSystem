@@ -49,18 +49,6 @@ public class TakingLessonController {
 		return "takingLessonList";
 	}
 	
-	@RequestMapping(value="/getDept",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
-	@ResponseBody
-	public String getDept(@RequestParam Integer id) {
-		System.out.println("id:"+id);
-		String res = "<option id=-1 value=-1>Bölüm seçin.</option>";
-		List<DeptInfo> list = this.deptDAO.listDeptFromUni(id);
-		for (DeptInfo tmp : list) {
-			res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+">"+tmp.getName()+"</option>");
-		}
-		return res;
-	}
-	
 	@RequestMapping(value="/getTakingLesson",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
 	@ResponseBody
 	public String getTakingLesson(@RequestParam Integer id) {

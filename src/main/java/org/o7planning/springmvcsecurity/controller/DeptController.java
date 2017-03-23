@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -41,6 +42,18 @@ public class DeptController {
 		List<DeptInfo> list = deptDAO.listDeptInfos();
 		model.addAttribute("deptInfos", list);
 		return "deptList";
+	}
+	
+	@RequestMapping(value="/getDept",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
+	@ResponseBody
+	public String getDept(@RequestParam Integer id) {
+		System.out.println("id:"+id);
+		String res = "<option id=-1 value=-1>Bölüm seçin.</option>";
+		List<DeptInfo> list = this.deptDAO.listDeptFromUni(id);
+		for (DeptInfo tmp : list) {
+			res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+">"+tmp.getName()+"</option>");
+		}
+		return res;
 	}
 
 	@SuppressWarnings("unused")

@@ -31,18 +31,22 @@
  
 <table border="1">
  <tr>
- 	<th>TakingLesson Id</th>
+ 	<th>Name</th>
    <th>Code</th>
+   <th>Language</th>
    <th>Credit</th>
    <th>AKTS</th>
+   <th>Term</th>
    <th>Delete</th>
    <th>Edit</th>
  </tr>
  <c:forEach items="${substituteLessonInfos}" var="info">
  <tr>
- 	<td> ${info.takingLessonId}  </td>
+ 	<td> ${info.name}  </td>
    <td> ${info.code}  </td>
+   <td> ${info.lang}  </td>
    <td> ${info.credit}  </td>
+   <td> ${info.term}  </td>
    <td> ${info.akts}  </td>
    <td> <a href="deleteSubstituteLesson?id=${info.id}">Delete</a> </td>
    <td> <a href="editSubstituteLesson?id=${info.id}">Edit</a> </td>

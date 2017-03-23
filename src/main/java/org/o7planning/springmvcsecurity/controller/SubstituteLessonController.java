@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.o7planning.springmvcsecurity.dao.DeptDAO;
+import org.o7planning.springmvcsecurity.dao.RulesDAO;
 import org.o7planning.springmvcsecurity.dao.SubstituteLessonDAO;
 import org.o7planning.springmvcsecurity.dao.TakingLessonDAO;
 import org.o7planning.springmvcsecurity.dao.UniDAO;
 import org.o7planning.springmvcsecurity.model.DeptInfo;
+import org.o7planning.springmvcsecurity.model.RulesInfo;
 import org.o7planning.springmvcsecurity.model.SubstituteLessonInfo;
 import org.o7planning.springmvcsecurity.model.TakingLessonInfo;
 import org.o7planning.springmvcsecurity.model.UniInfo;
@@ -46,12 +48,27 @@ public class SubstituteLessonController {
 	@Autowired
 	private SubstituteLessonDAO substituteLessonDAO;
 	
+	@Autowired
+	private RulesDAO rulesDAO;
+	
 	/* SubstituteLesson Controller Section */
 	@RequestMapping("/substituteLessonList")
 	public String substituteLessonList(Model model) {
 		List<SubstituteLessonInfo> list = substituteLessonDAO.listSubstituteLessonInfos();
 		model.addAttribute("substituteLessonInfos", list);
 		return "substituteLessonList";
+	}
+	
+	@RequestMapping(value="/getSubstituteLessonById",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
+	@ResponseBody
+	public String getSubstituteLessonById(@RequestParam Integer id) {
+		String res = "<option id=-1 value=-1>Ders seçin.</option>";
+		List<RulesInfo> listRules = this.rulesDAO.listRulesForLesson(id);
+		for (RulesInfo tmp : listRules) {
+			SubstituteLessonInfo temp = this.substituteLessonDAO.findSubstituteLessonInfo(tmp.getSubstituteLessonId());
+			res = res.concat("<option "+"id="+temp.getId()+" value="+temp.getId()+">"+temp.getName()+"</option>");
+		}
+		return res;
 	}
 	
 	@RequestMapping(value="/getSubstituteLesson",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")

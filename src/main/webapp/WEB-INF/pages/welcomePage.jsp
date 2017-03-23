@@ -16,26 +16,35 @@
 	<script src="${amsJS}"></script>	
 	<title>${title}</title>
 </head>
+<script type="text/javascript">
+$.get("http://freegeoip.net/json/", function (response) {
+    $("#ip").html("IP: " + response.ip);
+    $("#address").html(response.country_name + " / " + response.region_name);
+}, "jsonp");
+</script>
 <body>
-	<nav class="navbar">
-	<div class="menu">
-	    <div class="container-fluid">
-			<div class="navbar-header">
-				<a href="#">IYS</a>
-			</div>
-			<div>
-				<ul class="nav navbar-nav navbar-right" id="nav">
-					<li class="active"><a href="${pageContext.request.contextPath}/welcome" ><span class="glyphicon glyphicon-user"></span> Anasayfa</a></li>
-					<li><a href="${pageContext.request.contextPath}/userInfo"><span class="glyphicon glyphicon-log-in"></span> User Info</a></li>
-					<li><a href="${pageContext.request.contextPath}/admin" ><span class="glyphicon glyphicon-user"></span> Admin</a></li>
-					<c:if test="${pageContext.request.userPrincipal.name != null}">
-						<li><a href="${pageContext.request.contextPath}/newRule" ><span class="glyphicon glyphicon-plus"></span> Yeni Kural</a></li>
-						<li><a href="${pageContext.request.contextPath}/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+	<%@include file="navbar.jsp" %>
+	<div id="country"></div>
+	<div class="text-center">
+        <div class="media">
+            <div class="media-body">
+                <h4 class="media-heading">Hoşgeldin, ${pageContext.request.userPrincipal.name} <small id="address"></small></h4>
+                <h5 id="ip"></h5>
+                <hr style="margin:8px auto">
+                <c:forEach var="role"
+					items="${pageContext['request'].userPrincipal.principal.authorities}">
+					<c:if test="${role.authority == 'ROLE_SUPER_ADMIN' }">
+						<span class="label label-primary"><c:out value="SUPER ADMIN" /></span>
 					</c:if>
-				</ul>
-			</div>
-		</div>
-	</div>
-	</nav>	
+					<c:if test="${role.authority == 'ROLE_ADMIN' }">
+						<span class="label label-info"><c:out value="ADMIN" /></span>
+					</c:if>
+					<c:if test="${role.authority == 'ROLE_USER' }">
+						<span class="label label-default"><c:out value="USER" /></span>
+					</c:if>
+				</c:forEach>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

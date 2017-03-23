@@ -11,10 +11,11 @@ public class UserInfoMapper implements RowMapper<UserInfo> {
     @Override
     public UserInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
  
-        String userName = rs.getString("Username");
-        String password = rs.getString("Password");
- 
-        return new UserInfo(userName, password);
+        String username = rs.getString("username");
+        String password = rs.getString("password");
+        Integer stdId = rs.getInt("std_id");
+        Boolean enabled = rs.getBoolean("enabled");
+        return new UserInfo(username, password, stdId, enabled);
     }
  
 }
