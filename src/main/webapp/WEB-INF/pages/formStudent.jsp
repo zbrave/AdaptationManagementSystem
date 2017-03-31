@@ -19,18 +19,31 @@
 </head>
 <script type="text/javascript">
 $(document).ready(function(){
-  $.get("${pageContext.request.contextPath}/getUniDept?id=" + $('#deptId').val(), null, function (data) {
-    $("#UniDept").html(data);
-  });
-  $('#uniId').on('change',function(){
+  $.get("${pageContext.request.contextPath}/getUni", null, function (data) {
+          $("#sUniId").html(data);
+          $("#sUniId").val('${uniId}');
+      });
+	$.get("${pageContext.request.contextPath}/getDept?id=${studentForm.deptId}", null, function (data) {
+      $("#sDeptId").html(data);
+      $('#sDeptId').val('${studentForm.deptId}');
+	});
+  $('#sUniId').on('change',function(){
     $.get("${pageContext.request.contextPath}/getDept?id="+ $(this).children("option").filter(":selected").attr("id"), null, function (data) {
           $("#deptId").html(data);
       });
   });
+  $('#sUniId').on('change',function(){
+    $.get("${pageContext.request.contextPath}/getDept?id="+ $(this).children("option").filter(":selected").attr("id"), null, function (data) {
+          $("#sDeptId").html(data);
+      });
+  });
+  $('#sDeptId').on('change' ,function(){
+    var sa = $(this).val();
+    $('#deptId').val(sa); 
+  });
 });</script>
 <body>
  	<%@include file="navbar.jsp" %>
-	
 	<!-- Forms -->
 	<div id="newStu" >
   <div class="container">
@@ -43,14 +56,17 @@ $(document).ready(function(){
  
    <form:form action="saveStudent" method="POST" modelAttribute="studentForm">
     <div class="form-group">
-      <fieldset disabled>
+
       <label class="control-label">ID</label>
-      <form:input class="form-control disabled" path="id" />
-      </fieldset>
+      <form:input class="form-control" path="id" readonly="true" />
+      
+      <label class="control-label">Üniversite</label>
+      <select id="sUniId" class="form-control" ></select>
 
-      <form:input path="deptId" type="hidden" />
+      <label class="control-label">Bölüm</label>
+      <select id="sDeptId" class="form-control" ></select>
 
-      <div id="UniDept"></div>
+      <form:input path="deptId" class="form-control" type="hidden" />
 
       <label class="control-label">Ad</label>
       <form:input class="form-control" path="name" /></td>
@@ -72,16 +88,14 @@ $(document).ready(function(){
       <form:input class="form-control" path="recordYear" /></td>
       <form:errors path="recordYear" class="error-message" />
           
-           <tr>
-               <td>&nbsp;</td>
-               <td><input type="submit" value="Submit" />
-                  <a href="${pageContext.request.contextPath}/Student">Cancel</a>
-               </td>
-               <td>&nbsp;</td>
-           </tr>
-       </table>
+      <button class="btn btn-primary" type="  " value="Submit" >Ekle</button>
+      <button class="btn btn-danger"><a href="${pageContext.request.contextPath}/Student">Cancel</a></button>
+               
    </form:form>
  </div>
- </div></div></div></div>
+ </div>
+ </div>
+ </div>
+ </div>
 </body>
 </html>

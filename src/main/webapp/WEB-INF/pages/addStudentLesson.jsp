@@ -58,9 +58,9 @@ $(document).ready(function(){
 	<div class="col-lg-10">
 		<div class="row">
             <div class="panel panel-default">
-	            <div class="panel-body">
+	            <div class="panel-body ">
 	            <form:form action="getStudentData" method="POST" modelAttribute="studentForm">
-					<div class="form-group">
+					<div class="form-group form-inline">
 						
 						<label class="control-label">Öğrenci Adı</label>
 									 			
@@ -75,63 +75,72 @@ $(document).ready(function(){
 			        </div>
 		        </form:form>
 		        </div>
-	        </div> 
-	        <div class="panel-body">
+	        </div>
+	        <c:if test="${not empty uni}">
+	        <div class="panel panel-default panel-table">
+              <div class="panel-heading">
+                <div class="row">
+                    <h3 class="panel-title text-center">Öğrenci bilgisi</h3>
+                </div>
+              </div>
+              <div class="panel-body">
 		        <table class="table table-striped table-bordered table-list">
 		        	<thead>
 						<tr class="active">
-							<th>Üniversite</th>
-							<th>Bölüm</th>
-							<th>Numara</th>
-							<th>Ad</th>
-							<th>Soyad</th>
-							<th>İntibak Notu</th>
-							<th>Kayıt Yılı</th>
+							<th class="col-md-2 text-center">Üniversite</th>
+							<th class="col-md-2 text-center">Bölüm</th>
+							<th class="col-md-1 text-center">Numara</th>
+							<th class="col-md-2 text-center">Ad</th>
+							<th class="col-md-1 text-center">Soyad</th>
+							<th class="col-md-1 text-center">İntibak Notu</th>
+							<th class="col-md-1 text-center">Kayıt Yılı</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<td>${uni}</td>
-							<td>${dept}</td>
-							<td>${no}</td>
-							<td>${name}</td>
-							<td>${surname}</td>
-							<td>${adpScore}</td>
-							<td>${recordYear}</td>
+							<td class="col-md-2 text-center">${uni}</td>
+							<td class="col-md-2 text-center">${dept}</td>
+							<td class="col-md-1 text-center">${no}</td>
+							<td class="col-md-2 text-center">${name}</td>
+							<td class="col-md-1 text-center">${surname}</td>
+							<td class="col-md-1 text-center">${adpScore}</td>
+							<td class="col-md-1 text-center">${recordYear}</td>
 						</tr>
 					</tbody>
 				</table>
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<form:form action="saveStudentLesson" method="POST" modelAttribute="studentLessonForm">
+				</div>
+			</div>
+				<div class="panel panel-primary panel-table">
+              
+              <div class="panel-body">
+						<form:form action="saveStudentLesson" class="form-inline" method="POST" modelAttribute="studentLessonForm">
 							<div class="form-group">
 								<input id="id" name="id" type="hidden" value=""/>
 								
 								<input id="studentId" name="studentId" type="hidden" value="${id}"/>
 								
-								<label class="control-label">Alınan Ders</label>
+								<label class="control-label" style="margin-left: 10px;">Alınan Ders</label>
 											 			
 						   		<select id="takingLessonId" class="form-control" name="takingLessonId" ></select>
 
-								<label class="control-label">Sayılan Ders</label>
+								<label class="control-label" style="margin-left: 10px;">Sayılan Ders</label>
 											 			
 						   		<select id="substituteLessonId" class="form-control" name="substituteLessonId" ></select>
 						   		
-						   		<label class="control-label">Not</label>
+						   		<label class="control-label" style="margin-left: 10px;">Not</label>
 						   		
-						   		<input id="orgMark" class="form-control" name="orgMark" type="text" value=""/>
+						   		<input id="orgMark" class="form-control" style="width: 5%;" name="orgMark" type="text" value=""/>
 						   		
 						   		<input id="convMark" name="convMark" type="hidden" value=""/>
 						   		
-						   		<button type="submit" class="btn btn-default" value="Ekle" >Ekle</button>
+						   		<button type="submit" class="btn btn-default " style="margin-left: 30px;" value="Ekle" >Ekle</button>
 									        
-						        <c:if test="${not empty message5}">
+						        <c:if test="${not empty message}">
 								   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message}
 								   </div>
 								</c:if> 
 					        </div>
 				        </form:form>
-		        	</div>
 		        </div>
 			</div>
         </div>
@@ -303,6 +312,7 @@ $(document).ready(function(){
 				</table>				
 			</div>
 		</div>
-	</div>         
+	</div>  
+	</c:if>       
 </body>
 </html>

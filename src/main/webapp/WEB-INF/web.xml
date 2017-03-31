@@ -5,7 +5,7 @@
           http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
  id="WebApp_ID" version="3.0">
  
- <display-name>SpringMVCAnnotationSecurity</display-name>
+ <display-name>AMS</display-name>
  <welcome-file-list>
  	<welcome-file>index.html</welcome-file>
  	<welcome-file>index.htm</welcome-file>

@@ -31,6 +31,7 @@
  
 <table border="1">
  <tr>
+ <td> Name  </td>
  	<th>Dept Id</th>
    <th>Code</th>
    <th>Credit</th>
@@ -40,6 +41,7 @@
  </tr>
  <c:forEach items="${takingLessonInfos}" var="info">
  <tr>
+ <td> ${info.name}  </td>
  	<td> ${info.deptId}  </td>
    <td> ${info.code}  </td>
    <td> ${info.credit}  </td>
