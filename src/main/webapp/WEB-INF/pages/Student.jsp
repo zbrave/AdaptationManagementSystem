@@ -83,12 +83,7 @@ $(document).ready(function(){
 				                       
 				        <input id="recordYear" class="form-control" name="recordYear" />
 				        <br/>
-				        <button type="submit" class="btn btn-primary" value="Ekle" >Ekle</button>
-							        
-				        <c:if test="${not empty message5}">
-						   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message5}
-						   </div>
-						</c:if> 
+				        <button type="submit" class="btn btn-primary" value="Ekle" >Ekle</button> 
 			        </div>
 		        </form:form>
 		        </div>
@@ -129,6 +124,10 @@ $(document).ready(function(){
         </c:forEach>
     </table>
     </div>
+    <c:if test="${not empty message5}">
+	   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message5}
+	   </div>
+	</c:if>
 </div>
 
 </body>

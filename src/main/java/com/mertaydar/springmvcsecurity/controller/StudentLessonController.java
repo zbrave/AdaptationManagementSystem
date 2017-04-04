@@ -203,7 +203,7 @@ public class StudentLessonController {
 		}
 		model.addAttribute("lessons", list);
 		
-		System.out.println("sa"+list.size());
+//		System.out.println("sa"+list.size());
 
 //		return "redirect:/studentLessonList";
 		return "addStudentLesson";

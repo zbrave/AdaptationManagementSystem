@@ -153,7 +153,7 @@ $(document).ready(function(){
                     <h3 class="panel-title">1.Yarıyıl</h3>
                   </div>
                   <div class="col col-xs-6 text-right">
-                    <h5 class="sub-header">Sayılan Dersler</h5>
+                    <h5 class="sub-header">Alınan Dersler</h5>
                   </div>
                 </div>
               </div>
@@ -173,19 +173,19 @@ $(document).ready(function(){
 						<c:forEach items="${lessons}" var="info">
 							<c:if test="${info.subTerm == 1}">
 								<tr>
-								 	<td> ${info.subCode}  </td>
-								   	<td> ${info.subName}  </td>
-								  	<td> ${info.subLang}  </td>
-								   	<td> ${info.subCredit}  </td>
-								   	<td> ${info.subAkts}  </td>
-								   	<td> ${info.subMark}  </td>
+								   	<td> ${info.takCode}  </td>
+								   	<td> ${info.takName}  </td>
+								  	<td> ${info.takLang}  </td>
+								   	<td> ${info.takCredit}  </td>
+								   	<td> ${info.takAkts}  </td>
+								   	<td> ${info.takMark}  </td>
 								</tr>
 							</c:if>
 						 </c:forEach>
 					</tbody>
 				</table>				
 			</div>
-			</div>
+		</div>
 	</div>
 	<div class="col-lg-6">
 		<div class="panel panel-default panel-table">
@@ -195,7 +195,7 @@ $(document).ready(function(){
                     <h3 class="panel-title">1.Yarıyıl</h3>
                   </div>
                   <div class="col col-xs-6 text-right">
-                    <h5 class="sub-header">Alınan Dersler</h5>
+                    <h5 class="sub-header">(YTÜ) Sayılan Dersler</h5>
                   </div>
                 </div>
               </div>
@@ -214,48 +214,6 @@ $(document).ready(function(){
 					<tbody>
 						<c:forEach items="${lessons}" var="info">
 							<c:if test="${info.subTerm == 1}">
-								<tr>
-								   	<td> ${info.takCode}  </td>
-								   	<td> ${info.takName}  </td>
-								  	<td> ${info.takLang}  </td>
-								   	<td> ${info.takCredit}  </td>
-								   	<td> ${info.takAkts}  </td>
-								   	<td> ${info.takMark}  </td>
-								</tr>
-							</c:if>
-						 </c:forEach>
-					</tbody>
-				</table>				
-			</div>
-		</div>
-	</div>
-	<div class="col-lg-6">
-		<div class="panel panel-default panel-table">
-              <div class="panel-heading">
-                <div class="row">
-                  <div class="col col-xs-6">
-                    <h3 class="panel-title">2.Yarıyıl</h3>
-                  </div>
-                  <div class="col col-xs-6 text-right">
-                    <h5 class="sub-header">Sayılan Dersler</h5>
-                  </div>
-                </div>
-              </div>
-              <div class="panel-body">
-		        <table class="table table-striped table-bordered table-list">
-		        	<thead>
-						<tr class="active">
-							<th>Ders kodu</th>
-							<th>Ders adı</th>
-							<th>Dersin dili</th>
-							<th>Kredi</th>
-							<th>AKTS</th>
-							<th>Başarı notu</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach items="${lessons}" var="info">
-							<c:if test="${info.subTerm == 2}">
 								<tr>
 								 	<td> ${info.subCode}  </td>
 								   	<td> ${info.subName}  </td>
@@ -312,7 +270,49 @@ $(document).ready(function(){
 				</table>				
 			</div>
 		</div>
-	</div>  
+	</div>
+	<div class="col-lg-6">
+		<div class="panel panel-default panel-table">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col col-xs-6">
+                    <h3 class="panel-title">2.Yarıyıl</h3>
+                  </div>
+                  <div class="col col-xs-6 text-right">
+                    <h5 class="sub-header">(YTÜ) Sayılan Dersler</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-body">
+		        <table class="table table-striped table-bordered table-list">
+		        	<thead>
+						<tr class="active">
+							<th>Ders kodu</th>
+							<th>Ders adı</th>
+							<th>Dersin dili</th>
+							<th>Kredi</th>
+							<th>AKTS</th>
+							<th>Başarı notu</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${lessons}" var="info">
+							<c:if test="${info.subTerm == 2}">
+								<tr>
+								 	<td> ${info.subCode}  </td>
+								   	<td> ${info.subName}  </td>
+								  	<td> ${info.subLang}  </td>
+								   	<td> ${info.subCredit}  </td>
+								   	<td> ${info.subAkts}  </td>
+								   	<td> ${info.subMark}  </td>
+								</tr>
+							</c:if>
+						 </c:forEach>
+					</tbody>
+				</table>				
+			</div>
+			</div>
+	</div>
 	</c:if>       
 </body>
 </html>
