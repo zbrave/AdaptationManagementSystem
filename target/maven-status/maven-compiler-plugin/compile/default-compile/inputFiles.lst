@@ -24,6 +24,7 @@ D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecur
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\entity\SubstituteLesson.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\model\UniInfo.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\RulesDAO.java
+D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\view\ITextPdfView.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\model\StudentLessonInfo.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\impl\StudentDAOImpl.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\DeptDAO.java
@@ -45,6 +46,7 @@ D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecur
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\validator\UniValidator.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\config\SpringSecurityInitializer.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\impl\DeptDAOImpl.java
+D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\view\AbstractITextPdfView.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\model\SubstituteLessonInfo.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\MarkDAO.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\entity\Dept.java
