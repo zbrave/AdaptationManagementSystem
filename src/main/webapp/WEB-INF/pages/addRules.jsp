@@ -25,6 +25,7 @@ $(document).ready(function(){
 	        $("#uniId").html(data);
 	        $("#uniId2").html(data);
 	        $("#uniId3").html(data);
+	        $("#uniId4").html(data);
 	    });
 	$.get("${pageContext.request.contextPath}/getSubstituteLesson", null, function (data) {
         $("#substituteLessonId").html(data);
@@ -111,6 +112,7 @@ $(document).ready(function(){
                             <li><a href="#deptTab" data-toggle="tab">Bölüm</a></li>
                             <li><a href="#takingLessonTab" data-toggle="tab">Alınan Ders</a></li>
                             <li><a href="#substituteLessonTab" data-toggle="tab">Sayılan Ders</a></li>
+                            <li><a href="#markTab" data-toggle="tab">Not Sistemi</a></li>
                         </ul>
                 </div>
                 <div class="panel-body">
@@ -240,6 +242,33 @@ $(document).ready(function(){
 								</c:if>
 					   		</form:form>
                         </div>
+                        <div class="tab-pane fade" id="markTab">
+							<form:form action="saveMark" method="POST" modelAttribute="markForm">
+							  	<div class="form-group">
+							   		<input id="id" name="id" type="hidden" value=""/>
+					       			
+						        	<label class="control-label">Üniversite Adı</label>
+									
+									<select id="uniId4" class="form-control" name="uniId" ></select>
+
+									<label class="control-label">Alınan Not</label>
+
+					              	<input id="from" class="form-control input-sm" name="from" type="text" value="" style="height: 35px!important" />
+									
+									<label class="control-label">Sayılan Not(YTU)</label>
+
+									<input id="to" class="form-control input-sm" name="to" type="text" value="" style="height: 35px!important" />
+
+					    	       	<button type="submit" class="btn btn-default" value="Ekle" >Ekle</button>
+					           		
+					           		<c:if test="${not empty message1}">
+									   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message1}
+									   </div>
+									</c:if> 
+					
+					  			</div>
+							</form:form>
+						</div>
                     </div>
                 </div>
         	</div>

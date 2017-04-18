@@ -100,7 +100,7 @@ public class StudentController {
 			 for (StudentLessonInfo tmp : listStuLes){
 				 SubstituteLessonInfo tmpSub = this.substituteLessonDAO.findSubstituteLessonInfo(tmp.getSubstituteLessonId());
 				 TakingLessonInfo tmpTak = this.takingLessonDAO.findTakingLessonInfo(tmp.getTakingLessonId());
-				 JSPLessonFormat temp = new JSPLessonFormat(tmpSub, tmpTak, tmp.getOrgMark(), tmp.getConvMark());
+				 JSPLessonFormat temp = new JSPLessonFormat(tmp.getId(),tmpSub, tmpTak, tmp.getOrgMark(), tmp.getConvMark());
 				 list.add(temp);
 			 }
 		}
@@ -115,11 +115,25 @@ public class StudentController {
 	}
 	
 	@RequestMapping(value = "/Student", method = RequestMethod.GET)
-	public String Student(Model model) {
+	public String Student(Model model,@RequestParam Integer pageid,@RequestParam(value = "searchTerm", required = false) String search) {
 		
 		List<JSPStudentFormat> list = new ArrayList<JSPStudentFormat>();
-		List<StudentInfo> listStu = studentDAO.listStudentInfos();
-		
+		int total = 2;  
+        if (pageid == 1){
+        	
+        }  
+        else {  
+            pageid = (pageid-1)*total+1;  
+        }
+        List<StudentInfo> listStu = null;
+        if (search == null || search.isEmpty()) {
+        	listStu = studentDAO.listStudentInfos(pageid,total);
+        }
+        else {
+        	listStu = studentDAO.listStudentInfosByNo(pageid,total,search);
+        }
+		Integer pageSize = studentDAO.listStudentInfos().size();
+		pageSize = (int) Math.ceil(pageSize / (float)total);
 		for (StudentInfo tmp : listStu){
 			 DeptInfo dept = this.deptDAO.findDeptInfo(tmp.getDeptId());
 			 UniInfo uni = this.uniDAO.findUniInfo(dept.getUniId());
@@ -127,6 +141,7 @@ public class StudentController {
 			 list.add(temp);
 		 }
 		model.addAttribute("students", list);
+		model.addAttribute("pageSize", pageSize);
 		return "Student";
 	}
 	

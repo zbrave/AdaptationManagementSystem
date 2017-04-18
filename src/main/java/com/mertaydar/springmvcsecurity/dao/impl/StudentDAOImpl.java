@@ -38,6 +38,32 @@ public class StudentDAOImpl implements StudentDAO {
         Query query = session.createQuery(sql);
         return query.list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<StudentInfo> listStudentInfos(Integer pageid, Integer total) {
+		// sql query has to have exact names from own class variable 
+		String sql = "Select new " + StudentInfo.class.getName()//
+                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear) "//
+                + " from " + Student.class.getName() + " a ";
+		System.out.println(sql.toString());
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(sql).setFirstResult(pageid-1).setMaxResults(total);
+        return query.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<StudentInfo> listStudentInfosByNo(Integer pageid, Integer total, String no) {
+		// sql query has to have exact names from own class variable 
+		String sql = "Select new " + StudentInfo.class.getName()//
+                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear) "//
+                + " from " + Student.class.getName() + " a where no="+no;
+		System.out.println(sql.toString());
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(sql).setFirstResult(pageid-1).setMaxResults(total);
+        return query.list();
+	}
 
 	@Override
 	public void saveStudent(StudentInfo studentInfo) {

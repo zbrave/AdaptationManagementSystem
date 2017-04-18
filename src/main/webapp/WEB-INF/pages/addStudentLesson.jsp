@@ -21,12 +21,6 @@
   
 <script type="text/javascript">
 $(document).ready(function(){
-	$.get("${pageContext.request.contextPath}/getStudent", null, function (data) {
-	        $("#id").html(data);
-	    });
-});</script>
-<script type="text/javascript">
-$(document).ready(function(){
 	$.get("${pageContext.request.contextPath}/getTakingLesson?id=${deptId}" , null, function (data) {
         $("#takingLessonId").html(data);
     });
@@ -42,6 +36,79 @@ $(document).ready(function(){
     });
 });
 });</script>
+<script type="text/javascript">
+	$(function () {
+
+    function revert() {
+        $(".convMark .editfield").each(function () {
+            var $td = $(this).closest('td');
+            $td.empty();
+            $td.text($td.data('oldText'));
+            $td.data('editing', false);
+
+            // canceled            
+            console.log('Edit canceled.');
+        });
+    }
+
+    function save($input) {
+        var val = $input.val();
+        var $td = $input.closest('td');
+        $td.empty();
+        $td.text(val);
+        $td.data('editing', false);
+
+        // send json or whatever
+        console.log('url git'+val);
+
+    }
+
+
+    $('.convMark').on('keyup', 'input.editfield', function (e) {
+        if (e.which == 13) {
+            // save
+            $input = $(e.target);
+            save($input);
+        } else if (e.which == 27) {
+            // revert
+            revert();
+        }
+    });
+
+    $(".convMark").click(function (e) {
+
+        // consuem event
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        $td = $(this);
+
+        // if already editing, do nothing.
+        if ($td.data('editing')) return;
+        // mark as editing
+        $td.data('editing', true);
+
+        // get old text
+        var txt = $td.text();
+
+        // store old text
+        $td.data('oldText', txt);
+
+        // make input
+        var $input = $('<input type="text" class="editfield"><span class="glyphicon-step-backward">as</span>');
+        $input.val(txt);
+
+        // clean td and add the input
+        $td.empty();
+        $td.append($input);
+    });
+
+
+    $(document).click(function (e) {
+        revert();
+    });
+});
+</script>
 <title>Create substituteLesson</title>
 <style>
 .error-message {
@@ -53,29 +120,11 @@ $(document).ready(function(){
 </head>
 <body>
 	<%@include file="navbar.jsp" %>
+	
 	<div class="col-lg-1"></div>
 	<!-- Forms -->
 	<div class="col-lg-10">
 		<div class="row">
-            <div class="panel panel-default">
-	            <div class="panel-body ">
-	            <form:form action="getStudentData" method="POST" modelAttribute="studentForm">
-					<div class="form-group form-inline">
-						
-						<label class="control-label">Öğrenci Adı</label>
-									 			
-				   		<select id="id" class="form-control" name="id" ></select>
-
-				   		<button type="submit" class="btn btn-default" value="Ara" >Ara</button>
-							        
-				        <c:if test="${not empty message5}">
-						   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message}
-						   </div>
-						</c:if> 
-			        </div>
-		        </form:form>
-		        </div>
-	        </div>
 	        <c:if test="${not empty uni}">
 	        <div class="panel panel-default panel-table">
               <div class="panel-heading">
@@ -153,7 +202,7 @@ $(document).ready(function(){
                     <h3 class="panel-title">1.Yarıyıl</h3>
                   </div>
                   <div class="col col-xs-6 text-right">
-                    <h5 class="sub-header">Sayılan Dersler</h5>
+                    <h5 class="sub-header">Alınan Dersler</h5>
                   </div>
                 </div>
               </div>
@@ -173,19 +222,19 @@ $(document).ready(function(){
 						<c:forEach items="${lessons}" var="info">
 							<c:if test="${info.subTerm == 1}">
 								<tr>
-								 	<td> ${info.subCode}  </td>
-								   	<td> ${info.subName}  </td>
-								  	<td> ${info.subLang}  </td>
-								   	<td> ${info.subCredit}  </td>
-								   	<td> ${info.subAkts}  </td>
-								   	<td> ${info.subMark}  </td>
+								   	<td> ${info.takCode}  </td>
+								   	<td> ${info.takName}  </td>
+								  	<td> ${info.takLang}  </td>
+								   	<td> ${info.takCredit}  </td>
+								   	<td> ${info.takAkts}  </td>
+								   	<td> ${info.takMark}  </td>
 								</tr>
 							</c:if>
 						 </c:forEach>
 					</tbody>
 				</table>				
 			</div>
-			</div>
+		</div>
 	</div>
 	<div class="col-lg-6">
 		<div class="panel panel-default panel-table">
@@ -195,6 +244,50 @@ $(document).ready(function(){
                     <h3 class="panel-title">1.Yarıyıl</h3>
                   </div>
                   <div class="col col-xs-6 text-right">
+                    <h5 class="sub-header">(YTÜ) Sayılan Dersler</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-body">
+		        <table class="table table-striped table-bordered table-list">
+		        	<thead>
+						<tr class="active">
+							<th>Ders kodu</th>
+							<th>Ders adı</th>
+							<th>Dersin dili</th>
+							<th>Kredi</th>
+							<th>AKTS</th>
+							<th>Başarı notu</th>
+							<th>Eylem</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${lessons}" var="info">
+							<c:if test="${info.subTerm == 1}">
+								<tr>
+								 	<td> ${info.subCode}  </td>
+								   	<td> ${info.subName}  </td>
+								  	<td> ${info.subLang}  </td>
+								   	<td> ${info.subCredit}  </td>
+								   	<td> ${info.subAkts}  </td>
+								   	<td class="convMark">${info.subMark}</td>
+								   	<td> <a class='btn btn-info btn-xs' href="deleteStudentLesson?id=${info.stuLesId}&studentId=${id}"><span class="glyphicon glyphicon-edit"></span> Sil</a>  </td>
+								</tr>
+							</c:if>
+						 </c:forEach>
+					</tbody>
+				</table>				
+			</div>
+			</div>
+	</div>
+	<div class="col-lg-6">
+		<div class="panel panel-default panel-table">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col col-xs-6">
+                    <h3 class="panel-title">2.Yarıyıl</h3>
+                  </div>
+                  <div class="col col-xs-6 text-right">
                     <h5 class="sub-header">Alınan Dersler</h5>
                   </div>
                 </div>
@@ -213,7 +306,7 @@ $(document).ready(function(){
 					</thead>
 					<tbody>
 						<c:forEach items="${lessons}" var="info">
-							<c:if test="${info.subTerm == 1}">
+							<c:if test="${info.subTerm == 2}">
 								<tr>
 								   	<td> ${info.takCode}  </td>
 								   	<td> ${info.takName}  </td>
@@ -237,7 +330,7 @@ $(document).ready(function(){
                     <h3 class="panel-title">2.Yarıyıl</h3>
                   </div>
                   <div class="col col-xs-6 text-right">
-                    <h5 class="sub-header">Sayılan Dersler</h5>
+                    <h5 class="sub-header">(YTÜ) Sayılan Dersler</h5>
                   </div>
                 </div>
               </div>
@@ -270,49 +363,7 @@ $(document).ready(function(){
 				</table>				
 			</div>
 			</div>
-	</div>
-	<div class="col-lg-6">
-		<div class="panel panel-default panel-table">
-              <div class="panel-heading">
-                <div class="row">
-                  <div class="col col-xs-6">
-                    <h3 class="panel-title">2.Yarıyıl</h3>
-                  </div>
-                  <div class="col col-xs-6 text-right">
-                    <h5 class="sub-header">Alınan Dersler</h5>
-                  </div>
-                </div>
-              </div>
-              <div class="panel-body">
-		        <table class="table table-striped table-bordered table-list">
-		        	<thead>
-						<tr class="active">
-							<th>Ders kodu</th>
-							<th>Ders adı</th>
-							<th>Dersin dili</th>
-							<th>Kredi</th>
-							<th>AKTS</th>
-							<th>Başarı notu</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach items="${lessons}" var="info">
-							<c:if test="${info.subTerm == 2}">
-								<tr>
-								   	<td> ${info.takCode}  </td>
-								   	<td> ${info.takName}  </td>
-								  	<td> ${info.takLang}  </td>
-								   	<td> ${info.takCredit}  </td>
-								   	<td> ${info.takAkts}  </td>
-								   	<td> ${info.takMark}  </td>
-								</tr>
-							</c:if>
-						 </c:forEach>
-					</tbody>
-				</table>				
-			</div>
-		</div>
-	</div>  
-	</c:if>       
+		</c:if>
+	</div>       
 </body>
 </html>

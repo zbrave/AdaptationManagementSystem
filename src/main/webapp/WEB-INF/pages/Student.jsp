@@ -33,6 +33,26 @@ $(document).ready(function(){
 	    });
 	});
 });</script>
+<script type="text/javascript">
+$(document).ready(function(){
+	var getUrlParameter = function getUrlParameter(sParam) {
+	    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+	        sURLVariables = sPageURL.split('&'),
+	        sParameterName,
+	        i;
+
+	    for (i = 0; i < sURLVariables.length; i++) {
+	        sParameterName = sURLVariables[i].split('=');
+
+	        if (sParameterName[0] === sParam) {
+	            return sParameterName[1] === undefined ? true : sParameterName[1];
+	        }
+	    }
+	};
+	var pvar = getUrlParameter('pageid');
+	$('#' + pvar).addClass("active");
+});
+</script>
 <title>Create substituteLesson</title>
 <style>
 .error-message {
@@ -83,18 +103,23 @@ $(document).ready(function(){
 				                       
 				        <input id="recordYear" class="form-control" name="recordYear" />
 				        <br/>
-				        <button type="submit" class="btn btn-primary" value="Ekle" >Ekle</button>
-							        
-				        <c:if test="${not empty message5}">
-						   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message5}
-						   </div>
-						</c:if> 
+				        <button type="submit" class="btn btn-primary" value="Ekle" >Ekle</button> 
 			        </div>
 		        </form:form>
 		        </div>
 	        </div>
         </div>
 	</div>
+	
+	<div class="container">
+    <div class="row custyle">
+    	<form action="${pageContext.request.contextPath}/Student">
+    		<input type="hidden" name="pageid" value="1" />
+		    <input name="searchTerm" value="" />
+		    <button>Search</button>
+		</form>
+    </div>
+    </div>
 	
 	<div class="container">
     <div class="row custyle">
@@ -123,12 +148,26 @@ $(document).ready(function(){
                 <td>${info.no}</td>
                 <td>${info.adpScore}</td>
                 <td>${info.recordYear}</td>
-                <td class="text-center"><a class='btn btn-info btn-xs' href="editStudent?id=${info.id}"><span class="glyphicon glyphicon-edit"></span> Edit</a> 
-                <a href="deleteStudent?id=${info.id}" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Del</a></td>
+                <td class="text-center">
+                <a class='btn btn-info btn-xs' href="getStudentData?id=${info.id}"><span class="glyphicon glyphicon-edit"></span> İntibak yap</a>
+                <a class='btn btn-info btn-xs' href="editStudent?id=${info.id}"><span class="glyphicon glyphicon-edit"></span> Edit</a> 
+                <a href="deleteStudent?id=${info.id}" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Del</a>
+                </td>
             </tr>
         </c:forEach>
     </table>
+    <ul class="pagination pull-right">
+	  <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+	  <c:forEach var="i" begin="1" end="${pageSize }">
+	  <li id="${i }"><a href="Student?pageid=${i }">${i }</a></li>
+	  </c:forEach>
+	  <li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+	</ul>
     </div>
+    <c:if test="${not empty message5}">
+	   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message5}
+	   </div>
+	</c:if>
 </div>
 
 </body>

@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.mertaydar.springmvcsecurity.dao.DeptDAO;
+import com.mertaydar.springmvcsecurity.dao.MarkDAO;
 import com.mertaydar.springmvcsecurity.dao.RulesDAO;
 import com.mertaydar.springmvcsecurity.dao.StudentDAO;
 import com.mertaydar.springmvcsecurity.dao.StudentLessonDAO;
@@ -28,6 +29,7 @@ import com.mertaydar.springmvcsecurity.dao.SubstituteLessonDAO;
 import com.mertaydar.springmvcsecurity.dao.TakingLessonDAO;
 import com.mertaydar.springmvcsecurity.dao.UniDAO;
 import com.mertaydar.springmvcsecurity.dao.impl.DeptDAOImpl;
+import com.mertaydar.springmvcsecurity.dao.impl.MarkDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.RulesDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.StudentDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.StudentLessonDAOImpl;
@@ -152,6 +154,11 @@ public class ApplicationContextConfig {
   @Bean(name = "StudentLessonDAO")
   public StudentLessonDAO getStudentLessonDAO() {
       return new StudentLessonDAOImpl();
+  }
+  
+  @Bean(name = "MarkDAO")
+  public MarkDAO getMarkDAO() {
+	  return new MarkDAOImpl();
   }
  
 }

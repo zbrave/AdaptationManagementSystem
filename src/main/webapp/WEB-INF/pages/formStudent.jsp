@@ -69,28 +69,28 @@ $(document).ready(function(){
       <form:input path="deptId" class="form-control" type="hidden" />
 
       <label class="control-label">Ad</label>
-      <form:input class="form-control" path="name" /></td>
+      <form:input class="form-control" path="name" />
       <form:errors path="name" class="error-message" />    
 
       <label class="control-label">Soyad</label>
-      <form:input class="form-control" path="surname" /></td>
+      <form:input class="form-control" path="surname" />
       <form:errors path="surname" class="error-message" />
 
       <label class="control-label">Numara</label>
-      <form:input class="form-control" path="no" /></td>
+      <form:input class="form-control" path="no" />
       <form:errors path="no" class="error-message" /> 
 
       <label class="control-label">İntibak Notu</label>
-      <form:input class="form-control" path="adpScore" /></td>
+      <form:input class="form-control" path="adpScore" />
       <form:errors path="adpScore" class="error-message" />
 
       <label class="control-label">Kayıt Yılı</label>
-      <form:input class="form-control" path="recordYear" /></td>
+      <form:input class="form-control" path="recordYear" />
       <form:errors path="recordYear" class="error-message" />
           
       <button class="btn btn-primary" type="  " value="Submit" >Ekle</button>
       <button class="btn btn-danger"><a href="${pageContext.request.contextPath}/Student">Cancel</a></button>
-               
+     </div>    
    </form:form>
  </div>
  </div>

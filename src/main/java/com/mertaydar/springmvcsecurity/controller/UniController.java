@@ -32,13 +32,6 @@ public class UniController {
 	@Autowired
 	private UniDAO uniDAO;
 	
-	@RequestMapping(value = "/formAdaptation", method = RequestMethod.GET)
-	public String formAdaptation(Model model) {
-		List<UniInfo> courses = uniDAO.listUniInfos();
-		model.addAttribute("uniInfos", courses);
-		return "formAdaptation";
-	}
-	
 	/* Uni Controller Section */
 	@RequestMapping("/uniList")
 	public String uniList(Model model) {

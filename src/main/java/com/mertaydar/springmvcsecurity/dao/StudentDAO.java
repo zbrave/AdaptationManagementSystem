@@ -10,6 +10,10 @@ public interface StudentDAO {
 	public Student findStudent(Integer id);
 	 
     public List<StudentInfo> listStudentInfos();
+    
+    public List<StudentInfo> listStudentInfos(Integer pageid, Integer total);
+    
+    public List<StudentInfo> listStudentInfosByNo(Integer pageid, Integer total, String no);
  
     public void saveStudent(StudentInfo studentInfo);
  

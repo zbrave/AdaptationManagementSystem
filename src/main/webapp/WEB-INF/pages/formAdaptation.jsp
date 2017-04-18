@@ -14,13 +14,13 @@
     <tr>
         <th>ID</th>
         <th>Name</th>
-        <th>Date</th>
+        <th>UniId</th>
     </tr>
     <c:forEach var="c" items="${courses}">
         <tr>
             <td>${c.id}</td>
             <td>${c.name}</td>
-            <td><fmt:formatDate value="${c.date}" pattern="MM/dd/yy"/></td>
+            <td>${c.uniId}</td>
         </tr>
     </c:forEach>
 </table>

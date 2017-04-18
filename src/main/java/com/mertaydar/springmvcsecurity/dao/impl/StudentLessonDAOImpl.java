@@ -9,12 +9,25 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.mertaydar.springmvcsecurity.dao.DeptDAO;
+import com.mertaydar.springmvcsecurity.dao.MarkDAO;
+import com.mertaydar.springmvcsecurity.dao.StudentDAO;
 import com.mertaydar.springmvcsecurity.dao.StudentLessonDAO;
+import com.mertaydar.springmvcsecurity.entity.Mark;
 import com.mertaydar.springmvcsecurity.entity.StudentLesson;
 import com.mertaydar.springmvcsecurity.model.StudentLessonInfo;
 
 public class StudentLessonDAOImpl implements StudentLessonDAO {
-
+	
+	@Autowired
+	private DeptDAO deptDAO;
+	
+	@Autowired
+	private StudentDAO studentDAO;
+	
+	@Autowired
+	private MarkDAO markDAO;
+	
 	@Autowired
     private SessionFactory sessionFactory;
 	
@@ -77,7 +90,7 @@ public class StudentLessonDAOImpl implements StudentLessonDAO {
         }
         studentLesson.setSubstituteLessonId(studentLessonInfo.getSubstituteLessonId());
         studentLesson.setStudentId(studentLessonInfo.getStudentId());
-        studentLesson.setConvMark(studentLessonInfo.getConvMark());
+        studentLesson.setConvMark(convertMark(studentLessonInfo.getStudentId(), studentLessonInfo.getOrgMark()));
         studentLesson.setOrgMark(studentLessonInfo.getOrgMark());
         studentLesson.setTakingLessonId(studentLessonInfo.getTakingLessonId());
  
@@ -111,20 +124,32 @@ public class StudentLessonDAOImpl implements StudentLessonDAO {
 		// sql query has to have exact names from own class variable 
 		String sql = "Select new " + StudentLessonInfo.class.getName()//
                 + "(a.id, a.studentId, a.takingLessonId, a.substituteLessonId, a.orgMark, a.convMark) "//
-                + " from " + StudentLesson.class.getName() + " a Where a.takingLessonId = :code AND a.substituteLessonId = :code2";
+                + " from " + StudentLesson.class.getName() + " a Where a.takingLessonId = :code AND a.substituteLessonId = :code2 AND a.studentId = :code3";
 		System.out.println(sql.toString());
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery(sql);
         query.setParameter("code", stuLes.getTakingLessonId());
         query.setParameter("code2", stuLes.getSubstituteLessonId());
+        query.setParameter("code3", stuLes.getStudentId());
         
-        if (query.list().get(0) == null){
+        if (query.list().isEmpty()){
         	return false;
         }
         else {
         	return true;
         }
 		
+	}
+	
+	public String convertMark(Integer id, String orgMark) {
+		Integer uniId = deptDAO.findDept(studentDAO.findStudent(id).getDeptId()).getUniId();
+		Session session = sessionFactory.getCurrentSession();
+        Criteria crit = session.createCriteria(Mark.class);
+        crit.add(Restrictions.eq("uniId", uniId));
+        crit.add(Restrictions.eq("from", orgMark));
+        if (crit.list().isEmpty())
+        	return "?";
+        return ((Mark) crit.uniqueResult()).getTo();
 	}
 
 }

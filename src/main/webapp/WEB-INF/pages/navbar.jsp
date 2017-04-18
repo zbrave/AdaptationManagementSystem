@@ -17,8 +17,7 @@ $(document).ready(function(){
 				<ul class="nav navbar-nav navbar-right" id="nav">
 					<li id="home"><a href="${pageContext.request.contextPath}/welcome" ><span class="glyphicon glyphicon-user"></span> Anasayfa</a></li>
 					<c:if test="${pageContext.request.userPrincipal.name != null}">
-						<li id ="addStudent"><a href="${pageContext.request.contextPath}/Student"><span class="glyphicon glyphicon-log-in"></span> Öğrenci</a></li>
-						<li id="addStudentLesson"><a href="${pageContext.request.contextPath}/addStudentLesson" ><span class="glyphicon glyphicon-user"></span> İntibak Yap</a></li>
+						<li id ="addStudent"><a href="${pageContext.request.contextPath}/Student?pageid=1"><span class="glyphicon glyphicon-log-in"></span> Öğrenci</a></li>
 						<li id="addRules"><a href="${pageContext.request.contextPath}/addRules" ><span class="glyphicon glyphicon-plus"></span> Yeni Kural</a></li>
 						<c:forEach var="role"
 					items="${pageContext['request'].userPrincipal.principal.authorities}">

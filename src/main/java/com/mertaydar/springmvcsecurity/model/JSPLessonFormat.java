@@ -2,6 +2,7 @@ package com.mertaydar.springmvcsecurity.model;
 
 public class JSPLessonFormat {
 	
+	private Integer stuLesId;
 	private Integer takId;
 	private Integer subId;
 	private String takName;
@@ -23,7 +24,8 @@ public class JSPLessonFormat {
 		
 	}
 	
-	public JSPLessonFormat(SubstituteLessonInfo sub, TakingLessonInfo tak, String orgMark, String convMark){
+	public JSPLessonFormat(Integer stuLesId, SubstituteLessonInfo sub, TakingLessonInfo tak, String orgMark, String convMark){
+		this.stuLesId = stuLesId;
 		this.subId = sub.getId();
 		this.subAkts = sub.getAkts();
 		this.subCode = sub.getCode();
@@ -137,6 +139,14 @@ public class JSPLessonFormat {
 	}
 	public void setTakMark(String takMark) {
 		this.takMark = takMark;
+	}
+
+	public Integer getStuLesId() {
+		return stuLesId;
+	}
+
+	public void setStuLesId(Integer stuLesId) {
+		this.stuLesId = stuLesId;
 	}
 	
 	
