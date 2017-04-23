@@ -28,6 +28,8 @@ import com.mertaydar.springmvcsecurity.dao.StudentLessonDAO;
 import com.mertaydar.springmvcsecurity.dao.SubstituteLessonDAO;
 import com.mertaydar.springmvcsecurity.dao.TakingLessonDAO;
 import com.mertaydar.springmvcsecurity.dao.UniDAO;
+import com.mertaydar.springmvcsecurity.dao.UserDAO;
+import com.mertaydar.springmvcsecurity.dao.UserRoleDAO;
 import com.mertaydar.springmvcsecurity.dao.impl.DeptDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.MarkDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.RulesDAOImpl;
@@ -36,6 +38,8 @@ import com.mertaydar.springmvcsecurity.dao.impl.StudentLessonDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.SubstituteLessonDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.TakingLessonDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.UniDAOImpl;
+import com.mertaydar.springmvcsecurity.dao.impl.UserDAOImpl;
+import com.mertaydar.springmvcsecurity.dao.impl.UserRoleDAOImpl;
  
 @Configuration
 @ComponentScan("com.mertaydar.springmvcsecurity.*")
@@ -159,6 +163,16 @@ public class ApplicationContextConfig {
   @Bean(name = "MarkDAO")
   public MarkDAO getMarkDAO() {
 	  return new MarkDAOImpl();
+  }
+  
+  @Bean(name = "userDAO")
+  public UserDAO getUserDAO() {
+	  return new UserDAOImpl();
+  }
+  
+  @Bean(name = "userRoleDAO")
+  public UserRoleDAO getUserRoleDAO() {
+	  return new UserRoleDAOImpl();
   }
  
 }

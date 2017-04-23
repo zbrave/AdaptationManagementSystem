@@ -1,4 +1,5 @@
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\controller\TakingLessonController.java
+D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\entity\UserRole.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\impl\TakingLessonDAOImpl.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\controller\UniController.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\entity\Rules.java
@@ -10,6 +11,7 @@ D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecur
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\controller\DeptController.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\impl\StudentLessonDAOImpl.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\impl\UniDAOImpl.java
+D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\UserDAO.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\entity\Report.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\entity\TakingLesson.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\TakingLessonDAO.java
@@ -20,10 +22,10 @@ D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecur
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\impl\ReportDAOImpl.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\model\JSPLessonFormat.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\UniDAO.java
-D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\impl\UserInfoDAOImpl.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\entity\SubstituteLesson.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\model\UniInfo.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\RulesDAO.java
+D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\entity\User.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\model\StudentLessonInfo.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\impl\StudentDAOImpl.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\DeptDAO.java
@@ -37,9 +39,9 @@ D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecur
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\model\MarkInfo.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\model\StudentInfo.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\controller\FormController.java
-D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\UserInfoDAO.java
+D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\impl\UserDAOImpl.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\entity\StudentLesson.java
-D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\mapper\UserInfoMapper.java
+D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\model\UserRoleInfo.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\controller\RulesController.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\authentication\MyDBAuthenticationService.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\ReportDAO.java
@@ -53,7 +55,10 @@ D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecur
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\controller\MainController.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\controller\SubstituteLessonController.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\config\SpringWebAppInitializer.java
+D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\UserRoleDAO.java
+D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\controller\UserController.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\StudentDAO.java
+D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\impl\UserRoleDAOImpl.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\config\ApplicationContextConfig.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\SubstituteLessonDAO.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\model\UserInfo.java

@@ -236,4 +236,44 @@ public class StudentLessonController {
 //		return "redirect:/studentLessonList";
 		return "addStudentLesson";
 	}
+	
+	@RequestMapping("/updateStudentLesson")
+	public String updateStudentLesson(Model model, @ModelAttribute("studentLessonForm") @Validated StudentLessonInfo studentLessonInfo) {
+		StudentLessonInfo stuLes = null;
+		if (studentLessonInfo.getId() != null) {
+			stuLes = this.studentLessonDAO.findStudentLessonInfo(studentLessonInfo.getId());
+		}
+		stuLes.setConvMark(studentLessonInfo.getConvMark());
+		studentLessonDAO.saveStudentLessonNoConvert(stuLes);
+		
+		Integer stuId = studentLessonDAO.findStudentLessonInfo(studentLessonInfo.getId()).getStudentId();
+		System.out.println("x "+stuId+studentLessonInfo.getId()+studentLessonInfo.getConvMark());
+		
+		StudentInfo stu = this.studentDAO.findStudentInfo(stuId);
+		DeptInfo dept = null;
+		UniInfo uni = null; 
+		List<StudentLessonInfo> listStuLes = this.studentLessonDAO.listStudentLessonInfosForStudent(stuId);
+		List<JSPLessonFormat> list = new ArrayList<JSPLessonFormat>();
+		if (stu != null) {
+			 dept = this.deptDAO.findDeptInfo(stu.getDeptId());
+			 uni = this.uniDAO.findUniInfo(dept.getUniId());
+			 model.addAttribute("id", stu.getId());
+			 model.addAttribute("uni", uni.getName());
+			 model.addAttribute("dept", dept.getName());
+			 model.addAttribute("deptId", dept.getId());
+			 model.addAttribute("name", stu.getName());
+			 model.addAttribute("surname", stu.getSurname());
+			 model.addAttribute("no", stu.getNo());
+			 model.addAttribute("recordYear", stu.getRecordYear());
+			 model.addAttribute("adpScore", stu.getAdpScore());
+			 for (StudentLessonInfo tmp : listStuLes){
+				 SubstituteLessonInfo tmpSub = this.substituteLessonDAO.findSubstituteLessonInfo(tmp.getSubstituteLessonId());
+				 TakingLessonInfo tmpTak = this.takingLessonDAO.findTakingLessonInfo(tmp.getTakingLessonId());
+				 JSPLessonFormat temp = new JSPLessonFormat(tmp.getId(), tmpSub, tmpTak, tmp.getOrgMark(), tmp.getConvMark());
+				 list.add(temp);
+			 }
+		}
+		model.addAttribute("lessons", list);
+		return "addStudentLesson";
+	}
 }

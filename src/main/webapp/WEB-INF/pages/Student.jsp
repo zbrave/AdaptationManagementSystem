@@ -51,6 +51,18 @@ $(document).ready(function(){
 	};
 	var pvar = getUrlParameter('pageid');
 	$('#' + pvar).addClass("active");
+	console.log(pvar-1);
+	console.log(pvar+1);
+	$("#lefta").attr("href", "Student?pageid="+pvar-1);
+	$("#righta").attr("href", "Student?pageid="+pvar+1);
+	if (pvar == 1) {
+		$('#left').addClass("disabled");
+		$("#lefta").attr("href", "#");
+	}
+	if (pvar == ${pageSize}) {
+		$('#right').addClass("disabled");
+		$("#righta").attr("href", "#");
+	}
 });
 </script>
 <title>Create substituteLesson</title>
@@ -115,8 +127,8 @@ $(document).ready(function(){
     <div class="row custyle">
     	<form action="${pageContext.request.contextPath}/Student">
     		<input type="hidden" name="pageid" value="1" />
-		    <input name="searchTerm" value="" />
-		    <button>Search</button>
+		    <input class="input-sm" name="searchTerm" placeholder="Öğr. No" />
+		    <button class="btn btn-default">Ara</button>
 		</form>
     </div>
     </div>
@@ -157,11 +169,11 @@ $(document).ready(function(){
         </c:forEach>
     </table>
     <ul class="pagination pull-right">
-	  <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+	  <li id="left"><a id="lefta" href=""><span class="glyphicon glyphicon-chevron-left"></span></a></li>
 	  <c:forEach var="i" begin="1" end="${pageSize }">
 	  <li id="${i }"><a href="Student?pageid=${i }">${i }</a></li>
 	  </c:forEach>
-	  <li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+	  <li id="right"><a href=""><span class="glyphicon glyphicon-chevron-right"></span></a></li>
 	</ul>
     </div>
     <c:if test="${not empty message5}">

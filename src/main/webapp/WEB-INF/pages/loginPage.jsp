@@ -65,7 +65,7 @@
     
     <div class="col-md-4">
       <section class="login-form">
-        <form method="post" action="${pageContext.request.contextPath}/j_spring_security_check" role="login" method='POST'>
+        <form method="post" action="${pageContext.request.contextPath}/saveUser" role="login" method='POST'>
           <img src="http://www.yildiz.edu.tr/images/files/ytulogopng.png" class="img-responsive" alt="" style="width:50%"/>
           <h3 class="text-center">Yildiz Teknik Universitesi</h3>
 		  <h4 class="text-center">Intibak Yönetim Sistemi</h4>
@@ -77,7 +77,9 @@
 		</div>
     </c:if>
           <input type='text' class="form-control" id="username" placeholder="Username" name='username' value=''>          
+          <input type='text' class="form-control" id="email" placeholder="E-mail" name='email' value=''>
           <input type='password' class="form-control" id="password" placeholder="Password" name='password' />
+          <input type='password' class="form-control" id="passwordConf" placeholder="Password again" name='passwordConf' />
                     
           
           <div class="pwstrength_viewport_progress"></div>
@@ -91,7 +93,7 @@
         </form>
         
         <div class="form-links">
-          <a href="#">www.website.com</a>
+          <a href="#">www.mertaydar.com</a>
         </div>
       </section>  
       </div>

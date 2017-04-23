@@ -100,6 +100,41 @@ public class StudentLessonDAOImpl implements StudentLessonDAO {
         }
 		
 	}
+	
+	@Override
+	public void saveStudentLessonNoConvert(StudentLessonInfo studentLessonInfo) {
+		Integer id = studentLessonInfo.getId();
+        StudentLesson studentLesson = null;
+        if (id != null) {
+            studentLesson = this.findStudentLesson(id);
+        }
+        boolean isNew = false;
+        if (studentLesson == null) {
+            isNew = true;
+            studentLesson = new StudentLesson();
+            //
+            String sql = "SELECT MAX(id) FROM " + StudentLesson.class.getName();
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(sql);
+            if (query.list().get(0) == null){
+            	studentLesson.setId(1);
+            }
+            else {
+            	studentLesson.setId(Integer.parseInt(query.list().get(0).toString())+1);
+            }
+        }
+        studentLesson.setSubstituteLessonId(studentLessonInfo.getSubstituteLessonId());
+        studentLesson.setStudentId(studentLessonInfo.getStudentId());
+        studentLesson.setConvMark(studentLessonInfo.getConvMark());
+        studentLesson.setOrgMark(studentLessonInfo.getOrgMark());
+        studentLesson.setTakingLessonId(studentLessonInfo.getTakingLessonId());
+ 
+        if (isNew) {
+            Session session = this.sessionFactory.getCurrentSession();
+            session.persist(studentLesson);
+        }
+		
+	}
 
 	@Override
 	public StudentLessonInfo findStudentLessonInfo(Integer id) {

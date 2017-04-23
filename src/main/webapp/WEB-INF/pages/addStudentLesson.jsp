@@ -36,79 +36,6 @@ $(document).ready(function(){
     });
 });
 });</script>
-<script type="text/javascript">
-	$(function () {
-
-    function revert() {
-        $(".convMark .editfield").each(function () {
-            var $td = $(this).closest('td');
-            $td.empty();
-            $td.text($td.data('oldText'));
-            $td.data('editing', false);
-
-            // canceled            
-            console.log('Edit canceled.');
-        });
-    }
-
-    function save($input) {
-        var val = $input.val();
-        var $td = $input.closest('td');
-        $td.empty();
-        $td.text(val);
-        $td.data('editing', false);
-
-        // send json or whatever
-        console.log('url git'+val);
-
-    }
-
-
-    $('.convMark').on('keyup', 'input.editfield', function (e) {
-        if (e.which == 13) {
-            // save
-            $input = $(e.target);
-            save($input);
-        } else if (e.which == 27) {
-            // revert
-            revert();
-        }
-    });
-
-    $(".convMark").click(function (e) {
-
-        // consuem event
-        e.preventDefault();
-        e.stopImmediatePropagation();
-
-        $td = $(this);
-
-        // if already editing, do nothing.
-        if ($td.data('editing')) return;
-        // mark as editing
-        $td.data('editing', true);
-
-        // get old text
-        var txt = $td.text();
-
-        // store old text
-        $td.data('oldText', txt);
-
-        // make input
-        var $input = $('<input type="text" class="editfield"><span class="glyphicon-step-backward">as</span>');
-        $input.val(txt);
-
-        // clean td and add the input
-        $td.empty();
-        $td.append($input);
-    });
-
-
-    $(document).click(function (e) {
-        revert();
-    });
-});
-</script>
 <title>Create substituteLesson</title>
 <style>
 .error-message {
@@ -159,18 +86,21 @@ $(document).ready(function(){
 				</table>
 				</div>
 			</div>
+			<c:forEach var="role"
+					items="${pageContext['request'].userPrincipal.principal.authorities}">
+						<c:if test="${role.authority == 'ROLE_ADMIN' }">
 				<div class="panel panel-primary panel-table">
               
               <div class="panel-body">
 						<form:form action="saveStudentLesson" class="form-inline" method="POST" modelAttribute="studentLessonForm">
-							<div class="form-group">
+							<div class="form-group col-lg-8">
 								<input id="id" name="id" type="hidden" value=""/>
 								
 								<input id="studentId" name="studentId" type="hidden" value="${id}"/>
 								
 								<label class="control-label" style="margin-left: 10px;">Alınan Ders</label>
 											 			
-						   		<select id="takingLessonId" class="form-control" name="takingLessonId" ></select>
+						   		<select id="takingLessonId" class="form-control" name="takingLessonId" style="width: 23%;" ></select>
 
 								<label class="control-label" style="margin-left: 10px;">Sayılan Ders</label>
 											 			
@@ -190,16 +120,38 @@ $(document).ready(function(){
 								</c:if> 
 					        </div>
 				        </form:form>
+				        <form:form action="setToStudent?id=${id }" class="form-inline" method="POST" modelAttribute="userForm">
+							<div class="form-group col-lg-4">
+								<label class="control-label" style="margin-left: 10px;">Atanan Kullanıcı</label>
+				        		<select id="studentId" class="form-control" name="studentId" >
+				        			<option id="" value="">Atama yapma.</option>
+   									<c:forEach items="${students }" var="data">
+   										<c:choose>
+    										<c:when test="${id == data.studentId }">
+        										<option id="${data.id }" value="${data.id }" selected>${data.username }</option>
+        									</c:when>
+        									<c:otherwise>
+        										<option id="${data.id }" value="${data.id }">${data.username }</option>
+        									</c:otherwise>
+        								</c:choose>
+        							</c:forEach>
+        						</select>
+        						<button type="submit" class="btn btn-default " style="margin-left: 30px;" value="Ekle" >Ekle</button>
+				        	</div>
+				        </form:form>
 		        </div>
 			</div>
+			</c:if>
+			</c:forEach>
         </div>
 	</div>
+	<c:forEach var="i" begin="1" end="8">
 	<div class="col-lg-6">
 		<div class="panel panel-default panel-table">
               <div class="panel-heading">
                 <div class="row">
                   <div class="col col-xs-6">
-                    <h3 class="panel-title">1.Yarıyıl</h3>
+                    <h3 class="panel-title">${i}.Yarıyıl</h3>
                   </div>
                   <div class="col col-xs-6 text-right">
                     <h5 class="sub-header">Alınan Dersler</h5>
@@ -220,7 +172,7 @@ $(document).ready(function(){
 					</thead>
 					<tbody>
 						<c:forEach items="${lessons}" var="info">
-							<c:if test="${info.subTerm == 1}">
+							<c:if test="${info.subTerm == i}">
 								<tr>
 								   	<td> ${info.takCode}  </td>
 								   	<td> ${info.takName}  </td>
@@ -236,12 +188,14 @@ $(document).ready(function(){
 			</div>
 		</div>
 	</div>
+	<c:forEach var="role" items="${pageContext['request'].userPrincipal.principal.authorities}">
+						<c:if test="${role.authority == 'ROLE_ADMIN' }">
 	<div class="col-lg-6">
 		<div class="panel panel-default panel-table">
               <div class="panel-heading">
                 <div class="row">
                   <div class="col col-xs-6">
-                    <h3 class="panel-title">1.Yarıyıl</h3>
+                    <h3 class="panel-title">${i}.Yarıyıl</h3>
                   </div>
                   <div class="col col-xs-6 text-right">
                     <h5 class="sub-header">(YTÜ) Sayılan Dersler</h5>
@@ -263,15 +217,21 @@ $(document).ready(function(){
 					</thead>
 					<tbody>
 						<c:forEach items="${lessons}" var="info">
-							<c:if test="${info.subTerm == 1}">
+							<c:if test="${info.subTerm == i}">
 								<tr>
 								 	<td> ${info.subCode}  </td>
 								   	<td> ${info.subName}  </td>
 								  	<td> ${info.subLang}  </td>
 								   	<td> ${info.subCredit}  </td>
 								   	<td> ${info.subAkts}  </td>
-								   	<td class="convMark">${info.subMark}</td>
-								   	<td> <a class='btn btn-info btn-xs' href="deleteStudentLesson?id=${info.stuLesId}&studentId=${id}"><span class="glyphicon glyphicon-edit"></span> Sil</a>  </td>
+								   	<form:form action="updateStudentLesson" class="form-inline" method="POST" modelAttribute="studentLessonForm">
+								   	<td><input id="convMark" name="convMark" class="input-sm" style="width: 50px;" value="${info.subMark }" /></td>
+								   	<input id="id" name="id" type="hidden" value="${info.stuLesId }"/>
+								   	<td> 
+								   		<a class='btn btn-danger btn-xs' href="deleteStudentLesson?id=${info.stuLesId}&studentId=${id}"><span class="glyphicon glyphicon-edit"></span> Sil</a>
+								   		<button type="submit" class="btn btn-info btn-xs" value="Ekle" >Not güncelle</button>
+								   	</td>
+								   	</form:form>
 								</tr>
 							</c:if>
 						 </c:forEach>
@@ -280,54 +240,17 @@ $(document).ready(function(){
 			</div>
 			</div>
 	</div>
+	</c:if>
+	</c:forEach>
+	
+	<c:forEach var="role" items="${pageContext['request'].userPrincipal.principal.authorities}">
+						<c:if test="${role.authority == 'ROLE_USER' }">
 	<div class="col-lg-6">
 		<div class="panel panel-default panel-table">
               <div class="panel-heading">
                 <div class="row">
                   <div class="col col-xs-6">
-                    <h3 class="panel-title">2.Yarıyıl</h3>
-                  </div>
-                  <div class="col col-xs-6 text-right">
-                    <h5 class="sub-header">Alınan Dersler</h5>
-                  </div>
-                </div>
-              </div>
-              <div class="panel-body">
-		        <table class="table table-striped table-bordered table-list">
-		        	<thead>
-						<tr class="active">
-							<th>Ders kodu</th>
-							<th>Ders adı</th>
-							<th>Dersin dili</th>
-							<th>Kredi</th>
-							<th>AKTS</th>
-							<th>Başarı notu</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach items="${lessons}" var="info">
-							<c:if test="${info.subTerm == 2}">
-								<tr>
-								   	<td> ${info.takCode}  </td>
-								   	<td> ${info.takName}  </td>
-								  	<td> ${info.takLang}  </td>
-								   	<td> ${info.takCredit}  </td>
-								   	<td> ${info.takAkts}  </td>
-								   	<td> ${info.takMark}  </td>
-								</tr>
-							</c:if>
-						 </c:forEach>
-					</tbody>
-				</table>				
-			</div>
-		</div>
-	</div>
-	<div class="col-lg-6">
-		<div class="panel panel-default panel-table">
-              <div class="panel-heading">
-                <div class="row">
-                  <div class="col col-xs-6">
-                    <h3 class="panel-title">2.Yarıyıl</h3>
+                    <h3 class="panel-title">${i }.Yarıyıl</h3>
                   </div>
                   <div class="col col-xs-6 text-right">
                     <h5 class="sub-header">(YTÜ) Sayılan Dersler</h5>
@@ -348,7 +271,7 @@ $(document).ready(function(){
 					</thead>
 					<tbody>
 						<c:forEach items="${lessons}" var="info">
-							<c:if test="${info.subTerm == 2}">
+							<c:if test="${info.subTerm == i}">
 								<tr>
 								 	<td> ${info.subCode}  </td>
 								   	<td> ${info.subName}  </td>
@@ -363,7 +286,10 @@ $(document).ready(function(){
 				</table>				
 			</div>
 			</div>
-		</c:if>
-	</div>       
+	</div>
+	</c:if>
+	</c:forEach>
+	</c:forEach>
+	</c:if>       
 </body>
 </html>

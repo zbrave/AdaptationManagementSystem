@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta http-equiv="refresh" content="1;url=${pageContext.request.contextPath}/login" />
 	<spring:url value="/resources/css/bootstrap.css" var="bootstrapCSS" />
 	<spring:url value="/resources/js/bootstrap.js" var="bootstrapJS" />
 	<spring:url value="/resources/others/ams.css" var="amsCSS" />

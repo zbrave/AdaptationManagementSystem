@@ -12,18 +12,22 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.mertaydar.springmvcsecurity.dao.UserInfoDAO;
+import com.mertaydar.springmvcsecurity.dao.UserDAO;
+import com.mertaydar.springmvcsecurity.dao.UserRoleDAO;
 import com.mertaydar.springmvcsecurity.model.UserInfo;
  
 @Service
 public class MyDBAuthenticationService implements UserDetailsService {
  
     @Autowired
-    private UserInfoDAO userInfoDAO;
+    private UserDAO userDAO;
+    
+    @Autowired
+    private UserRoleDAO userRoleDAO;
  
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserInfo userInfo = userInfoDAO.findUserInfo(username);
+        UserInfo userInfo = this.userDAO.findLoginUserInfo(username);
         System.out.println("UserInfo= " + userInfo);
         
         if (userInfo == null) {
@@ -31,7 +35,7 @@ public class MyDBAuthenticationService implements UserDetailsService {
         }
          
         // [USER,ADMIN,..]
-        List<String> roles= userInfoDAO.getUserRoles(username);
+        List<String> roles= userRoleDAO.getUserRoles(userInfo.getId());
          
         List<GrantedAuthority> grantList= new ArrayList<GrantedAuthority>();
         if(roles!= null)  {
@@ -39,6 +43,7 @@ public class MyDBAuthenticationService implements UserDetailsService {
                 // ROLE_USER, ROLE_ADMIN,..
                 GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role);
                 grantList.add(authority);
+                System.out.println("Yetkiler: "+role);
             }
         }        
          

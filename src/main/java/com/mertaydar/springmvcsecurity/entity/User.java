@@ -1,90 +1,73 @@
-package com.mertaydar.springmvcsecurity.model;
- 
-public class UserInfo {
+package com.mertaydar.springmvcsecurity.entity;
+
+
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name = "user")
+public class User {
 	
 	private Integer id;
+	private Integer studentId;
 	private String email;
     private String username;
     private String password;
-    private String passwordConf;
-    private Integer studentId;
     private boolean enabled;
-	
-    public UserInfo() {
-    	
-    }
     
-    
-
-	public UserInfo(Integer id, String email, String username, String password, Integer studentId,
-			boolean enabled) {
-		super();
-		this.id = id;
-		this.email = email;
-		this.username = username;
-		this.password = password;
-		this.studentId = studentId;
-		this.enabled = enabled;
-	}
-
-
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	public Integer getId() {
 		return id;
 	}
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
+	
+	@Column(name = "email",unique = true, length = 255)
 	public String getEmail() {
 		return email;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
+	
+	@Column(name = "username",unique = true , length = 45)
 	public String getUsername() {
 		return username;
 	}
-
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
+	
+	@Column(name = "password" , length = 60)
 	public String getPassword() {
 		return password;
 	}
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	
+	@Column(name = "enabled")
 	public boolean isEnabled() {
 		return enabled;
 	}
-
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-
-	public String getPasswordConf() {
-		return passwordConf;
-	}
-
-	public void setPasswordConf(String passwordConf) {
-		this.passwordConf = passwordConf;
-	}
-
+	@Column(name = "student_id")
 	public Integer getStudentId() {
 		return studentId;
 	}
-
 	public void setStudentId(Integer studentId) {
 		this.studentId = studentId;
 	}
-     
-    
- 
+	
 }

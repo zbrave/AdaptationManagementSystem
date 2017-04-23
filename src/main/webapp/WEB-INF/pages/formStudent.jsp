@@ -89,7 +89,7 @@ $(document).ready(function(){
       <form:errors path="recordYear" class="error-message" />
           
       <button class="btn btn-primary" type="  " value="Submit" >Ekle</button>
-      <button class="btn btn-danger"><a href="${pageContext.request.contextPath}/Student">Cancel</a></button>
+      <button class="btn btn-danger"><a href="${pageContext.request.contextPath}/Student?pageid=1">Cancel</a></button>
      </div>    
    </form:form>
  </div>

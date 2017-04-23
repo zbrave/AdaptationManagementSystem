@@ -1,6 +1,7 @@
 package com.mertaydar.springmvcsecurity.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -27,6 +28,7 @@ import com.mertaydar.springmvcsecurity.dao.StudentLessonDAO;
 import com.mertaydar.springmvcsecurity.dao.SubstituteLessonDAO;
 import com.mertaydar.springmvcsecurity.dao.TakingLessonDAO;
 import com.mertaydar.springmvcsecurity.dao.UniDAO;
+import com.mertaydar.springmvcsecurity.dao.UserDAO;
 import com.mertaydar.springmvcsecurity.model.DeptInfo;
 import com.mertaydar.springmvcsecurity.model.JSPLessonFormat;
 import com.mertaydar.springmvcsecurity.model.JSPStudentFormat;
@@ -36,6 +38,7 @@ import com.mertaydar.springmvcsecurity.model.StudentLessonInfo;
 import com.mertaydar.springmvcsecurity.model.SubstituteLessonInfo;
 import com.mertaydar.springmvcsecurity.model.TakingLessonInfo;
 import com.mertaydar.springmvcsecurity.model.UniInfo;
+import com.mertaydar.springmvcsecurity.model.UserInfo;
 
 @Controller
 //Enable Hibernate Transaction.
@@ -60,12 +63,26 @@ public class StudentController {
 	private RulesDAO rulesDAO;
 	
 	@Autowired
+	private UserDAO userDAO;
+	
+	@Autowired
 	private StudentDAO studentDAO;
 	
 	@Autowired
 	private StudentLessonDAO studentLessonDAO;
 	
 /* Student Section */
+	
+	@RequestMapping(value = "/setToStudent", method = RequestMethod.POST)
+	public String saveDept(Model model, @RequestParam("id") Integer id,
+			@ModelAttribute("userForm") @Validated UserInfo userInfo, //
+			BindingResult result, //
+			final RedirectAttributes redirectAttributes) {
+		UserInfo user = this.userDAO.findUserInfo(userInfo.getStudentId());
+		user.setStudentId(id);
+		this.userDAO.saveUser(user);
+		return "redirect:/getStudentData?id="+id.toString();
+	}
 	
 	@RequestMapping(value="/getStudent",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
 	@ResponseBody
@@ -76,6 +93,18 @@ public class StudentController {
 			res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+">"+tmp.getName()+"</option>");
 		}
 		return res;
+	}
+	
+	@RequestMapping(value = "/myAdapt", method = RequestMethod.GET)
+	public String saveDept(Model model, Principal principal) {
+		UserInfo user = this.userDAO.findLoginUserInfo(principal.getName());
+		return "redirect:/getStudentData?id="+user.getStudentId().toString();
+	}
+	
+	@RequestMapping(value = "/report", method = RequestMethod.GET)
+	public String getReport(Model model, Principal principal) {
+
+		return "report";
 	}
 	
 	@RequestMapping("/getStudentData")
@@ -104,6 +133,8 @@ public class StudentController {
 				 list.add(temp);
 			 }
 		}
+		List<UserInfo> students = userDAO.listUserInfos();
+		model.addAttribute("students", students);
 		model.addAttribute("lessons", list);
 		return "addStudentLesson";
 	}
@@ -274,7 +305,7 @@ public class StudentController {
 		
 
 //		return "redirect:/studentList";
-		return "redirect:/Student";
+		return "redirect:/Student?pageid=1";
 	}
 	
 }

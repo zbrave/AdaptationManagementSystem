@@ -15,10 +15,22 @@ $(document).ready(function(){
 			</div>
 			<div>
 				<ul class="nav navbar-nav navbar-right" id="nav">
-					<li id="home"><a href="${pageContext.request.contextPath}/welcome" ><span class="glyphicon glyphicon-user"></span> Anasayfa</a></li>
 					<c:if test="${pageContext.request.userPrincipal.name != null}">
-						<li id ="addStudent"><a href="${pageContext.request.contextPath}/Student?pageid=1"><span class="glyphicon glyphicon-log-in"></span> Öğrenci</a></li>
-						<li id="addRules"><a href="${pageContext.request.contextPath}/addRules" ><span class="glyphicon glyphicon-plus"></span> Yeni Kural</a></li>
+						<li id="home"><a href="${pageContext.request.contextPath}/welcome" ><span class="glyphicon glyphicon-user"></span> Anasayfa</a></li>
+					</c:if>
+					<c:forEach var="role"
+					items="${pageContext['request'].userPrincipal.principal.authorities}">
+						<c:if test="${role.authority == 'ROLE_USER' }">
+							<li id ="student"><a href="${pageContext.request.contextPath}/myAdapt"><span class="glyphicon glyphicon-log-in"></span> İntibakım</a></li>
+						</c:if>
+					</c:forEach>
+					<c:forEach var="role"
+					items="${pageContext['request'].userPrincipal.principal.authorities}">
+						<c:if test="${role.authority == 'ROLE_ADMIN' }">
+							<li id ="student"><a href="${pageContext.request.contextPath}/Student?pageid=1"><span class="glyphicon glyphicon-log-in"></span> Öğrenciler</a></li>
+							<li id="addRules"><a href="${pageContext.request.contextPath}/addRules" ><span class="glyphicon glyphicon-plus"></span> Yeni Kural</a></li>
+						</c:if>
+					</c:forEach>
 						<c:forEach var="role"
 					items="${pageContext['request'].userPrincipal.principal.authorities}">
 						<c:if test="${role.authority == 'ROLE_SUPER_ADMIN' }">
@@ -34,7 +46,7 @@ $(document).ready(function(){
 						</c:if>
 						</c:forEach>
 						<li><a href="${pageContext.request.contextPath}/logout"><span class="glyphicon glyphicon-log-in"></span> Çıkış</a></li>
-					</c:if>
+					
 				</ul>
 			</div>
 		</div>
