@@ -14,6 +14,7 @@ import com.mertaydar.springmvcsecurity.dao.MarkDAO;
 import com.mertaydar.springmvcsecurity.dao.StudentDAO;
 import com.mertaydar.springmvcsecurity.dao.StudentLessonDAO;
 import com.mertaydar.springmvcsecurity.entity.Mark;
+import com.mertaydar.springmvcsecurity.entity.Ourmark;
 import com.mertaydar.springmvcsecurity.entity.StudentLesson;
 import com.mertaydar.springmvcsecurity.model.StudentLessonInfo;
 
@@ -92,6 +93,41 @@ public class StudentLessonDAOImpl implements StudentLessonDAO {
         studentLesson.setStudentId(studentLessonInfo.getStudentId());
         studentLesson.setConvMark(convertMark(studentLessonInfo.getStudentId(), studentLessonInfo.getOrgMark()));
         studentLesson.setOrgMark(studentLessonInfo.getOrgMark());
+        studentLesson.setTakingLessonId(studentLessonInfo.getTakingLessonId());
+ 
+        if (isNew) {
+            Session session = this.sessionFactory.getCurrentSession();
+            session.persist(studentLesson);
+        }
+		
+	}
+	
+	@Override
+	public void saveStudentLessonExempt(StudentLessonInfo studentLessonInfo) {
+		Integer id = studentLessonInfo.getId();
+        StudentLesson studentLesson = null;
+        if (id != null) {
+            studentLesson = this.findStudentLesson(id);
+        }
+        boolean isNew = false;
+        if (studentLesson == null) {
+            isNew = true;
+            studentLesson = new StudentLesson();
+            //
+            String sql = "SELECT MAX(id) FROM " + StudentLesson.class.getName();
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(sql);
+            if (query.list().get(0) == null){
+            	studentLesson.setId(1);
+            }
+            else {
+            	studentLesson.setId(Integer.parseInt(query.list().get(0).toString())+1);
+            }
+        }
+        studentLesson.setSubstituteLessonId(studentLessonInfo.getSubstituteLessonId());
+        studentLesson.setStudentId(studentLessonInfo.getStudentId());
+        studentLesson.setConvMark("MUAF");
+        studentLesson.setOrgMark("MUAF");
         studentLesson.setTakingLessonId(studentLessonInfo.getTakingLessonId());
  
         if (isNew) {
@@ -181,10 +217,14 @@ public class StudentLessonDAOImpl implements StudentLessonDAO {
 		Session session = sessionFactory.getCurrentSession();
         Criteria crit = session.createCriteria(Mark.class);
         crit.add(Restrictions.eq("uniId", uniId));
-        crit.add(Restrictions.eq("from", orgMark));
+        crit.add(Restrictions.eq("mark", orgMark));
         if (crit.list().isEmpty())
         	return "?";
-        return ((Mark) crit.uniqueResult()).getTo();
+        Criteria crit2 = session.createCriteria(Ourmark.class);
+        crit2.add(Restrictions.eq("value", ((Mark) crit.uniqueResult()).getValue()));
+        if (crit2.list().isEmpty())
+        	return "??";
+        return ((Ourmark) crit2.uniqueResult()).getMark();
 	}
 
 }

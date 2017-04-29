@@ -1,0 +1,99 @@
+@page {
+    size: A4;
+    margin: 0;
+}
+@media print {
+    .page {
+        margin: 0;
+        border: initial;
+        border-radius: initial;
+        width: initial;
+        min-height: initial;
+        box-shadow: initial;
+        background: initial;
+        page-break-after: always;
+    }
+}
+
+.header img {
+    position: relative;
+    float: left;
+    top: 20px;
+    left: 10px;
+    width: 120px;
+    height: 120px;
+    background: transparent;
+}
+
+.header h1 {
+    position: relative;
+    font-size: 20px;
+    top: 65px;
+    left: 100px;
+}
+
+.header table {
+    margin-right: 50px;
+    position: relative;
+    top: 0px;
+    left: 800px;
+}
+
+.options {
+    position: relative;
+    margin-top: 80px;
+    margin-left: 80px;
+}
+
+.options label {
+    margin-left: 20px;
+    font-size: 12px;
+}
+
+input[type="checkbox"]{
+    width: 20px; /*Desired width*/
+    height: 20px; /*Desired height*/
+}
+
+.student table {
+    margin-left: 100px;
+    margin-top: 20px;
+    position: relative;
+    top: 0px;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.lesson table.right {
+    margin-top: 10px;
+    position: relative;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.lesson table.left {
+    margin-top: 10px;
+    margin-left: 70px;
+    position: relative;
+    text-align: center;
+    border-collapse: collapse;
+    float: left;
+}
+
+.lesson label {
+    margin-left: 100px;
+    position: ;
+}
+
+.footer table {
+    margin-top: 10px;
+    margin-left: 40px;
+    position: relative;
+    text-align: center;
+    border-collapse: collapse;
+    float: left;
+}
+
+.student table thead th {
+    width: %50;
+}

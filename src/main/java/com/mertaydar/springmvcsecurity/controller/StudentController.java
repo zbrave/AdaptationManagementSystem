@@ -22,6 +22,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mertaydar.springmvcsecurity.dao.DeptDAO;
+import com.mertaydar.springmvcsecurity.dao.MailSend;
 import com.mertaydar.springmvcsecurity.dao.RulesDAO;
 import com.mertaydar.springmvcsecurity.dao.StudentDAO;
 import com.mertaydar.springmvcsecurity.dao.StudentLessonDAO;
@@ -32,6 +33,7 @@ import com.mertaydar.springmvcsecurity.dao.UserDAO;
 import com.mertaydar.springmvcsecurity.model.DeptInfo;
 import com.mertaydar.springmvcsecurity.model.JSPLessonFormat;
 import com.mertaydar.springmvcsecurity.model.JSPStudentFormat;
+import com.mertaydar.springmvcsecurity.model.MailInfo;
 import com.mertaydar.springmvcsecurity.model.RulesInfo;
 import com.mertaydar.springmvcsecurity.model.StudentInfo;
 import com.mertaydar.springmvcsecurity.model.StudentLessonInfo;
@@ -71,6 +73,9 @@ public class StudentController {
 	@Autowired
 	private StudentLessonDAO studentLessonDAO;
 	
+	@Autowired
+	private MailSend mailSend;
+	
 /* Student Section */
 	
 	@RequestMapping(value = "/setToStudent", method = RequestMethod.POST)
@@ -98,6 +103,26 @@ public class StudentController {
 	@RequestMapping(value = "/myAdapt", method = RequestMethod.GET)
 	public String saveDept(Model model, Principal principal) {
 		UserInfo user = this.userDAO.findLoginUserInfo(principal.getName());
+		return "redirect:/getStudentData?id="+user.getStudentId().toString();
+	}
+	
+	@RequestMapping(value = "/sendMail", method = RequestMethod.POST)
+	public String sendMail(Model model, Principal principal, @ModelAttribute("mailForm") @Validated MailInfo mailInfo, final RedirectAttributes redirectAttributes) {
+		UserInfo user = this.userDAO.findLoginUserInfo(principal.getName());
+		String decodedToUTF8;
+		try {
+			decodedToUTF8 = new String(mailInfo.getSubject().getBytes("ISO-8859-1"), "UTF-8");
+			mailInfo.setSubject(decodedToUTF8);
+			decodedToUTF8 = new String(mailInfo.getText().getBytes("ISO-8859-1"), "UTF-8");
+			mailInfo.setText(decodedToUTF8);
+		} catch (UnsupportedEncodingException e) {
+			System.out.println("Mail cannot converted.");
+			e.printStackTrace();
+		}
+		String text = "Kullanıcı: "+principal.getName()+"\n\n";
+		text = text.concat(mailInfo.getText());
+		mailSend.sendSimpleMessage(mailInfo.getTo(), mailInfo.getSubject(), text);
+		redirectAttributes.addFlashAttribute("message", "Mail Gönderildi.");
 		return "redirect:/getStudentData?id="+user.getStudentId().toString();
 	}
 	
@@ -136,6 +161,9 @@ public class StudentController {
 		List<UserInfo> students = userDAO.listUserInfos();
 		model.addAttribute("students", students);
 		model.addAttribute("lessons", list);
+		
+		List<UserInfo> admins = userDAO.listUserInfosRoleAdmin();
+		model.addAttribute("admins", admins);
 		return "addStudentLesson";
 	}
 	

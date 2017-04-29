@@ -64,7 +64,7 @@ public class UserController {
 
 		// Important!!: Need @EnableWebMvc
 		// Add message to flash scope
-		redirectAttributes.addFlashAttribute("signupMsg", "Kullanıcı eklendi.");
+		redirectAttributes.addFlashAttribute("signupMsg", "Hesabınızı mailize gelen aktivasyon linki ile aktive edin.");
 
 //		return "redirect:/deptList";
 		return "redirect:/login";

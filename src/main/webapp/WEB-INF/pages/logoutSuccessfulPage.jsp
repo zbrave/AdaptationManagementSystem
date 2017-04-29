@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="refresh" content="1;url=${pageContext.request.contextPath}/login" />
+	<meta http-equiv="refresh" content="1.5;url=${pageContext.request.contextPath}/login" />
 	<spring:url value="/resources/css/bootstrap.css" var="bootstrapCSS" />
 	<spring:url value="/resources/js/bootstrap.js" var="bootstrapJS" />
 	<spring:url value="/resources/others/ams.css" var="amsCSS" />
@@ -16,16 +16,7 @@
 	<title>Logout</title>
 </head>
 <body>
-    <nav class="navbar">
-	<div class="menu">
-	    <div class="container-fluid">
-			<div class="navbar-header">
-				<a href="${pageContext.request.contextPath}">IYS</a>
-			</div>
-		</div>
-	</div>
-	</nav>
- 
-    <h1>Çıkış yapıldı!</h1>
+ 	<div class="text-center" style="margin-top: 320px;"><h1><span class="glyphicon glyphicon-hourglass"></span></h1></div>
+ 	<div class="text-center" style="margin-top: 20px;"><h1 class="">Çıkış yapılıyor.</h1></div>     
 </body>
 </html>

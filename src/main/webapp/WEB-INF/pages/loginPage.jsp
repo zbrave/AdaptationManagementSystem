@@ -26,23 +26,25 @@
       <section class="login-form">
         <form method="post" action="${pageContext.request.contextPath}/j_spring_security_check" role="login" method='POST'>
           <img src="http://www.yildiz.edu.tr/images/files/ytulogopng.png" class="img-responsive" alt="" style="width:50%"/>
-          <h3 class="text-center">Yildiz Teknik Universitesi</h3>
-		  <h4 class="text-center">Intibak Yonetim Sistemi</h4>
+          <h3 class="text-center">Yıldız Teknik Üniversitesi</h3>
+		  <h4 class="text-center">İntibak Yonetim Sistemi</h4>
 		  <!-- /login?error=true -->
+      <c:if test="${not empty signupMsg}">
+         <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${signupMsg}
+         </div>
+      </c:if>
      <c:if test="${param.error == 'true'}">
         <div class="alert alert-danger" role="alert">
-  			<a href="#" class="alert-link">Login Failed!!!<br />
-                Reason :  ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</a>
+  			<a href="#" class="alert-link">Giriş yapılamadı!<br />
+                ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</a>
 		</div>
     </c:if>
-          <input type='text' class="form-control" id="username" placeholder="Username" name='username' value=''>          
-          <input type='password' class="form-control" id="password" placeholder="Password" name='password' />
+          <input type='text' class="form-control" id="username" placeholder="Kullanıcı adı" name='username' value=''>          
+          <input type='password' class="form-control" id="password" placeholder="Şifre" name='password' />
                     
           
-          <div class="pwstrength_viewport_progress"></div>
           
-          
-          <button type="submit" name="go" class="btn btn-lg btn-primary btn-block">Giris Yap</button>
+          <button type="submit" name="go" class="btn btn-lg btn-primary btn-block">Giriş Yap</button>
           <div>
             <a href="#" onclick="$('#loginbox').hide(); $('#signupbox').show()">Yeni hesap ac</a> yada <a href="#">Sifremi unuttum</a>
           </div>
@@ -50,7 +52,7 @@
         </form>
         
         <div class="form-links">
-          <a href="#">www.website.com</a>
+          <a href="#">www.ce.yildiz.edu.tr</a>
         </div>
       </section>  
       </div>
@@ -67,19 +69,20 @@
       <section class="login-form">
         <form method="post" action="${pageContext.request.contextPath}/saveUser" role="login" method='POST'>
           <img src="http://www.yildiz.edu.tr/images/files/ytulogopng.png" class="img-responsive" alt="" style="width:50%"/>
-          <h3 class="text-center">Yildiz Teknik Universitesi</h3>
-		  <h4 class="text-center">Intibak Yönetim Sistemi</h4>
+          <h3 class="text-center">Yıldız Teknik Üniversitesi</h3>
+		  <h4 class="text-center">İntibak Yönetim Sistemi</h4>
+      <h5 class="text-center">Yeni kullanıcı kaydı</h5>
 		  <!-- /login?error=true -->
      <c:if test="${param.error == 'true'}">
         <div class="alert alert-danger" role="alert">
-  			<a href="#" class="alert-link">Login Failed!!!<br />
-                Reason :  ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</a>
+  			<a href="#" class="alert-link">Hata!<br />
+                ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</a>
 		</div>
     </c:if>
-          <input type='text' class="form-control" id="username" placeholder="Username" name='username' value=''>          
-          <input type='text' class="form-control" id="email" placeholder="E-mail" name='email' value=''>
-          <input type='password' class="form-control" id="password" placeholder="Password" name='password' />
-          <input type='password' class="form-control" id="passwordConf" placeholder="Password again" name='passwordConf' />
+          <input type='text' class="form-control" id="username" placeholder="Kullanıcı adı" name='username' value=''>          
+          <input type='text' class="form-control" id="email" placeholder="E-posta adresi" name='email' value=''>
+          <input type='password' class="form-control" id="password" placeholder="Şifre" name='password' />
+          <input type='password' class="form-control" id="passwordConf" placeholder="Şifre doğrulama" name='passwordConf' />
                     
           
           <div class="pwstrength_viewport_progress"></div>

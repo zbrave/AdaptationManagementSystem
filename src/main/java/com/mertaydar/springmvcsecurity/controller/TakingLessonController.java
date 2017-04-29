@@ -53,11 +53,21 @@ public class TakingLessonController {
 	@RequestMapping(value="/getTakingLesson",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
 	@ResponseBody
 	public String getTakingLesson(@RequestParam Integer id) {
-		System.out.println("id:"+id);
 		String res = "<option id=-1 value=-1>Alınan ders seçin.</option>";
 		List<TakingLessonInfo> list = this.takingLessonDAO.listTakingLessonFromDept(id);
 		for (TakingLessonInfo tmp : list) {
-			res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+">"+tmp.getName()+"</option>");
+			res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+">"+tmp.getCode()+" "+tmp.getName()+">Kredi: "+tmp.getCredit()+"</option>");
+		}
+		return res;
+	}
+	
+	@RequestMapping(value="/getTakingLessons",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
+	@ResponseBody
+	public String getTakingLessons(@RequestParam Integer id) {
+		String res = "";
+		List<TakingLessonInfo> list = this.takingLessonDAO.listTakingLessonFromDept(id);
+		for (TakingLessonInfo tmp : list) {
+			res = res.concat("<tr><td>"+tmp.getId()+"</td><td>"+tmp.getName()+"</td><td>"+tmp.getCode()+"</td><td>"+tmp.getLang()+"</td><td>"+tmp.getCredit()+"</td><td>"+tmp.getAkts()+"</td><td>"+tmp.getTerm()+"</td><td><a href=\"deleteTakingLesson?id="+tmp.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Sil</a></td></tr>");
 		}
 		return res;
 	}
@@ -133,18 +143,19 @@ public class TakingLessonController {
 			takingLessonInfo = this.takingLessonDAO.findTakingLessonInfo(id);
 		}
 		if (takingLessonInfo == null) {
-			return "redirect:/takingLessonList";
+			return "redirect:/addRules#takingLessonTab";
 		}
 
 		return this.formTakingLesson(model, takingLessonInfo);
 	}
 
 	@RequestMapping("/deleteTakingLesson")
-	public String deleteTakingLesson(Model model, @RequestParam("id") Integer id) {
+	public String deleteTakingLesson(Model model, @RequestParam("id") Integer id, final RedirectAttributes redirectAttributes) {
 		if (id != null) {
 			this.takingLessonDAO.deleteTakingLesson(id);
+			redirectAttributes.addFlashAttribute("message3", "Ders Silindi.");
 		}
-		return "redirect:/takingLessonList";
+		return "redirect:/addRules#takingLessonTab";
 	}
 
 	@RequestMapping(value = "/saveTakingLesson", method = RequestMethod.POST)
@@ -168,11 +179,11 @@ public class TakingLessonController {
 
 		this.takingLessonDAO.saveTakingLesson(takingLessonInfo);
 
-		// Important!!: Need @EnableWebMvc
+		// Important!!: Need @EnableWebMvc1
 		// Add message to flash scope
 		redirectAttributes.addFlashAttribute("message3", "Alınan ders eklendi.");
 
 //		return "redirect:/takingLessonList";
-		return "redirect:/addRules";
+		return "redirect:/addRules#takingLessonTab";
 	}
 }

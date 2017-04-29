@@ -15,13 +15,17 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.mertaydar.springmvcsecurity.dao.ActivationDAO;
 import com.mertaydar.springmvcsecurity.dao.DeptDAO;
 import com.mertaydar.springmvcsecurity.dao.MarkDAO;
+import com.mertaydar.springmvcsecurity.dao.OurmarkDAO;
 import com.mertaydar.springmvcsecurity.dao.RulesDAO;
 import com.mertaydar.springmvcsecurity.dao.StudentDAO;
 import com.mertaydar.springmvcsecurity.dao.StudentLessonDAO;
@@ -30,8 +34,10 @@ import com.mertaydar.springmvcsecurity.dao.TakingLessonDAO;
 import com.mertaydar.springmvcsecurity.dao.UniDAO;
 import com.mertaydar.springmvcsecurity.dao.UserDAO;
 import com.mertaydar.springmvcsecurity.dao.UserRoleDAO;
+import com.mertaydar.springmvcsecurity.dao.impl.ActivationDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.DeptDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.MarkDAOImpl;
+import com.mertaydar.springmvcsecurity.dao.impl.OurmarkDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.RulesDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.StudentDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.StudentLessonDAOImpl;
@@ -40,6 +46,9 @@ import com.mertaydar.springmvcsecurity.dao.impl.TakingLessonDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.UniDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.UserDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.UserRoleDAOImpl;
+
+import com.mertaydar.springmvcsecurity.dao.MailSend;
+import com.mertaydar.springmvcsecurity.dao.impl.MailSendImpl;
  
 @Configuration
 @ComponentScan("com.mertaydar.springmvcsecurity.*")
@@ -165,6 +174,11 @@ public class ApplicationContextConfig {
 	  return new MarkDAOImpl();
   }
   
+  @Bean(name = "OurmarkDAO")
+  public OurmarkDAO getOurmarkDAO() {
+	  return new OurmarkDAOImpl();
+  }
+  
   @Bean(name = "userDAO")
   public UserDAO getUserDAO() {
 	  return new UserDAOImpl();
@@ -173,6 +187,39 @@ public class ApplicationContextConfig {
   @Bean(name = "userRoleDAO")
   public UserRoleDAO getUserRoleDAO() {
 	  return new UserRoleDAOImpl();
+  }
+  
+  @Bean(name = "ActivationDAO")
+  public ActivationDAO getActivationDAO() {
+	  return new ActivationDAOImpl();
+  }
+  
+  @Bean(name = "mailSend")
+  public MailSend getMailSend() {
+      return new MailSendImpl();
+  }
+  
+  @Bean
+  public JavaMailSender javaMailService() {
+      JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+
+      javaMailSender.setHost("smtp.gmail.com");
+      javaMailSender.setPort(587);
+      javaMailSender.setUsername("ytuiys@gmail.com");
+      javaMailSender.setPassword("ytuiys123");
+      
+      javaMailSender.setJavaMailProperties(getMailProperties());
+
+      return javaMailSender;
+  }
+  
+  private Properties getMailProperties() {
+      Properties properties = new Properties();
+      properties.setProperty("mail.transport.protocol", "smtp");
+      properties.setProperty("mail.smtp.auth", "false");
+      properties.setProperty("mail.smtp.starttls.enable", "true");
+      properties.setProperty("mail.debug", "false");
+      return properties;
   }
  
 }

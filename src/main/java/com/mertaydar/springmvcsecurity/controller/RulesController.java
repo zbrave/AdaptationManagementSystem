@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mertaydar.springmvcsecurity.dao.DeptDAO;
 import com.mertaydar.springmvcsecurity.dao.RulesDAO;
+import com.mertaydar.springmvcsecurity.dao.SubstituteLessonDAO;
 import com.mertaydar.springmvcsecurity.dao.TakingLessonDAO;
 import com.mertaydar.springmvcsecurity.dao.UniDAO;
 import com.mertaydar.springmvcsecurity.model.DeptInfo;
@@ -43,14 +45,34 @@ public class RulesController {
 	private TakingLessonDAO takingLessonDAO;
 	
 	@Autowired
+	private SubstituteLessonDAO substituteLessonDAO;
+	
+	@Autowired
 	private RulesDAO rulesDAO;
 	
 /* Rules Section */
 	
 	@RequestMapping(value = "/addRules", method = RequestMethod.GET)
 	public String addRules(Model model) {
-
+		List<RulesInfo> rules = rulesDAO.listRulesInfos();
+		model.addAttribute("rules", rules);
+		
 		return "addRules";
+	}
+	
+	@RequestMapping(value="/getRules",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
+	@ResponseBody
+	public String getRules(@RequestParam Integer id) {
+		System.out.println("id:"+id);
+		String res = "";
+		List<TakingLessonInfo> tl = takingLessonDAO.listTakingLessonFromDept(id);
+		for (TakingLessonInfo t : tl) {
+			List<RulesInfo> rules = rulesDAO.listRulesForLesson(t.getId());
+			for (RulesInfo r : rules) {
+				res = res.concat("<tr><td>"+r.getId()+"</td>"+"<td>"+t.getName()+"</td><td>"+substituteLessonDAO.findSubstituteLesson(r.getSubstituteLessonId()).getName()+"</td><td><a href=\"deleteRules?id="+r.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Sil</a></td></tr>");
+			}
+		}
+		return res;
 	}
 	
 	@RequestMapping("/rulesList")
@@ -140,11 +162,12 @@ public class RulesController {
 	}
 
 	@RequestMapping("/deleteRules")
-	public String deleteRules(Model model, @RequestParam("id") Integer id) {
+	public String deleteRules(Model model, @RequestParam("id") Integer id, final RedirectAttributes redirectAttributes) {
 		if (id != null) {
 			this.rulesDAO.deleteRules(id);
+			redirectAttributes.addFlashAttribute("message5", "Bölüm silindi.");
 		}
-		return "redirect:/rulesList";
+		return "redirect:/addRules";
 	}
 
 	@RequestMapping(value = "/saveRules", method = RequestMethod.POST)

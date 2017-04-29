@@ -2,6 +2,7 @@ package com.mertaydar.springmvcsecurity.dao.impl;
  
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -11,14 +12,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mertaydar.springmvcsecurity.dao.ActivationDAO;
 import com.mertaydar.springmvcsecurity.dao.UserDAO;
+import com.mertaydar.springmvcsecurity.dao.UserRoleDAO;
 import com.mertaydar.springmvcsecurity.model.UserInfo;
+import com.mertaydar.springmvcsecurity.entity.Activation;
 import com.mertaydar.springmvcsecurity.entity.User;
  
 @Service
 @Transactional
 public class UserDAOImpl implements UserDAO {
  
+	@Autowired
+	private UserRoleDAO userRoleDAO;
+	
+	@Autowired ActivationDAO actiavationDAO;
+	
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -48,11 +57,28 @@ public class UserDAOImpl implements UserDAO {
 	    user.setPassword(userInfo.getPassword());
 	    user.setStudentId(userInfo.getStudentId());
 	    user.setEnabled(false);
+	    Activation act = new Activation();
+	    act.setUsername(user.getUsername());
+	    act.setCode(getSaltString());
+	    actiavationDAO.saveActivation(act);
 	    if(isNew){
 	    	Session session=this.sessionFactory.getCurrentSession();
 	    	session.persist(user);
 	    }
 	}
+	
+	protected String getSaltString() {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 18) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        String saltStr = salt.toString();
+        return saltStr;
+
+    }
 
 	@Override
 	public UserInfo findUserInfo(Integer id) {
@@ -98,6 +124,28 @@ public class UserDAOImpl implements UserDAO {
         List<UserInfo> userInfos=new ArrayList<UserInfo>();
         for(User u : users){
         	userInfos.add((UserInfo)findUserInfo(u.getId()));
+        }
+        return userInfos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserInfo> listUserInfosRoleAdmin() {
+        boolean isAdmin = false;
+		Session session = sessionFactory.getCurrentSession();
+        Criteria crit = session.createCriteria(User.class);
+        List<User> users =(List<User>) crit.list();
+        List<UserInfo> userInfos=new ArrayList<UserInfo>();
+        for(User u : users){
+        	isAdmin = false;
+        	List<String> roles = userRoleDAO.getUserRoles(u.getId());
+        	for (String s : roles) {
+        		if (s.equals("ADMIN")) {
+        			isAdmin = true;
+        		}
+        	}
+        	if (isAdmin == true)
+        		userInfos.add((UserInfo)findUserInfo(u.getId()));
         }
         return userInfos;
 	}

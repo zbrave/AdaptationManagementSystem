@@ -48,11 +48,21 @@ public class DeptController {
 	@RequestMapping(value="/getDept",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
 	@ResponseBody
 	public String getDept(@RequestParam Integer id) {
-		System.out.println("id:"+id);
 		String res = "<option id=-1 value=-1>Bölüm seçin.</option>";
 		List<DeptInfo> list = this.deptDAO.listDeptFromUni(id);
 		for (DeptInfo tmp : list) {
 			res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+">"+tmp.getName()+"</option>");
+		}
+		return res;
+	}
+	
+	@RequestMapping(value="/getDepts",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
+	@ResponseBody
+	public String getDepts(@RequestParam Integer id) {
+		String res = "";
+		List<DeptInfo> list = this.deptDAO.listDeptFromUni(id);
+		for (DeptInfo tmp : list) {
+			res = res.concat("<tr><td>"+tmp.getId()+"</td><td>"+tmp.getName()+"</td><td><a href=\"deleteDept?id="+tmp.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Sil</a></td></tr>");
 		}
 		return res;
 	}
@@ -119,11 +129,12 @@ public class DeptController {
 	}
 
 	@RequestMapping("/deleteDept")
-	public String deleteDept(Model model, @RequestParam("id") Integer id) {
+	public String deleteDept(Model model, @RequestParam("id") Integer id, final RedirectAttributes redirectAttributes) {
 		if (id != null) {
 			this.deptDAO.deleteDept(id);
+			redirectAttributes.addFlashAttribute("message2", "Bölüm silindi.");
 		}
-		return "redirect:/deptList";
+		return "redirect:/addRules#deptTab";
 	}
 
 	@RequestMapping(value = "/saveDept", method = RequestMethod.POST)
@@ -153,6 +164,6 @@ public class DeptController {
 		redirectAttributes.addFlashAttribute("message2", "Bölüm eklendi.");
 
 //		return "redirect:/deptList";
-		return "redirect:/addRules";
+		return "redirect:/addRules#deptTab";
 	}
 }

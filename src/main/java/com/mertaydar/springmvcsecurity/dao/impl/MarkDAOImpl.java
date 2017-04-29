@@ -44,7 +44,7 @@ public class MarkDAOImpl implements MarkDAO{
 	public List<MarkInfo> listMarkFromUni(Integer id) {
 		// sql query has to have exact names from own class variable 
 		String sql = "Select new " + MarkInfo.class.getName()//
-                + "(a.id, a.uniId, a.from, a.to) "//
+                + "(a.id, a.uniId, a.mark, a.value) "//
                 + " from " + Mark.class.getName() + " a where a.uniId = :code";
 //		System.out.println(sql.toString());
         Session session = sessionFactory.getCurrentSession();
@@ -76,8 +76,8 @@ public class MarkDAOImpl implements MarkDAO{
             }
         }
         mark.setUniId(markInfo.getUniId());
-        mark.setFrom(markInfo.getFrom());
-        mark.setTo(markInfo.getTo());
+        mark.setMark(markInfo.getMark());
+        mark.setValue(markInfo.getValue());
  
         if (isNew) {
             Session session = this.sessionFactory.getCurrentSession();
@@ -92,7 +92,7 @@ public class MarkDAOImpl implements MarkDAO{
         if (mark == null) {
             return null;
         }
-        return new MarkInfo(mark.getId(), mark.getUniId(), mark.getFrom(), mark.getTo());
+        return new MarkInfo(mark.getId(), mark.getUniId(), mark.getMark(), mark.getValue());
 	}
 
 	@Override

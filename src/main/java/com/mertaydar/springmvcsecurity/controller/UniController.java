@@ -62,6 +62,17 @@ public class UniController {
 		return res;
 	}
 
+	@RequestMapping(value="/getUnis",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
+	@ResponseBody
+	public String getUnis() {
+		String res = "";
+		List<UniInfo> list = this.uniDAO.listUniInfos();
+		for (UniInfo tmp : list) {
+			res = res.concat("<tr><td>"+tmp.getId()+"</td><td>"+tmp.getName()+"</td><td><a href=\"deleteUni?id="+tmp.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Sil</a></td></tr>");
+		}
+		return res;
+	}
+	
 	private String formUni(Model model, UniInfo uniInfo) {
 		model.addAttribute("uniForm", uniInfo);
 
@@ -93,18 +104,19 @@ public class UniController {
 			uniInfo = this.uniDAO.findUniInfo(id);
 		}
 		if (uniInfo == null) {
-			return "redirect:/uniList";
+			return "redirect:/addRules";
 		}
 
 		return this.formUni(model, uniInfo);
 	}
 
 	@RequestMapping("/deleteUni")
-	public String deleteUni(Model model, @RequestParam("id") Integer id) {
+	public String deleteUni(Model model, @RequestParam("id") Integer id, final RedirectAttributes redirectAttributes) {
 		if (id != null) {
 			this.uniDAO.deleteUni(id);
+			redirectAttributes.addFlashAttribute("message1", "Üniversite silindi.");
 		}
-		return "redirect:/uniList";
+		return "redirect:/addRules";
 	}
 
 	@RequestMapping(value = "/saveUni", method = RequestMethod.POST)

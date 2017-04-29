@@ -1,5 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
- <%@ page pageEncoding="UTF-8" %>
+<%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
  
@@ -150,11 +150,11 @@ $(document).ready(function(){
 		<div class="panel panel-default panel-table">
               <div class="panel-heading">
                 <div class="row">
-                  <div class="col col-xs-6">
+                  <div class="col col-xs-2">
                     <h3 class="panel-title">${i}.Yarıyıl</h3>
                   </div>
-                  <div class="col col-xs-6 text-right">
-                    <h5 class="sub-header">Alınan Dersler</h5>
+                  <div class="col col-xs-10 text-right">
+                    <h5 class="sub-header">${uni} - ${dept} / Alınan Dersler</h5>
                   </div>
                 </div>
               </div>
@@ -289,6 +289,46 @@ $(document).ready(function(){
 	</div>
 	</c:if>
 	</c:forEach>
+	</c:forEach>
+	<c:forEach var="role" items="${pageContext['request'].userPrincipal.principal.authorities}">
+		<c:if test="${role.authority == 'ROLE_USER' }">
+			<!-- Mail Form -->
+			<form:form action="sendMail" class="form-inline" method="POST" modelAttribute="mailForm">
+				<div class="col-lg-3"></div>
+				<div class="form-group well">
+					
+					<input id="studentId" name="studentId" type="hidden" value="${id}"/>
+					
+					<label class="control-label" style="margin-left: 10px;">Kime</label>
+								 			
+			   		<select id="to" class="form-control" name="to" style="width: 23%;" >
+			   			<c:forEach items="${admins}" var="info">
+			   				<option id="${info.email}" value="${info.email}">${info.username}</option>
+						</c:forEach>
+			   		</select>
+
+					<label class="control-label" style="margin-left: 10px;">Konu</label>
+								 			
+			   		<select id="subject" class="form-control" name="subject" >
+			   			<option value="İtiraz">İtiraz</option>
+			   			<option value="İstek">İstek</option>
+			   			<option value="Öneri">Öneri</option>
+			   			<option value="Diğer">Diğer</option>
+			   		</select>
+			   		
+			   		<label class="control-label" style="margin-left: 10px;">İçerik</label>
+			   		
+			   		<textarea id="text" class="form-control" name="text" rows="4" cols="55" style="margin-top: 20px;"></textarea>
+			   		
+			   		<button type="submit" class="btn btn-default " style="margin-left: 10px;" value="Ekle" >Gönder</button>
+						        
+			        <c:if test="${not empty message}">
+					   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message}
+					   </div>
+					</c:if> 
+		        </div>
+	        </form:form>
+		</c:if>
 	</c:forEach>
 	</c:if>       
 </body>

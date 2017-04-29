@@ -33,15 +33,26 @@ public class JSPLessonFormat {
 		this.subLang = sub.getLang();
 		this.subName = sub.getName();
 		this.subTerm = sub.getTerm();
-		this.takId = tak.getId();
-		this.takAkts = tak.getAkts();
-		this.takCode = tak.getCode();
-		this.takCredit = tak.getCredit();
-		this.takLang = tak.getLang();
-		this.takName = tak.getName();
-		this.takTerm = tak.getTerm();
 		this.subMark = convMark;
-		this.takMark = orgMark;
+		if (tak == null) {
+			this.takId = 0;
+			this.takAkts = 0;
+			this.takCode = "MUAF";
+			this.takCredit = 0;
+			this.takLang = "MUAF";
+			this.takName = "MUAF";
+			this.takTerm = 0;
+			this.takMark = orgMark;
+		}else {
+			this.takId = tak.getId();
+			this.takAkts = tak.getAkts();
+			this.takCode = tak.getCode();
+			this.takCredit = tak.getCredit();
+			this.takLang = tak.getLang();
+			this.takName = tak.getName();
+			this.takTerm = tak.getTerm();
+			this.takMark = orgMark;
+		}
 	}
 	
 	public Integer getTakId() {

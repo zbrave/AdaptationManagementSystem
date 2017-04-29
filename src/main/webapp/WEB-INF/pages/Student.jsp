@@ -65,7 +65,7 @@ $(document).ready(function(){
 	}
 });
 </script>
-<title>Create substituteLesson</title>
+<title>IYS - Öğrenciler</title>
 <style>
 .error-message {
    color: red;

@@ -83,6 +83,17 @@ public class SubstituteLessonController {
 		return res;
 	}
 	
+	@RequestMapping(value="/getSubstituteLessons",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
+	@ResponseBody
+	public String getSubstituteLessons() {
+		String res = "";
+		List<SubstituteLessonInfo> list = this.substituteLessonDAO.listSubstituteLessonInfos();
+		for (SubstituteLessonInfo tmp : list) {
+			res = res.concat("<tr><td>"+tmp.getId()+"</td><td>"+tmp.getName()+"</td><td>"+tmp.getCode()+"</td><td>"+tmp.getLang()+"</td><td>"+tmp.getCredit()+"</td><td>"+tmp.getAkts()+"</td><td>"+tmp.getTerm()+"</td><td><a href=\"deleteSubstituteLesson?id="+tmp.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Sil</a></td></tr>");
+		}
+		return res;
+	}
+	
 	private Map<Integer, String> takingLessonList() {
 		Map<Integer, String> takingLessonMap = new LinkedHashMap<Integer, String>();
 		List<TakingLessonInfo> takingLessonList = this.takingLessonDAO.listTakingLessonInfos();
@@ -163,11 +174,12 @@ public class SubstituteLessonController {
 	}
 
 	@RequestMapping("/deleteSubstituteLesson")
-	public String deleteSubstituteLesson(Model model, @RequestParam("id") Integer id) {
+	public String deleteSubstituteLesson(Model model, @RequestParam("id") Integer id, final RedirectAttributes redirectAttributes) {
 		if (id != null) {
 			this.substituteLessonDAO.deleteSubstituteLesson(id);
+			redirectAttributes.addFlashAttribute("message4", "Ders silindi.");
 		}
-		return "redirect:/substituteLessonList";
+		return "redirect:/addRules#substituteLessonTab";
 	}
 
 	@RequestMapping(value = "/saveSubstituteLesson", method = RequestMethod.POST)
@@ -196,6 +208,6 @@ public class SubstituteLessonController {
 		redirectAttributes.addFlashAttribute("message4", "Verilen Ders Eklendi.");
 
 //		return "redirect:/substituteLessonList";
-		return "redirect:/addRules";
+		return "redirect:/addRules#substituteLessonTab";
 	}
 }

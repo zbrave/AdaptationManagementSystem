@@ -18,6 +18,9 @@
   src="https://code.jquery.com/jquery-3.1.1.js"
   integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
   crossorigin="anonymous"></script>
+
+
+  <script type='text/javascript' src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
   
    <script type="text/javascript">
 $(document).ready(function(){
@@ -33,6 +36,21 @@ $(document).ready(function(){
 });</script>
  <script type="text/javascript">
 $(document).ready(function(){
+	$('#uniId4').on('change',function(){
+		$.get("${pageContext.request.contextPath}/getMarks?id="+ $(this).children("option").filter(":selected").attr("id"), null, function (data) {
+	        $('#marks > tbody:last-child').html(data);
+	    });
+	});
+	$('#deptId').on('change',function(){
+		$.get("${pageContext.request.contextPath}/getTakingLessons?id="+ $(this).children("option").filter(":selected").attr("id"), null, function (data) {
+	        $('#takLes > tbody:last-child').html(data);
+	    });
+	});
+	$('#uniId').on('change',function(){
+		$.get("${pageContext.request.contextPath}/getDepts?id="+ $(this).children("option").filter(":selected").attr("id"), null, function (data) {
+	        $('#depts > tbody:last-child').html(data);
+	    });
+	});
 	$('#uniId2').on('change',function(){
 		$.get("${pageContext.request.contextPath}/getDept?id="+ $(this).children("option").filter(":selected").attr("id"), null, function (data) {
 	        $("#deptId").html(data);
@@ -50,9 +68,19 @@ $(document).ready(function(){
 		$.get("${pageContext.request.contextPath}/getTakingLesson?id="+ $(this).children("option").filter(":selected").attr("id"), null, function (data) {
 	        $("#takingLessonId").html(data);
 	    });
+	    $.get("${pageContext.request.contextPath}/getRules?id="+ $(this).children("option").filter(":selected").attr("id"), null, function (data) {
+	        $('#rules > tbody:last-child').html(data);
+	    });
 	});
+	$.get("${pageContext.request.contextPath}/getUnis", null, function (data) {
+	        $('#unis > tbody:last-child').html(data);
+	    });
+	$.get("${pageContext.request.contextPath}/getSubstituteLessons", null, function (data) {
+	        $('#subLes > tbody:last-child').html(data);
+	    });
 });</script>
-<title>Create substituteLesson</title>
+
+<title>IYS - Kural ekleme</title>
 <style>
 .error-message {
    color: red;
@@ -97,6 +125,22 @@ $(document).ready(function(){
 						</c:if> 
 			        </div>
 		        </form:form>
+
+		        <div class="row custyle">
+				    <table id="rules" class="table table-striped custab" style="background-color: #FFF;">
+				    <thead>
+				        <tr>
+				            <th>ID</th>
+				            <th>Alınan Ders</th>
+				            <th>Sayılan Ders</th>
+				            <th class="text-center">Eylem</th>
+				        </tr>
+				    </thead>
+				   	<tbody>
+				   		
+				   	</tbody>
+				    </table>
+			    </div>
 		        </div>
 	        </div>
         </div>
@@ -135,6 +179,21 @@ $(document).ready(function(){
 					
 					  			</div>
 							</form:form>
+
+							<div class="row custyle">
+							    <table id="unis" class="table table-striped custab" style="background-color: #FFF;">
+							    <thead>
+							        <tr>
+							            <th>ID</th>
+							            <th>Üniversite Adı</th>
+							            <th class="text-center">Eylem</th>
+							        </tr>
+							    </thead>
+							   	<tbody>
+							   		
+							   	</tbody>
+							    </table>
+						    </div>
 						</div>
                         <div class="tab-pane fade" id="deptTab">
 							<form:form action="saveDept" method="POST" modelAttribute="deptForm">
@@ -159,6 +218,21 @@ $(document).ready(function(){
 							           
 					       		</div>
 					   		</form:form>
+
+					   		<div class="row custyle">
+							    <table id="depts" class="table table-striped custab" style="background-color: #FFF;">
+							    <thead>
+							        <tr>
+							            <th>ID</th>
+							            <th>Bölüm Adı</th>
+							            <th class="text-center">Eylem</th>
+							        </tr>
+							    </thead>
+							   	<tbody>
+							   		
+							   	</tbody>
+							    </table>
+						    </div>
 						</div>
                         <div class="tab-pane fade" id="takingLessonTab">
 							<form:form action="saveTakingLesson" method="POST" modelAttribute="takingLessonForm">
@@ -204,6 +278,26 @@ $(document).ready(function(){
 								   </div>
 								</c:if>
 					   		</form:form>
+
+					   		<div class="row custyle">
+							    <table id="takLes" class="table table-striped custab" style="background-color: #FFF;">
+							    <thead>
+							        <tr>
+							            <th>ID</th>
+							            <th>Adı</th>
+							            <th>Kodu</th>
+							            <th>Dili</th>
+							            <th>Kredi</th>
+							            <th>AKTS</th>
+							            <th>Dönem</th>
+							            <th class="text-center">Eylem</th>
+							        </tr>
+							    </thead>
+							   	<tbody>
+							   		
+							   	</tbody>
+							    </table>
+						    </div>
 						</div>
                         <div class="tab-pane fade" id="substituteLessonTab">
                         	<form:form action="saveSubstituteLesson" method="POST" modelAttribute="substituteLessonForm">
@@ -241,6 +335,26 @@ $(document).ready(function(){
 								   </div>
 								</c:if>
 					   		</form:form>
+
+					   		<div class="row custyle">
+							    <table id="subLes" class="table table-striped custab" style="background-color: #FFF;">
+							    <thead>
+							        <tr>
+							            <th>ID</th>
+							            <th>Adı</th>
+							            <th>Kodu</th>
+							            <th>Dili</th>
+							            <th>Kredi</th>
+							            <th>AKTS</th>
+							            <th>Dönem</th>
+							            <th class="text-center">Eylem</th>
+							        </tr>
+							    </thead>
+							   	<tbody>
+							   		
+							   	</tbody>
+							    </table>
+						    </div>
                         </div>
                         <div class="tab-pane fade" id="markTab">
 							<form:form action="saveMark" method="POST" modelAttribute="markForm">
@@ -251,28 +365,55 @@ $(document).ready(function(){
 									
 									<select id="uniId4" class="form-control" name="uniId" ></select>
 
-									<label class="control-label">Alınan Not</label>
+									<label class="control-label">Harf Notu</label>
 
-					              	<input id="from" class="form-control input-sm" name="from" type="text" value="" style="height: 35px!important" />
+					              	<input id="mark" class="form-control input-sm" name="mark" type="text" value="" style="height: 35px!important" />
 									
-									<label class="control-label">Sayılan Not(YTU)</label>
+									<label class="control-label">Puanı</label>
 
-									<input id="to" class="form-control input-sm" name="to" type="text" value="" style="height: 35px!important" />
+									<input id="value" class="form-control input-sm" name="value" type="text" value="" style="height: 35px!important" />
 
 					    	       	<button type="submit" class="btn btn-default" value="Ekle" >Ekle</button>
 					           		
 					           		<c:if test="${not empty message1}">
-									   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message1}
+									   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message6}
 									   </div>
 									</c:if> 
 					
 					  			</div>
 							</form:form>
+
+							<div class="row custyle">
+							    <table id="marks" class="table table-striped custab" style="background-color: #FFF;">
+							    <thead>
+							        <tr>
+							            <th>ID</th>
+							            <th>Harf notu</th>
+							            <th>Puanı</th>
+							            <th class="text-center">Eylem</th>
+							        </tr>
+							    </thead>
+							   	<tbody>
+							   		
+							   	</tbody>
+							    </table>
+						    </div>
 						</div>
                     </div>
                 </div>
         	</div>
     	</div>		
 	</div>
+	<script type="text/javascript">
+  	var url = document.location.toString();
+	if (url.match('#')) {
+	    $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+	} //add a suffix
+
+	// Change hash for page-reload
+	$('.nav-tabs a').on('shown.bs.tab', function (e) {
+	    window.location.hash = e.target.hash;
+	})
+  </script>
 </body>
 </html>

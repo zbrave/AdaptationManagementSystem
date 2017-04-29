@@ -14,6 +14,8 @@ public interface StudentLessonDAO {
     
     public void saveStudentLesson(StudentLessonInfo studentLessonInfo);
     
+    public void saveStudentLessonExempt(StudentLessonInfo studentLessonInfo);
+    
     public void saveStudentLessonNoConvert(StudentLessonInfo studentLessonInfo);
  
     public StudentLessonInfo findStudentLessonInfo(Integer id);

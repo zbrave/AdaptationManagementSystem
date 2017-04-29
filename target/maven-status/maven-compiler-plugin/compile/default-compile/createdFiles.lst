@@ -2,7 +2,6 @@ com\mertaydar\springmvcsecurity\dao\impl\RulesDAOImpl.class
 com\mertaydar\springmvcsecurity\model\UserInfo.class
 com\mertaydar\springmvcsecurity\controller\UniController.class
 com\mertaydar\springmvcsecurity\controller\MainController.class
-com\mertaydar\springmvcsecurity\controller\MarkController.class
 com\mertaydar\springmvcsecurity\config\WebMvcConfig.class
 com\mertaydar\springmvcsecurity\authentication\MyDBAuthenticationService.class
 com\mertaydar\springmvcsecurity\entity\Mark.class
@@ -37,7 +36,6 @@ com\mertaydar\springmvcsecurity\entity\Dept.class
 com\mertaydar\springmvcsecurity\config\SpringWebAppInitializer.class
 com\mertaydar\springmvcsecurity\model\SubstituteLessonInfo.class
 com\mertaydar\springmvcsecurity\dao\UserRoleDAO.class
-com\mertaydar\springmvcsecurity\controller\FormController.class
 com\mertaydar\springmvcsecurity\dao\SubstituteLessonDAO.class
 com\mertaydar\springmvcsecurity\model\JSPStudentFormat.class
 com\mertaydar\springmvcsecurity\model\JSPLessonFormat.class

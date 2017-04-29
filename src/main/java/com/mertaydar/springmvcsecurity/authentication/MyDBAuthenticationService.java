@@ -45,12 +45,21 @@ public class MyDBAuthenticationService implements UserDetailsService {
                 grantList.add(authority);
                 System.out.println("Yetkiler: "+role);
             }
-        }        
-         
-        UserDetails userDetails = (UserDetails) new User(userInfo.getUsername(), //
-                userInfo.getPassword(),grantList);
+        }
         
+   /*     UserDetails userDetails = (UserDetails) new User(userInfo.getUsername(), //
+                userInfo.getPassword(),grantList);
+        if (!userInfo.isEnabled()) {
+	        System.out.println("Kullanıcı yasaklı!!!");
+	        return null;
+        }*/
+        UserDetails userDetails = buildUserForAuthentication(userInfo, grantList);
         return userDetails;
+    }
+    
+    private User buildUserForAuthentication(UserInfo userInfo,List<GrantedAuthority> authorities) {
+    		return new User(userInfo.getUsername(), userInfo.getPassword(),
+    				userInfo.isEnabled(), true, true, true, authorities);
     }
      
 }

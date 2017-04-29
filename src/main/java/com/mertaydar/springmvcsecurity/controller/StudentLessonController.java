@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mertaydar.springmvcsecurity.dao.DeptDAO;
 import com.mertaydar.springmvcsecurity.dao.StudentDAO;
@@ -155,41 +156,14 @@ public class StudentLessonController {
 		if (id != null) {
 			this.studentLessonDAO.deleteStudentLesson(id);
 		}
-		
-		StudentInfo stu = this.studentDAO.findStudentInfo(studentId);
-		System.out.println(stu.getName()+studentId);
-		DeptInfo dept = null;
-		UniInfo uni = null; 
-		List<StudentLessonInfo> listStuLes = this.studentLessonDAO.listStudentLessonInfosForStudent(studentId);
-		List<JSPLessonFormat> list = new ArrayList<JSPLessonFormat>();
-		if (stu != null) {
-			 dept = this.deptDAO.findDeptInfo(stu.getDeptId());
-			 uni = this.uniDAO.findUniInfo(dept.getUniId());
-			 model.addAttribute("id", stu.getId());
-			 model.addAttribute("uni", uni.getName());
-			 model.addAttribute("dept", dept.getName());
-			 model.addAttribute("deptId", dept.getId());
-			 model.addAttribute("name", stu.getName());
-			 model.addAttribute("surname", stu.getSurname());
-			 model.addAttribute("no", stu.getNo());
-			 model.addAttribute("recordYear", stu.getRecordYear());
-			 model.addAttribute("adpScore", stu.getAdpScore());
-			 for (StudentLessonInfo tmp : listStuLes){
-				 SubstituteLessonInfo tmpSub = this.substituteLessonDAO.findSubstituteLessonInfo(tmp.getSubstituteLessonId());
-				 TakingLessonInfo tmpTak = this.takingLessonDAO.findTakingLessonInfo(tmp.getTakingLessonId());
-				 JSPLessonFormat temp = new JSPLessonFormat(tmp.getId(), tmpSub, tmpTak, tmp.getOrgMark(), tmp.getConvMark());
-				 list.add(temp);
-			 }
-		}
-		model.addAttribute("lessons", list);
-		
-		return "addStudentLesson";
+		/* BUG */
+		return "redirect:/getStudentData?id="+id.toString();
 	}
 
 	@RequestMapping(value = "/saveStudentLesson", method = RequestMethod.POST)
 	public String saveStudentLesson(Model model, //
 			@ModelAttribute("studentLessonForm") @Validated StudentLessonInfo studentLessonInfo, //
-			BindingResult result) {
+			BindingResult result, final RedirectAttributes redirectAttributes) {
 
 
 		if (result.hasErrors()) {
@@ -197,44 +171,22 @@ public class StudentLessonController {
 		}
 		
 		if (this.studentLessonDAO.isDuplicate(studentLessonInfo)) {
-			model.addAttribute("message", "Zaten eklenmiş.");
+			redirectAttributes.addFlashAttribute("message", "Zaten eklenmiş.");
+		}
+		else if (studentLessonInfo.getTakingLessonId() == -1){
+			if (studentLessonInfo.getSubstituteLessonId() == -1) {
+				redirectAttributes.addFlashAttribute("message", "Ders seçimi yapın.");
+			}
+			else {
+				this.studentLessonDAO.saveStudentLessonExempt(studentLessonInfo);
+			}
 		}
 		else {
 			this.studentLessonDAO.saveStudentLesson(studentLessonInfo);
 		}
-		
-
-		StudentInfo stu = this.studentDAO.findStudentInfo(studentLessonInfo.getStudentId());
-		System.out.println(stu.getName()+studentLessonInfo.getStudentId());
-		DeptInfo dept = null;
-		UniInfo uni = null; 
-		List<StudentLessonInfo> listStuLes = this.studentLessonDAO.listStudentLessonInfosForStudent(studentLessonInfo.getStudentId());
-		List<JSPLessonFormat> list = new ArrayList<JSPLessonFormat>();
-		if (stu != null) {
-			 dept = this.deptDAO.findDeptInfo(stu.getDeptId());
-			 uni = this.uniDAO.findUniInfo(dept.getUniId());
-			 model.addAttribute("id", stu.getId());
-			 model.addAttribute("uni", uni.getName());
-			 model.addAttribute("dept", dept.getName());
-			 model.addAttribute("deptId", dept.getId());
-			 model.addAttribute("name", stu.getName());
-			 model.addAttribute("surname", stu.getSurname());
-			 model.addAttribute("no", stu.getNo());
-			 model.addAttribute("recordYear", stu.getRecordYear());
-			 model.addAttribute("adpScore", stu.getAdpScore());
-			 for (StudentLessonInfo tmp : listStuLes){
-				 SubstituteLessonInfo tmpSub = this.substituteLessonDAO.findSubstituteLessonInfo(tmp.getSubstituteLessonId());
-				 TakingLessonInfo tmpTak = this.takingLessonDAO.findTakingLessonInfo(tmp.getTakingLessonId());
-				 JSPLessonFormat temp = new JSPLessonFormat(tmp.getId(), tmpSub, tmpTak, tmp.getOrgMark(), tmp.getConvMark());
-				 list.add(temp);
-			 }
-		}
-		model.addAttribute("lessons", list);
-		
-//		System.out.println("sa"+list.size());
 
 //		return "redirect:/studentLessonList";
-		return "addStudentLesson";
+		return "redirect:/getStudentData?id="+studentLessonInfo.getStudentId().toString();
 	}
 	
 	@RequestMapping("/updateStudentLesson")
@@ -249,31 +201,7 @@ public class StudentLessonController {
 		Integer stuId = studentLessonDAO.findStudentLessonInfo(studentLessonInfo.getId()).getStudentId();
 		System.out.println("x "+stuId+studentLessonInfo.getId()+studentLessonInfo.getConvMark());
 		
-		StudentInfo stu = this.studentDAO.findStudentInfo(stuId);
-		DeptInfo dept = null;
-		UniInfo uni = null; 
-		List<StudentLessonInfo> listStuLes = this.studentLessonDAO.listStudentLessonInfosForStudent(stuId);
-		List<JSPLessonFormat> list = new ArrayList<JSPLessonFormat>();
-		if (stu != null) {
-			 dept = this.deptDAO.findDeptInfo(stu.getDeptId());
-			 uni = this.uniDAO.findUniInfo(dept.getUniId());
-			 model.addAttribute("id", stu.getId());
-			 model.addAttribute("uni", uni.getName());
-			 model.addAttribute("dept", dept.getName());
-			 model.addAttribute("deptId", dept.getId());
-			 model.addAttribute("name", stu.getName());
-			 model.addAttribute("surname", stu.getSurname());
-			 model.addAttribute("no", stu.getNo());
-			 model.addAttribute("recordYear", stu.getRecordYear());
-			 model.addAttribute("adpScore", stu.getAdpScore());
-			 for (StudentLessonInfo tmp : listStuLes){
-				 SubstituteLessonInfo tmpSub = this.substituteLessonDAO.findSubstituteLessonInfo(tmp.getSubstituteLessonId());
-				 TakingLessonInfo tmpTak = this.takingLessonDAO.findTakingLessonInfo(tmp.getTakingLessonId());
-				 JSPLessonFormat temp = new JSPLessonFormat(tmp.getId(), tmpSub, tmpTak, tmp.getOrgMark(), tmp.getConvMark());
-				 list.add(temp);
-			 }
-		}
-		model.addAttribute("lessons", list);
-		return "addStudentLesson";
+		
+		return "redirect:/getStudentData?id="+stuId.toString();
 	}
 }

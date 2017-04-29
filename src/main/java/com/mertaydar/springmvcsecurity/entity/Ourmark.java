@@ -6,14 +6,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "mark")
-public class Mark {
+@Table(name = "ourmark")
+public class Ourmark {
 	@Id
 	@Column(name = "id", nullable = false)
 	private Integer id;
-	
-	@Column(name = "uni_id", nullable = false)
-	private Integer uniId;
 	
 	@Column(name = "`mark`", length = 3, nullable = false)
 	private String mark;
@@ -27,14 +24,6 @@ public class Mark {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Integer getUniId() {
-		return uniId;
-	}
-
-	public void setUniId(Integer uniId) {
-		this.uniId = uniId;
 	}
 
 	public String getMark() {
@@ -52,7 +41,6 @@ public class Mark {
 	public void setValue(Float value) {
 		this.value = value;
 	}
-	
-	
-	
 }
+
+	

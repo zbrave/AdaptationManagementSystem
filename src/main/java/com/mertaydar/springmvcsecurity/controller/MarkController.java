@@ -47,11 +47,21 @@ public class MarkController {
 	@RequestMapping(value="/getMark",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
 	@ResponseBody
 	public String getMark(@RequestParam Integer id) {
-		System.out.println("id:"+id);
 		String res = "<option id=-1 value=-1>Üniversite seçin.</option>";
 		List<MarkInfo> list = this.markDAO.listMarkFromUni(id);
 		for (MarkInfo tmp : list) {
 //			res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+">"+tmp.getName()+"</option>");
+		}
+		return res;
+	}
+	
+	@RequestMapping(value="/getMarks",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
+	@ResponseBody
+	public String getMarks(@RequestParam Integer id) {
+		String res = "";
+		List<MarkInfo> list = this.markDAO.listMarkFromUni(id);
+		for (MarkInfo tmp : list) {
+			res = res.concat("<tr><td>"+tmp.getId()+"</td><td>"+tmp.getMark()+"</td><td>"+tmp.getValue()+"</td><td><a href=\"deleteMark?id="+tmp.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Sil</a></td></tr>");
 		}
 		return res;
 	}
@@ -61,7 +71,7 @@ public class MarkController {
 		Map<Integer, String> markMap = new LinkedHashMap<Integer, String>();
 		List<MarkInfo> markList = this.markDAO.listMarkInfos();
 		for (MarkInfo tmp : markList) {
-			markMap.put(tmp.getId(), tmp.getFrom());
+			markMap.put(tmp.getId(), tmp.getMark());
 		}
 
 		return markMap;
@@ -118,11 +128,12 @@ public class MarkController {
 	}
 
 	@RequestMapping("/deleteMark")
-	public String deleteMark(Model model, @RequestParam("id") Integer id) {
+	public String deleteMark(Model model, @RequestParam("id") Integer id, final RedirectAttributes redirectAttributes) {
 		if (id != null) {
 			this.markDAO.deleteMark(id);
+			redirectAttributes.addFlashAttribute("message2", "Not silindi.");
 		}
-		return "redirect:/markList";
+		return "redirect:/addRules#markTab";
 	}
 
 	@RequestMapping(value = "/saveMark", method = RequestMethod.POST)
@@ -149,9 +160,9 @@ public class MarkController {
 
 		// Important!!: Need @EnableWebMvc
 		// Add message to flash scope
-		redirectAttributes.addFlashAttribute("message2", "Bölüm eklendi.");
+		redirectAttributes.addFlashAttribute("message6", "Not eklendi.");
 
 //		return "redirect:/markList";
-		return "redirect:/addRules";
+		return "redirect:/addRules#markTab";
 	}
 }

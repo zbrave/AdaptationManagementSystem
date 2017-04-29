@@ -29,6 +29,7 @@ $(document).ready(function(){
 						<c:if test="${role.authority == 'ROLE_ADMIN' }">
 							<li id ="student"><a href="${pageContext.request.contextPath}/Student?pageid=1"><span class="glyphicon glyphicon-log-in"></span> Öğrenciler</a></li>
 							<li id="addRules"><a href="${pageContext.request.contextPath}/addRules" ><span class="glyphicon glyphicon-plus"></span> Yeni Kural</a></li>
+							<li id="Ourmark"><a href="${pageContext.request.contextPath}/Ourmark" ><span class="glyphicon glyphicon-plus"></span> Not Sistemi</a></li>
 						</c:if>
 					</c:forEach>
 						<c:forEach var="role"

@@ -15,4 +15,5 @@ public interface UserDAO {
     public User findLoginUser(String username);
     public UserInfo findLoginUserInfo(String username);
     public List<UserInfo> listUserInfos();
+    public List<UserInfo> listUserInfosRoleAdmin();
 }
