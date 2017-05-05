@@ -19,7 +19,7 @@ public class StudentLesson implements Serializable {
 	@Column(name = "student_id", nullable = false)
 	private Integer studentId;
 	
-	@Column(name = "taking_lesson_id", nullable = false)
+	@Column(name = "taking_lesson_id", nullable = true)
 	private Integer takingLessonId;
 	
 	@Column(name = "substitute_lesson_id", nullable = false)

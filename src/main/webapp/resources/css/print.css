@@ -18,36 +18,51 @@
 .header img {
     position: relative;
     float: left;
-    top: 20px;
-    left: 10px;
     width: 120px;
     height: 120px;
-    background: transparent;
 }
 
 .header h1 {
-    position: relative;
-    font-size: 20px;
-    top: 65px;
-    left: 100px;
+    font-size: 13px;
+    font-family: Arial;
+    text-align: center;
 }
 
-.header table {
-    margin-right: 50px;
-    position: relative;
-    top: 0px;
-    left: 800px;
+.header table.head, td  {
+    border: 1px solid;
+    border-collapse: collapse;
+}
+
+.headinfo {
+    font-size: 9px;
+    font-family: Calibri;
+    font-weight: bold;
+}
+
+.headinfo2 {
+    font-size: 9px;
+    font-family: Calibri;
 }
 
 .options {
     position: relative;
-    margin-top: 80px;
-    margin-left: 80px;
+}
+
+.options table {
+    border: 5px solid;
+    border-collapse: collapse;
+}
+
+.asd {
+    font-size: 7px;
+    font-weight: bold;
+    font-family: "Times New Roman";
 }
 
 .options label {
-    margin-left: 20px;
-    font-size: 12px;
+    font-size: 7px;
+    font-weight: bold;
+    font-family: "Times New Roman";
 }
 
 input[type="checkbox"]{
@@ -56,8 +71,6 @@ input[type="checkbox"]{
 }
 
 .student table {
-    margin-left: 100px;
-    margin-top: 20px;
     position: relative;
     top: 0px;
     text-align: center;
@@ -65,15 +78,12 @@ input[type="checkbox"]{
 }
 
 .lesson table.right {
-    margin-top: 10px;
     position: relative;
     text-align: center;
     border-collapse: collapse;
 }
 
 .lesson table.left {
-    margin-top: 10px;
-    margin-left: 70px;
     position: relative;
     text-align: center;
     border-collapse: collapse;
@@ -81,13 +91,10 @@ input[type="checkbox"]{
 }
 
 .lesson label {
-    margin-left: 100px;
     position: ;
 }
 
 .footer table {
-    margin-top: 10px;
-    margin-left: 40px;
     position: relative;
     text-align: center;
     border-collapse: collapse;

@@ -15,11 +15,11 @@ import javax.persistence.Table;
 public class User {
 	
 	private Integer id;
-	private Integer studentId;
+	private String username;
+	private String password;
 	private String email;
-    private String username;
-    private String password;
-    private boolean enabled;
+	private Integer studentId;
+	private boolean enabled;
     
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,7 +62,7 @@ public class User {
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-	@Column(name = "student_id")
+	@Column(name = "student_id", nullable = true)
 	public Integer getStudentId() {
 		return studentId;
 	}

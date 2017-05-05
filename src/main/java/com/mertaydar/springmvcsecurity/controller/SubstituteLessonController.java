@@ -67,7 +67,7 @@ public class SubstituteLessonController {
 		List<RulesInfo> listRules = this.rulesDAO.listRulesForLesson(id);
 		for (RulesInfo tmp : listRules) {
 			SubstituteLessonInfo temp = this.substituteLessonDAO.findSubstituteLessonInfo(tmp.getSubstituteLessonId());
-			res = res.concat("<option "+"id="+temp.getId()+" value="+temp.getId()+">"+temp.getName()+"</option>");
+			res = res.concat("<option "+"id="+temp.getId()+" value="+temp.getId()+">"+temp.getCode()+" "+temp.getName()+">Kredi: "+temp.getCredit()+"</option>");
 		}
 		return res;
 	}
@@ -78,7 +78,7 @@ public class SubstituteLessonController {
 		String res = "<option id=-1 value=-1>Ders seçin.</option>";
 		List<SubstituteLessonInfo> list = this.substituteLessonDAO.listSubstituteLessonInfos();
 		for (SubstituteLessonInfo tmp : list) {
-			res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+">"+tmp.getName()+"</option>");
+			res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+">"+tmp.getCode()+" "+tmp.getName()+">Kredi: "+tmp.getCredit()+"</option>");
 		}
 		return res;
 	}

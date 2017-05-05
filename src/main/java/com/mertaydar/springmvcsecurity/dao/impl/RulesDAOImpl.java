@@ -10,13 +10,23 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mertaydar.springmvcsecurity.dao.RulesDAO;
+import com.mertaydar.springmvcsecurity.dao.SubstituteLessonDAO;
+import com.mertaydar.springmvcsecurity.dao.TakingLessonDAO;
 import com.mertaydar.springmvcsecurity.entity.Rules;
 import com.mertaydar.springmvcsecurity.model.RulesInfo;
+import com.mertaydar.springmvcsecurity.model.SubstituteLessonInfo;
+import com.mertaydar.springmvcsecurity.model.TakingLessonInfo;
 
 public class RulesDAOImpl implements RulesDAO {
 
 	@Autowired
     private SessionFactory sessionFactory;
+	
+	@Autowired
+	private TakingLessonDAO takingLessonDAO;
+	
+	@Autowired
+	private SubstituteLessonDAO substituteLessonDAO;
 	
 	@Override
 	public Rules findRules(Integer id) {
@@ -115,6 +125,14 @@ public class RulesDAOImpl implements RulesDAO {
         else {
         	return true;
         }
+	}
+
+	@Override
+	public boolean isLabCondition(RulesInfo rulesInfo) {
+		TakingLessonInfo tak = takingLessonDAO.findTakingLessonInfo(rulesInfo.getTakingLessonId());
+		SubstituteLessonInfo sub = substituteLessonDAO.findSubstituteLessonInfo(rulesInfo.getSubstituteLessonId());
+		/* LAB SAATİ */
+		return false;
 	}
 
 }

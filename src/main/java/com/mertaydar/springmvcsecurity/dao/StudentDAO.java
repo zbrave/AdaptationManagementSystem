@@ -13,7 +13,7 @@ public interface StudentDAO {
     
     public List<StudentInfo> listStudentInfos(Integer pageid, Integer total);
     
-    public List<StudentInfo> listStudentInfosByNo(Integer pageid, Integer total, String no);
+    public List<StudentInfo> listStudentInfosBySearch(Integer pageid, Integer total, String val, String cate);
  
     public void saveStudent(StudentInfo studentInfo);
  
@@ -22,4 +22,8 @@ public interface StudentDAO {
     public void deleteStudent(Integer id);
     
     public boolean isDuplicate(StudentInfo studentInfo);
+    
+    public void calcAdpAkts(Integer id, Integer coef);
+    
+    public void calcAdpCredit(Integer id, Integer coef);
 }

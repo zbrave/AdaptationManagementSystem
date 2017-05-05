@@ -49,7 +49,7 @@ $(document).ready(function(){
   <div class="container">
 		<div class="row">
             <div class="panel panel-primary">
-            <div class="panel-heading">Yeni Öğrenci Ekle<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <div class="panel-heading">Öğrenci Değişiklik Formu<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 					</button></div>
 	            <div class="panel-body">
@@ -87,6 +87,21 @@ $(document).ready(function(){
       <label class="control-label">Kayıt Yılı</label>
       <form:input class="form-control" path="recordYear" />
       <form:errors path="recordYear" class="error-message" />
+      
+      <label class="control-label">Danışman</label>
+      <form:select class="form-control" path="advisorId" >
+        <c:forEach items="${advisors }" var="data">
+          <c:choose>
+            <c:when test="${advisorId == data.id }">
+                <option id="${data.id }" value="${data.id }" selected>${data.username }</option>
+              </c:when>
+              <c:otherwise>
+                <option id="${data.id }" value="${data.id }">${data.username }</option>
+              </c:otherwise>
+          </c:choose>
+        </c:forEach>
+      </form:select>
+      <form:errors path="advisorId" class="error-message" />
           
       <button class="btn btn-primary" type="  " value="Submit" >Ekle</button>
       <button class="btn btn-danger"><a href="${pageContext.request.contextPath}/Student?pageid=1">Cancel</a></button>

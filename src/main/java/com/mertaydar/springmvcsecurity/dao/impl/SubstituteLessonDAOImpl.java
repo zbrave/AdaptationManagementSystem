@@ -31,7 +31,7 @@ public class SubstituteLessonDAOImpl implements SubstituteLessonDAO {
 	public List<SubstituteLessonInfo> listSubstituteLessonInfos() {
 		// sql query has to have exact names from own class variable 
 		String sql = "Select new " + SubstituteLessonInfo.class.getName()//
-                + "(a.id, a.name, a.code, a.lang, a.credit, a.akts, a.term) "//
+                + "(a.id, a.name, a.code, a.lang, a.credit, a.lab, a.akts, a.term, a.conditionId) "//
                 + " from " + SubstituteLesson.class.getName() + " a ";
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery(sql);
@@ -66,6 +66,8 @@ public class SubstituteLessonDAOImpl implements SubstituteLessonDAO {
         substituteLesson.setCode(substituteLessonInfo.getCode());
         substituteLesson.setCredit(substituteLessonInfo.getCredit());
         substituteLesson.setAkts(substituteLessonInfo.getAkts());
+        substituteLesson.setLab(substituteLessonInfo.getLab());
+        substituteLesson.setConditionId(substituteLessonInfo.getConditionId());
  
         if (isNew) {
             Session session = this.sessionFactory.getCurrentSession();
@@ -80,7 +82,7 @@ public class SubstituteLessonDAOImpl implements SubstituteLessonDAO {
         if (substituteLesson == null) {
             return null;
         }
-        return new SubstituteLessonInfo(substituteLesson.getId(), substituteLesson.getName(), substituteLesson.getCode(), substituteLesson.getLang(), substituteLesson.getCredit(), substituteLesson.getAkts(), substituteLesson.getTerm());
+        return new SubstituteLessonInfo(substituteLesson.getId(), substituteLesson.getName(), substituteLesson.getCode(), substituteLesson.getLang(), substituteLesson.getCredit(), substituteLesson.getLab(), substituteLesson.getAkts(), substituteLesson.getTerm(), substituteLesson.getConditionId());
 	}
 
 	@Override

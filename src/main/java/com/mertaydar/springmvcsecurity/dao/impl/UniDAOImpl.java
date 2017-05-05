@@ -1,16 +1,20 @@
 package com.mertaydar.springmvcsecurity.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mertaydar.springmvcsecurity.dao.UniDAO;
+import com.mertaydar.springmvcsecurity.entity.Dept;
 import com.mertaydar.springmvcsecurity.entity.Uni;
+import com.mertaydar.springmvcsecurity.model.DeptInfo;
 import com.mertaydar.springmvcsecurity.model.UniInfo;
 
 public class UniDAOImpl implements UniDAO {
@@ -38,7 +42,23 @@ public class UniDAOImpl implements UniDAO {
         Query query = session.createQuery(sql);
         return query.list();
 	}
-
+	
+	@Override
+	public List<UniInfo> listUniInfoWithName(String name) {
+		Session session = sessionFactory.getCurrentSession();
+        Criteria crit = session.createCriteria(Uni.class);
+        crit.add(Restrictions.ilike("name", name, MatchMode.ANYWHERE));
+        List<Uni> unis = crit.list();
+        if (unis == null || unis.isEmpty()) {
+            return null;
+        }
+        List<UniInfo> list = new ArrayList<UniInfo>();
+        for (Uni d : unis) {
+        	list.add(new UniInfo(d.getId(), d.getName()));
+        }
+        return list;
+	}
+	
 	@Override
 	public void saveUni(UniInfo uniInfo) {
 		Integer id = uniInfo.getId();

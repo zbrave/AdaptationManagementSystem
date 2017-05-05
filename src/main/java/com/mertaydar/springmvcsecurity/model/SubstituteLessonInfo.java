@@ -7,23 +7,27 @@ public class SubstituteLessonInfo {
 	private String code;
 	private String lang;
 	private Integer credit;
+	private Integer lab;
 	private Integer akts;
 	private Integer term;
+	private Integer conditionId;
 	
 	public SubstituteLessonInfo() {
 		super();
 	}
 
-	public SubstituteLessonInfo(Integer id, String name, String code, String lang, Integer credit, Integer akts,
-			Integer term) {
+	public SubstituteLessonInfo(Integer id, String name, String code, String lang, Integer credit, Integer lab, Integer akts,
+			Integer term, Integer conditionId) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.code = code;
 		this.lang = lang;
 		this.credit = credit;
+		this.lab = lab;
 		this.akts = akts;
 		this.term = term;
+		this.conditionId = conditionId;
 	}
 
 
@@ -82,6 +86,22 @@ public class SubstituteLessonInfo {
 
 	public void setTerm(Integer term) {
 		this.term = term;
+	}
+
+	public Integer getLab() {
+		return lab;
+	}
+
+	public void setLab(Integer lab) {
+		this.lab = lab;
+	}
+
+	public Integer getConditionId() {
+		return conditionId;
+	}
+
+	public void setConditionId(Integer conditionId) {
+		this.conditionId = conditionId;
 	}
 	
 }

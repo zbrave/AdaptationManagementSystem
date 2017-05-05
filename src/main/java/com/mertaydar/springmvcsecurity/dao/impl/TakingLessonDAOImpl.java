@@ -31,7 +31,7 @@ public class TakingLessonDAOImpl implements TakingLessonDAO {
 	public List<TakingLessonInfo> listTakingLessonInfos() {
 		// sql query has to have exact names from own class variable 
 		String sql = "Select new " + TakingLessonInfo.class.getName()//
-                + "(a.id, a.deptId, a.name, a.code, a.lang, a.credit, a.akts, a.term) "//
+                + "(a.id, a.deptId, a.name, a.code, a.lang, a.credit, a.lab, a.akts, a.term) "//
                 + " from " + TakingLesson.class.getName() + " a ";
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery(sql);
@@ -43,7 +43,7 @@ public class TakingLessonDAOImpl implements TakingLessonDAO {
 	public List<TakingLessonInfo> listTakingLessonFromDept(Integer id) {
 		// sql query has to have exact names from own class variable 
 		String sql = "Select new " + TakingLessonInfo.class.getName()//
-                + "(a.id, a.deptId, a.name, a.code, a.lang, a.credit, a.akts, a.term) "//
+                + "(a.id, a.deptId, a.name, a.code, a.lang, a.credit, a.lab, a.akts, a.term) "//
                 + " from " + TakingLesson.class.getName() + " a where a.deptId = :code";
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery(sql);
@@ -80,6 +80,7 @@ public class TakingLessonDAOImpl implements TakingLessonDAO {
         takingLesson.setCode(takingLessonInfo.getCode());
         takingLesson.setCredit(takingLessonInfo.getCredit());
         takingLesson.setAkts(takingLessonInfo.getAkts());
+        takingLesson.setLab(takingLessonInfo.getLab());
  
         if (isNew) {
             Session session = this.sessionFactory.getCurrentSession();
@@ -94,7 +95,7 @@ public class TakingLessonDAOImpl implements TakingLessonDAO {
         if (takingLesson == null) {
             return null;
         }
-        return new TakingLessonInfo(takingLesson.getId(), takingLesson.getDeptId(), takingLesson.getName(), takingLesson.getCode(), takingLesson.getLang(), takingLesson.getCredit(), takingLesson.getAkts(), takingLesson.getTerm());
+        return new TakingLessonInfo(takingLesson.getId(), takingLesson.getDeptId(), takingLesson.getName(), takingLesson.getCode(), takingLesson.getLang(), takingLesson.getCredit(), takingLesson.getLab(),takingLesson.getAkts(), takingLesson.getTerm());
 	}
 
 	@Override

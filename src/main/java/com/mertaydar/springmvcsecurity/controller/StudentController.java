@@ -79,7 +79,7 @@ public class StudentController {
 /* Student Section */
 	
 	@RequestMapping(value = "/setToStudent", method = RequestMethod.POST)
-	public String saveDept(Model model, @RequestParam("id") Integer id,
+	public String setToStudent(Model model, @RequestParam("id") Integer id,
 			@ModelAttribute("userForm") @Validated UserInfo userInfo, //
 			BindingResult result, //
 			final RedirectAttributes redirectAttributes) {
@@ -101,7 +101,7 @@ public class StudentController {
 	}
 	
 	@RequestMapping(value = "/myAdapt", method = RequestMethod.GET)
-	public String saveDept(Model model, Principal principal) {
+	public String myAdapt(Model model, Principal principal) {
 		UserInfo user = this.userDAO.findLoginUserInfo(principal.getName());
 		return "redirect:/getStudentData?id="+user.getStudentId().toString();
 	}
@@ -130,6 +130,27 @@ public class StudentController {
 	public String getReport(Model model, Principal principal) {
 
 		return "report";
+	}
+	
+	@RequestMapping(value = "/setAdvisor", method = RequestMethod.GET)
+	public String setAdvisor(Model model, Principal principal, @RequestParam(value = "advisorId") Integer advisorId, @RequestParam(value = "id") Integer id, final RedirectAttributes redirectAttributes) {
+		if (id == null || advisorId == null) {
+			return "redirect:/Student";
+		}
+		StudentInfo stuInfo = this.studentDAO.findStudentInfo(id);
+		stuInfo.setAdvisorId(advisorId);
+		this.studentDAO.saveStudent(stuInfo);
+		redirectAttributes.addFlashAttribute("message", "Danışman atandı.");
+		return "redirect:/Student";
+	}
+	
+	@RequestMapping(value = "/calcAdp", method = RequestMethod.GET)
+	public String calcAdp(Model model, @RequestParam("id") Integer id, @RequestParam("coef") Integer coef, @RequestParam("type") String type) {
+		if (type.equals("Akts"))
+			studentDAO.calcAdpAkts(id, coef);
+		if (type.equals("Credit"))
+			studentDAO.calcAdpCredit(id, coef);
+		return "redirect:/getStudentData?id="+id;
 	}
 	
 	@RequestMapping("/getStudentData")
@@ -174,7 +195,7 @@ public class StudentController {
 	}
 	
 	@RequestMapping(value = "/Student", method = RequestMethod.GET)
-	public String Student(Model model,@RequestParam Integer pageid,@RequestParam(value = "searchTerm", required = false) String search) {
+	public String Student(Model model, @RequestParam Integer pageid, @RequestParam(value = "searchTerm", required = false) String search, @RequestParam(value = "category", required = false) String category) {
 		
 		List<JSPStudentFormat> list = new ArrayList<JSPStudentFormat>();
 		int total = 2;  
@@ -189,14 +210,29 @@ public class StudentController {
         	listStu = studentDAO.listStudentInfos(pageid,total);
         }
         else {
-        	listStu = studentDAO.listStudentInfosByNo(pageid,total,search);
+        	String decodedToUTF8;
+    		try {
+    			decodedToUTF8 = new String(search.getBytes("ISO-8859-1"), "UTF-8");
+    			search = (decodedToUTF8);
+    		} catch (UnsupportedEncodingException e) {
+    			System.out.println("Search term name cannot converted.");
+    			e.printStackTrace();
+    		}
+        	listStu = studentDAO.listStudentInfosBySearch(pageid,total,search,category);
         }
 		Integer pageSize = studentDAO.listStudentInfos().size();
 		pageSize = (int) Math.ceil(pageSize / (float)total);
 		for (StudentInfo tmp : listStu){
 			 DeptInfo dept = this.deptDAO.findDeptInfo(tmp.getDeptId());
 			 UniInfo uni = this.uniDAO.findUniInfo(dept.getUniId());
-			 JSPStudentFormat temp = new JSPStudentFormat(tmp.getId(), uni.getId(), uni.getName(), dept.getId(), dept.getName(), tmp.getName(), tmp.getSurname(), tmp.getNo(), tmp.getAdpScore(), tmp.getRecordYear() );
+			 UserInfo user = this.userDAO.findUserInfo(tmp.getAdvisorId());
+			 JSPStudentFormat temp = new JSPStudentFormat();
+			 if (user == null) {
+				 temp = new JSPStudentFormat(tmp.getId(), uni.getId(), uni.getName(), dept.getId(), dept.getName(), tmp.getName(), tmp.getSurname(), tmp.getNo(), tmp.getAdpScore(), tmp.getRecordYear(), "Danışman atanmamış." );
+			 }
+			 else {
+				 temp = new JSPStudentFormat(tmp.getId(), uni.getId(), uni.getName(), dept.getId(), dept.getName(), tmp.getName(), tmp.getSurname(), tmp.getNo(), tmp.getAdpScore(), tmp.getRecordYear(), user.getUsername() );
+			 }
 			 list.add(temp);
 		 }
 		model.addAttribute("students", list);
@@ -288,7 +324,10 @@ public class StudentController {
 			System.out.println("Bu id li öğrenci yok.");
 			return "redirect:/studentList";
 		}
-
+		List<UserInfo> admins = userDAO.listUserInfosRoleAdmin();
+		System.out.println("admins size:"+admins.size());
+		model.addAttribute("advisorId", studentInfo.getAdvisorId());
+		model.addAttribute("advisors", admins);
 		return this.formStudent(model, studentInfo);
 	}
 
@@ -320,16 +359,11 @@ public class StudentController {
 			System.out.println("Uni name cannot converted.");
 			e.printStackTrace();
 		}
-		if (studentDAO.isDuplicate(studentInfo)){
-			redirectAttributes.addFlashAttribute("message5", "Öğrenci zaten eklenmiş.");
-		}
-		else {
 			this.studentDAO.saveStudent(studentInfo);
 
 			// Important!!: Need @EnableWebMvc
 			// Add message to flash scope
-			redirectAttributes.addFlashAttribute("message5", "Öğrenci Eklendi.");
-		}
+			redirectAttributes.addFlashAttribute("message5", "Öğrenci güncellendi.");
 		
 
 //		return "redirect:/studentList";

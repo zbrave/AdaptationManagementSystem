@@ -89,7 +89,7 @@ $(document).ready(function(){
 					<div class="form-group">
 						<input id="id" name="id" type="hidden" value=""/>
 						
-						<input id="adpScore" name="adpScore" type="hidden" value="0"/>
+						<input id="adpScore" name="adpScore" type="hidden" value=""/>
 						
 						<label class="control-label">Üniversite Adı</label>
 									 			
@@ -125,9 +125,18 @@ $(document).ready(function(){
 	
 	<div class="container">
     <div class="row custyle">
-    	<form action="${pageContext.request.contextPath}/Student">
+    	<form action="${pageContext.request.contextPath}/Student" class="form-inline">
     		<input type="hidden" name="pageid" value="1" />
-		    <input class="input-sm" name="searchTerm" placeholder="Öğr. No" />
+		    <input class="input-sm" name="searchTerm" placeholder="" />
+		    <select name="category" class="form-control" style="width: 15%">
+		    	<option value="uni">Üniversite</option>
+		    	<option value="deptId">Bölüm</option>
+		    	<option value="name">Ad</option>
+		    	<option value="surname">Soyad</option>
+		    	<option value="no">Numara</option>
+		    	<option value="adp_Score">İntibak Yılı</option>
+		    	<option value="record_year">Kayıt Yılı</option>
+		    </select>
 		    <button class="btn btn-default">Ara</button>
 		</form>
     </div>
@@ -145,8 +154,9 @@ $(document).ready(function(){
             <th>Ad</th>
             <th>Soyad</th>
             <th>Numara</th>
-            <th>İntibak Notu</th>
+            <th>İntibak Yılı</th>
             <th>Kayıt Yılı</th>
+            <th>Danışman</th>
             <th class="text-center">Action</th>
         </tr>
     </thead>
@@ -160,6 +170,7 @@ $(document).ready(function(){
                 <td>${info.no}</td>
                 <td>${info.adpScore}</td>
                 <td>${info.recordYear}</td>
+                <td>${info.advisor}</td>
                 <td class="text-center">
                 <a class='btn btn-info btn-xs' href="getStudentData?id=${info.id}"><span class="glyphicon glyphicon-edit"></span> İntibak yap</a>
                 <a class='btn btn-info btn-xs' href="editStudent?id=${info.id}"><span class="glyphicon glyphicon-edit"></span> Edit</a> 

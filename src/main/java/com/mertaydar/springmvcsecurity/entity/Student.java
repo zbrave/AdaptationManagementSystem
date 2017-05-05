@@ -28,11 +28,22 @@ public class Student implements Serializable {
 	@Column(name = "no", length = 10, nullable = false)
 	private String no;
 	
-	@Column(name = "adp_score", nullable = false)
+	@Column(name = "adp_score", nullable = true)
 	private Integer adpScore;
 	
 	@Column(name = "record_year", nullable = false)
 	private Integer recordYear;
+	
+	@Column(name = "advisor_id", nullable = true)
+	private Integer advisorId;
+
+	public Integer getAdvisorId() {
+		return advisorId;
+	}
+
+	public void setAdvisorId(Integer advisorId) {
+		this.advisorId = advisorId;
+	}
 
 	public Integer getId() {
 		return id;

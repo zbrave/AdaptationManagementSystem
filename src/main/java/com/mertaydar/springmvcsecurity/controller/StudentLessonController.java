@@ -157,7 +157,7 @@ public class StudentLessonController {
 			this.studentLessonDAO.deleteStudentLesson(id);
 		}
 		/* BUG */
-		return "redirect:/getStudentData?id="+id.toString();
+		return "redirect:/getStudentData?id="+studentId.toString();
 	}
 
 	@RequestMapping(value = "/saveStudentLesson", method = RequestMethod.POST)
@@ -180,6 +180,26 @@ public class StudentLessonController {
 			else {
 				this.studentLessonDAO.saveStudentLessonExempt(studentLessonInfo);
 			}
+		}
+		else if (substituteLessonDAO.findSubstituteLessonInfo(studentLessonInfo.getSubstituteLessonId()).getConditionId() != null) {
+			List<StudentLessonInfo> list = studentLessonDAO.listStudentLessonInfosForStudent(studentLessonInfo.getStudentId());
+			Integer cond_id = substituteLessonDAO.findSubstituteLessonInfo(studentLessonInfo.getSubstituteLessonId()).getConditionId();
+			boolean alrdy = false;
+			for (StudentLessonInfo l : list) {
+				if (l.getSubstituteLessonId() == cond_id) {
+					alrdy = true;
+				}
+			}
+			if (alrdy) {
+				this.studentLessonDAO.saveStudentLesson(studentLessonInfo);
+			}
+			else {
+				SubstituteLessonInfo sub = substituteLessonDAO.findSubstituteLessonInfo(cond_id);
+				redirectAttributes.addFlashAttribute("message", "Koşul: "+sub.getCode());
+			}
+		}
+		else if (substituteLessonDAO.findSubstituteLessonInfo(studentLessonInfo.getSubstituteLessonId()).getLab() > takingLessonDAO.findTakingLessonInfo(studentLessonInfo.getTakingLessonId()).getLab()) {
+			redirectAttributes.addFlashAttribute("message", "Lab. saati eşit veya büyük olmalı.");
 		}
 		else {
 			this.studentLessonDAO.saveStudentLesson(studentLessonInfo);

@@ -68,7 +68,7 @@ $(document).ready(function(){
 							<th class="col-md-1 text-center">Numara</th>
 							<th class="col-md-2 text-center">Ad</th>
 							<th class="col-md-1 text-center">Soyad</th>
-							<th class="col-md-1 text-center">İntibak Notu</th>
+							<th class="col-md-1 text-center">İntibak Yılı</th>
 							<th class="col-md-1 text-center">Kayıt Yılı</th>
 						</tr>
 					</thead>
@@ -104,7 +104,7 @@ $(document).ready(function(){
 
 								<label class="control-label" style="margin-left: 10px;">Sayılan Ders</label>
 											 			
-						   		<select id="substituteLessonId" class="form-control" name="substituteLessonId" ></select>
+						   		<select id="substituteLessonId" class="form-control" name="substituteLessonId" style="width: 23%;" ></select>
 						   		
 						   		<label class="control-label" style="margin-left: 10px;">Not</label>
 						   		
@@ -139,6 +139,15 @@ $(document).ready(function(){
         						<button type="submit" class="btn btn-default " style="margin-left: 30px;" value="Ekle" >Ekle</button>
 				        	</div>
 				        </form:form>
+		        </div>
+		        <div class="panel-body">
+		        	<form:form class="form-inline" action="${pageContext.request.contextPath}/calcAdp" method="GET">
+			    		<input type="hidden" class="form-control" name="id" value="${id}" />
+					    <label class="control-label" style="margin-left: 10px;">İntibak Yılı Hesapla</label>
+					    <input class="input-sm" class="form-control" name="coef" placeholder="Katsayı girin" />
+					    <select name="type" class="form-control"><option value="Credit">Kredi</option><option value="Akts">AKTS</option></select>
+					    <button class="btn btn-default btn-xs">Hesapla</button>   
+					</form:form>
 		        </div>
 			</div>
 			</c:if>

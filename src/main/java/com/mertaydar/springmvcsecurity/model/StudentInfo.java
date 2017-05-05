@@ -8,12 +8,13 @@ public class StudentInfo {
 	private String no;
 	private Integer adpScore;
 	private Integer recordYear;
+	private Integer advisorId;
 	
 	public StudentInfo(){
 		
 	}
 
-	public StudentInfo(Integer id, Integer deptId, String name, String surname, String no, Integer adpScore, Integer recordYear) {
+	public StudentInfo(Integer id, Integer deptId, String name, String surname, String no, Integer adpScore, Integer recordYear, Integer advisorId) {
 		super();
 		this.id = id;
 		this.deptId = deptId;
@@ -22,6 +23,7 @@ public class StudentInfo {
 		this.no = no;
 		this.adpScore = adpScore;
 		this.recordYear = recordYear;
+		this.advisorId = advisorId;
 	}
 
 	public Integer getId() {
@@ -78,6 +80,14 @@ public class StudentInfo {
 
 	public void setRecordYear(Integer recordYear) {
 		this.recordYear = recordYear;
+	}
+
+	public Integer getAdvisorId() {
+		return advisorId;
+	}
+
+	public void setAdvisorId(Integer advisorId) {
+		this.advisorId = advisorId;
 	}
 	
 	

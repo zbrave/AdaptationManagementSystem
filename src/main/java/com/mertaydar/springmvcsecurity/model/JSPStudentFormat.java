@@ -11,13 +11,14 @@ public class JSPStudentFormat {
 	private String no;
 	private Integer adpScore;
 	private Integer recordYear;
+	private String advisor;
 	
 	public JSPStudentFormat() {
 		
 	}
 	
 	public JSPStudentFormat(Integer id, Integer uniId, String uniName, Integer deptId, String deptName, String name,
-			String surname, String no, Integer adpScore, Integer recordYear) {
+			String surname, String no, Integer adpScore, Integer recordYear, String advisor) {
 		super();
 		this.id = id;
 		this.uniId = uniId;
@@ -29,6 +30,7 @@ public class JSPStudentFormat {
 		this.no = no;
 		this.adpScore = adpScore;
 		this.recordYear = recordYear;
+		this.advisor = advisor;
 	}
 
 	public Integer getId() {
@@ -109,6 +111,14 @@ public class JSPStudentFormat {
 
 	public void setRecordYear(Integer recordYear) {
 		this.recordYear = recordYear;
+	}
+
+	public String getAdvisor() {
+		return advisor;
+	}
+
+	public void setAdvisor(String advisor) {
+		this.advisor = advisor;
 	}
 	
 	

@@ -1,11 +1,13 @@
 package com.mertaydar.springmvcsecurity.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -92,6 +94,34 @@ public class DeptDAOImpl implements DeptDAO {
             return null;
         }
         return new DeptInfo(dept.getId(), dept.getUniId(), dept.getName());
+	}
+	
+	@Override
+	public DeptInfo findDeptInfoWithName(String name) {
+		Session session = sessionFactory.getCurrentSession();
+        Criteria crit = session.createCriteria(Dept.class);
+        crit.add(Restrictions.eq("name", name));
+        Dept dept = (Dept) crit.uniqueResult();
+        if (dept == null) {
+            return null;
+        }
+        return new DeptInfo(dept.getId(), dept.getUniId(), dept.getName());
+	}
+	
+	@Override
+	public List<DeptInfo> listDeptInfoWithName(String name) {
+		Session session = sessionFactory.getCurrentSession();
+        Criteria crit = session.createCriteria(Dept.class);
+        crit.add(Restrictions.ilike("name", name, MatchMode.ANYWHERE));
+        List<Dept> depts = crit.list();
+        if (depts == null || depts.isEmpty()) {
+            return null;
+        }
+        List<DeptInfo> list = new ArrayList<DeptInfo>();
+        for (Dept d : depts) {
+        	list.add(new DeptInfo(d.getId(), d.getUniId(), d.getName()));
+        }
+        return list;
 	}
 
 	@Override

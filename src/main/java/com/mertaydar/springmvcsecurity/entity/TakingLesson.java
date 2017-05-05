@@ -30,6 +30,9 @@ public class TakingLesson implements Serializable {
 	
 	@Column(name = "credit", nullable = false)
 	private Integer credit;
+	
+	@Column(name = "lab", nullable = false)
+	private Integer lab;
 
 	@Column(name = "akts", nullable = false)
 	private Integer akts;
@@ -37,6 +40,14 @@ public class TakingLesson implements Serializable {
 	@Column(name = "term", nullable = false)
 	private Integer term;
 
+	public Integer getLab() {
+		return lab;
+	}
+
+	public void setLab(Integer lab) {
+		this.lab = lab;
+	}
+	
 	public Integer getId() {
 		return id;
 	}

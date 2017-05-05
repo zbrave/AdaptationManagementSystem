@@ -3,6 +3,7 @@ package com.mertaydar.springmvcsecurity.dao;
 import java.util.List;
 
 import com.mertaydar.springmvcsecurity.entity.Uni;
+import com.mertaydar.springmvcsecurity.model.DeptInfo;
 import com.mertaydar.springmvcsecurity.model.UniInfo;
 
 public interface UniDAO {
@@ -16,5 +17,7 @@ public interface UniDAO {
     public UniInfo findUniInfo(Integer id);
  
     public void deleteUni(Integer id);
+    
+    public List<UniInfo> listUniInfoWithName(String name);
     
 }

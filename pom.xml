@@ -24,12 +24,18 @@
   </repositories>
  
   <dependencies>
-  
   	<dependency>
-		    <groupId>javax.mail</groupId>
-		    <artifactId>mail</artifactId>
-		    <version>1.4.7</version>
-		</dependency>
+	    <groupId>org.docx4j</groupId>
+	    <artifactId>docx4j</artifactId>
+	    <version>3.3.3</version>
+	</dependency>
+  	
+  	
+  	<dependency>
+	    <groupId>javax.mail</groupId>
+	    <artifactId>mail</artifactId>
+	    <version>1.4.7</version>
+	</dependency>
  
       <!-- Spring framework START -->
       <!-- http://mvnrepository.com/artifact/org.springframework/spring-core -->

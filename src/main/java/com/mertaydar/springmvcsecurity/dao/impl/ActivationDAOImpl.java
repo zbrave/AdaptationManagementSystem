@@ -24,6 +24,14 @@ public class ActivationDAOImpl implements ActivationDAO {
 	}
 	
 	@Override
+	public Activation findActivationWithCode(String code) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria crit = session.createCriteria(Activation.class);
+        crit.add(Restrictions.eq("code", code));
+        return (Activation) crit.uniqueResult();
+	}
+	
+	@Override
 	public Activation findActivationWithUser(Integer id) {
         Session session = sessionFactory.getCurrentSession();
         Criteria crit = session.createCriteria(Activation.class);

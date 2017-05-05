@@ -1,5 +1,6 @@
 package com.mertaydar.springmvcsecurity.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -9,14 +10,35 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.mertaydar.springmvcsecurity.dao.DeptDAO;
 import com.mertaydar.springmvcsecurity.dao.StudentDAO;
+import com.mertaydar.springmvcsecurity.dao.StudentLessonDAO;
+import com.mertaydar.springmvcsecurity.dao.TakingLessonDAO;
+import com.mertaydar.springmvcsecurity.dao.UniDAO;
 import com.mertaydar.springmvcsecurity.entity.Student;
+import com.mertaydar.springmvcsecurity.entity.StudentLesson;
+import com.mertaydar.springmvcsecurity.model.DeptInfo;
 import com.mertaydar.springmvcsecurity.model.StudentInfo;
+import com.mertaydar.springmvcsecurity.model.StudentLessonInfo;
+import com.mertaydar.springmvcsecurity.model.TakingLessonInfo;
+import com.mertaydar.springmvcsecurity.model.UniInfo;
 
 public class StudentDAOImpl implements StudentDAO {
 
 	@Autowired
     private SessionFactory sessionFactory;
+	
+	@Autowired
+	private StudentLessonDAO studentLessonDAO;
+	
+	@Autowired
+	private TakingLessonDAO takingLessonDAO;
+	
+	@Autowired
+	private DeptDAO deptDAO;
+	
+	@Autowired
+	private UniDAO uniDAO;
 	
 	@Override
 	public Student findStudent(Integer id) {
@@ -31,7 +53,7 @@ public class StudentDAOImpl implements StudentDAO {
 	public List<StudentInfo> listStudentInfos() {
 		// sql query has to have exact names from own class variable 
 		String sql = "Select new " + StudentInfo.class.getName()//
-                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear) "//
+                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear, a.advisorId) "//
                 + " from " + Student.class.getName() + " a ";
 		System.out.println(sql.toString());
         Session session = sessionFactory.getCurrentSession();
@@ -44,7 +66,7 @@ public class StudentDAOImpl implements StudentDAO {
 	public List<StudentInfo> listStudentInfos(Integer pageid, Integer total) {
 		// sql query has to have exact names from own class variable 
 		String sql = "Select new " + StudentInfo.class.getName()//
-                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear) "//
+                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear, a.advisorId) "//
                 + " from " + Student.class.getName() + " a ";
 		System.out.println(sql.toString());
         Session session = sessionFactory.getCurrentSession();
@@ -54,15 +76,55 @@ public class StudentDAOImpl implements StudentDAO {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<StudentInfo> listStudentInfosByNo(Integer pageid, Integer total, String no) {
+	public List<StudentInfo> listStudentInfosBySearch(Integer pageid, Integer total, String val, String cate) {
 		// sql query has to have exact names from own class variable 
-		String sql = "Select new " + StudentInfo.class.getName()//
-                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear) "//
-                + " from " + Student.class.getName() + " a where no="+no;
-		System.out.println(sql.toString());
-        Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery(sql).setFirstResult(pageid-1).setMaxResults(total);
-        return query.list();
+		if (cate.equals("deptId")) {
+			List<StudentInfo> list = new ArrayList<StudentInfo>();
+			List<DeptInfo> depts = this.deptDAO.listDeptInfoWithName(val);
+			if (depts == null || depts.isEmpty()) {
+				return list;
+			}
+			for (DeptInfo dept : depts) {
+				String sql = "Select new " + StudentInfo.class.getName()//
+		                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear, a.advisorId) "//
+		                + " from " + Student.class.getName() + " a where "+cate+" like :val";
+		        Session session = sessionFactory.getCurrentSession();
+		        Query query = session.createQuery(sql).setParameter("val", dept.getId()).setFirstResult(pageid-1).setMaxResults(total);
+		        System.out.println(sql.toString());
+		        list.addAll(query.list());
+			}
+        	return list;
+		}
+		else if (cate.equals("uni")) {
+			List<StudentInfo> list = new ArrayList<StudentInfo>();
+			List<UniInfo> unis = this.uniDAO.listUniInfoWithName(val);
+			List<DeptInfo> depts = new ArrayList<DeptInfo>();
+			if (unis == null || unis.isEmpty()) {
+				return list;
+			}
+			for (UniInfo uni : unis) {
+				 depts.addAll(this.deptDAO.listDeptFromUni(uni.getId()));
+			}
+			for (DeptInfo dept : depts) {
+				String sql = "Select new " + StudentInfo.class.getName()//
+		                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear, a.advisorId) "//
+		                + " from " + Student.class.getName() + " a where a.deptId like :val";
+		        Session session = sessionFactory.getCurrentSession();
+		        Query query = session.createQuery(sql).setParameter("val", dept.getId()).setFirstResult(pageid-1).setMaxResults(total);
+		        System.out.println(sql.toString());
+		        list.addAll(query.list());
+			}
+        	return list;
+		}
+		else {
+			String sql = "Select new " + StudentInfo.class.getName()//
+	                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear, a.advisorId) "//
+	                + " from " + Student.class.getName() + " a where "+cate+" like '%"+val+"%'";
+			System.out.println(sql.toString());
+	        Session session = sessionFactory.getCurrentSession();
+	        Query query = session.createQuery(sql).setFirstResult(pageid-1).setMaxResults(total);
+	        return query.list();
+		}
 	}
 
 	@Override
@@ -93,6 +155,7 @@ public class StudentDAOImpl implements StudentDAO {
         student.setSurname(studentInfo.getSurname());
         student.setAdpScore(studentInfo.getAdpScore());
         student.setRecordYear(studentInfo.getRecordYear());
+        student.setAdvisorId(studentInfo.getAdvisorId());
  
         if (isNew) {
             Session session = this.sessionFactory.getCurrentSession();
@@ -107,7 +170,7 @@ public class StudentDAOImpl implements StudentDAO {
         if (student == null) {
             return null;
         }
-        return new StudentInfo(student.getId(), student.getDeptId(), student.getName(), student.getSurname(), student.getNo(), student.getAdpScore(), student.getRecordYear());
+        return new StudentInfo(student.getId(), student.getDeptId(), student.getName(), student.getSurname(), student.getNo(), student.getAdpScore(), student.getRecordYear(), student.getAdvisorId());
 	}
 
 	@Override
@@ -131,6 +194,63 @@ public class StudentDAOImpl implements StudentDAO {
         else {
         	return true;
         }
+	}
+
+	@Override
+	public void calcAdpAkts(Integer id, Integer coef) {
+		List<StudentLessonInfo> list = studentLessonDAO.listStudentLessonInfosForStudent(id);
+		int total = 0;
+		int val = -1;
+		for (StudentLessonInfo l : list) {
+			TakingLessonInfo les = takingLessonDAO.findTakingLessonInfo(l.getSubstituteLessonId());
+			total += les.getAkts();
+		}
+		if (total < coef){
+			val = 1;
+		}
+		else if (total < 2*coef){
+			val = 2;
+		}
+		else if (total < 3*coef){
+			val = 3;
+		}
+		else if (total < 4*coef){
+			val = 4;
+		}
+		StudentInfo stu = findStudentInfo(id);
+		stu.setAdpScore(val);
+		saveStudent(stu);
+		System.out.println(stu.getAdpScore()+val);
+		
+	}
+	
+	@Override
+	public void calcAdpCredit(Integer id, Integer coef) {
+		List<StudentLessonInfo> list = studentLessonDAO.listStudentLessonInfosForStudent(id);
+		int total = 0;
+		int val = -1;
+		for (StudentLessonInfo l : list) {
+			TakingLessonInfo les = takingLessonDAO.findTakingLessonInfo(l.getSubstituteLessonId());
+			total += les.getCredit();
+		}
+		System.out.println("tot"+total+" coef "+coef);
+		if (total < coef){
+			val = 1;
+		}
+		else if (total < 2*coef){
+			val = 2;
+		}
+		else if (total < 3*coef){
+			val = 3;
+		}
+		else if (total < 4*coef){
+			val = 4;
+		}
+		StudentInfo stu = findStudentInfo(id);
+		stu.setAdpScore(val);
+		saveStudent(stu);
+		System.out.println(stu.getAdpScore()+" "+val);
+		
 	}
 
 }

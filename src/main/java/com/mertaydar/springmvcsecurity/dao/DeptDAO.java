@@ -16,6 +16,10 @@ public interface DeptDAO {
     public void saveDept(DeptInfo deptInfo);
  
     public DeptInfo findDeptInfo(Integer id);
+    
+    public DeptInfo findDeptInfoWithName(String name);
+    
+    public List<DeptInfo> listDeptInfoWithName(String name);
  
     public void deleteDept(Integer id);
 }

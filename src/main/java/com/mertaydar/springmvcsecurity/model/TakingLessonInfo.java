@@ -8,6 +8,7 @@ public class TakingLessonInfo {
 	private String code;
 	private String lang;
 	private Integer credit;
+	private Integer lab;
 	private Integer akts;
 	private Integer term;
 	
@@ -18,7 +19,7 @@ public class TakingLessonInfo {
 	
 
 	public TakingLessonInfo(Integer id, Integer deptId, String name, String code, String lang, Integer credit,
-			Integer akts, Integer term) {
+			Integer lab, Integer akts, Integer term) {
 		super();
 		this.id = id;
 		this.deptId = deptId;
@@ -26,6 +27,7 @@ public class TakingLessonInfo {
 		this.code = code;
 		this.lang = lang;
 		this.credit = credit;
+		this.lab = lab;
 		this.akts = akts;
 		this.term = term;
 	}
@@ -94,6 +96,18 @@ public class TakingLessonInfo {
 
 	public void setTerm(Integer term) {
 		this.term = term;
+	}
+
+
+
+	public Integer getLab() {
+		return lab;
+	}
+
+
+
+	public void setLab(Integer lab) {
+		this.lab = lab;
 	}
 
 	

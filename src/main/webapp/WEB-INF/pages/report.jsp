@@ -29,21 +29,32 @@
 <input type="button" onclick="printDiv('printableArea');" value="print a div!" />
 <div id="printableArea">
     <div class="header">
-		<img src="http://www.yildiz.edu.tr/images/files/ytulogopng.png" alt="ytulogo"/>
-		<h1><b>LİSANS PROGRAMLARI İÇİN DERS İNTİBAK FORMU</b></h1>
-		<table>
-			<tr><td>Form no: FR-1053</td></tr>
-			<tr><td>Revizyon Tarihi:	14.12.2015</td></tr>
-			<tr><td>Revizyon No:	00</td></tr>
-		</table>
+    <table class="head">
+    	<tr>
+			<td rowspan="3"><img src="http://www.yildiz.edu.tr/images/files/ytulogopng.png" alt="ytulogo"/></td>
+			<td rowspan="3"><h1><b>LİSANS PROGRAMLARI İÇİN DERS İNTİBAK FORMU</b></h1></td>
+			<td class="headinfo" colspan="1">Form no</td><td class="headinfo2" colspan="1">FR-1053</td>
+			<tr><td class="headinfo" colspan="1">Revizyon Tarihi</td><td class="headinfo2" colspan="1">14.12.2015</td></tr>
+			<tr><td class="headinfo" colspan="1">Revizyon No</td><td class="headinfo2" colspan="1">00</td></tr>
+		</tr>
+	</table>
 	</div>
 	<div class="options">
-		<label for="c1" >LYS <input type="checkbox" id="c1" ></label>
-		<label for="c2" >DGS <input type="checkbox" id="c2" ></label>
-		<label for="c3" >K.ARASI GEÇİŞ <input type="checkbox" id="c3" ></label>
-		<label for="c4" >AF <input type="checkbox" id="c4" ></label>
-		<label for="c5" >MERKEZİ YERLEŞTİRME PUANI İLE YATAY GEÇİŞ <input type="checkbox" id="c5" ></label>
-		<label for="c6" >KURUM İÇİ YATAY GEÇİŞ <input type="checkbox" id="c6" ></label>
+		<table>
+			<tr>
+				<td colspan="6"><label for="c1" >LYS <input type="checkbox" id="c1" ></label>
+				<label for="c2" >DGS <input type="checkbox" id="c2" ></label>
+				<label for="c3" >K.ARASI GEÇİŞ <input type="checkbox" id="c3" ></label>
+				<label for="c4" >AF <input type="checkbox" id="c4" ></label>
+				<label for="c5" >MERKEZİ YERLEŞTİRME PUANI İLE YATAY GEÇİŞ <input type="checkbox" id="c5" ></label>
+				<label for="c6" >KURUM İÇİ YATAY GEÇİŞ <input type="checkbox" id="c6" ></label></td>
+			</tr>
+		</table>
+		<table class="asd">
+			<tr>
+				<td colspan="1">ÖĞR.NO</td><td colspan="2">16011068</td><td colspan="1">ADI SOYADI</td><td colspan="3">Furkan Yılmaz</td><td colspan="1">BOLUM/PROGRAM</td><td colspan="3">Bilgisayar Mühendisliği</td>
+			</tr>
+		</table>
     </div>
     <div class="student">
 	    <table class="table" cellspacing="10" border="1">

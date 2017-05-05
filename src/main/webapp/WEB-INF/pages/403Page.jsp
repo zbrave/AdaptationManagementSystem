@@ -14,11 +14,10 @@
 	<script src="${bootstrapJS}"></script>
 	<link href="${amsCSS}" rel="stylesheet" />
 	<script src="${amsJS}"></script>	
-	<title>Access Denied</title>
+	<title>Erişim kısıtlandı!</title>
 </head>
 <body>
-	<%@include file="navbar.jsp" %>
  
-    <h3 style="color:red;">${message}</h3>
+    <h3 style="color:red;">Erişim kısıtlandı.</h3>
 </body>
 </html>

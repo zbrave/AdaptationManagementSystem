@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -13,10 +14,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mertaydar.springmvcsecurity.dao.ActivationDAO;
+import com.mertaydar.springmvcsecurity.dao.MailSend;
 import com.mertaydar.springmvcsecurity.dao.UserDAO;
 import com.mertaydar.springmvcsecurity.dao.UserRoleDAO;
+import com.mertaydar.springmvcsecurity.model.DeptInfo;
+import com.mertaydar.springmvcsecurity.model.StudentInfo;
+import com.mertaydar.springmvcsecurity.model.UniInfo;
 import com.mertaydar.springmvcsecurity.model.UserInfo;
 import com.mertaydar.springmvcsecurity.entity.Activation;
+import com.mertaydar.springmvcsecurity.entity.Student;
 import com.mertaydar.springmvcsecurity.entity.User;
  
 @Service
@@ -26,10 +32,14 @@ public class UserDAOImpl implements UserDAO {
 	@Autowired
 	private UserRoleDAO userRoleDAO;
 	
-	@Autowired ActivationDAO actiavationDAO;
+	@Autowired 
+	private ActivationDAO actiavationDAO;
 	
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	private MailSend mailSend;
 
 	@Override
 	public User findUser(Integer id) {
@@ -37,6 +47,32 @@ public class UserDAOImpl implements UserDAO {
         Criteria crit = session.createCriteria(User.class);
         crit.add(Restrictions.eq("id", id));
         return (User) crit.uniqueResult();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserInfo> listUserInfos(Integer pageid, Integer total) {
+		// sql query has to have exact names from own class variable 
+		String sql = "Select new " + UserInfo.class.getName()//
+                + "(a.id, a.email, a.username, a.password, a.studentId, a.enabled) "//
+                + " from " + User.class.getName() + " a ";
+		System.out.println(sql.toString());
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(sql).setFirstResult(pageid-1).setMaxResults(total);
+        return query.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserInfo> listUserInfosBySearch(Integer pageid, Integer total, String val, String cate) {
+		// sql query has to have exact names from own class variable 
+		String sql = "Select new " + UserInfo.class.getName()//
+                + "(a.id, a.email, a.username, a.password, a.studentId, a.enabled) "//
+                + " from " + User.class.getName() + " a where "+cate+" like '%"+val+"%'";
+		System.out.println(sql.toString());
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(sql).setFirstResult(pageid-1).setMaxResults(total);
+        return query.list();
 	}
 
 	@Override
@@ -50,17 +86,21 @@ public class UserDAOImpl implements UserDAO {
 		if( user == null ){
 			isNew = true;
 			user = new User();
+			user.setEnabled(false);
+			Activation act = new Activation();
+			act.setUsername(userInfo.getUsername());
+		    act.setCode(getSaltString());
+		    actiavationDAO.saveActivation(act);
+		    String text = "IYS hesabını aktif etmek için aşağıdaki linke tıklayın.\n\n";
+		    text = text.concat("http://localhost:8080/AMS/activate?code="+act.getCode().toString());
+		    mailSend.sendSimpleMessage(userInfo.getEmail(), "IYS Aktivasyon", text);
 		}
 		user.setId(userInfo.getId());
 	    user.setEmail(userInfo.getEmail());
 	    user.setUsername(userInfo.getUsername());
 	    user.setPassword(userInfo.getPassword());
 	    user.setStudentId(userInfo.getStudentId());
-	    user.setEnabled(false);
-	    Activation act = new Activation();
-	    act.setUsername(user.getUsername());
-	    act.setCode(getSaltString());
-	    actiavationDAO.saveActivation(act);
+	    user.setEnabled(userInfo.isEnabled());
 	    if(isNew){
 	    	Session session=this.sessionFactory.getCurrentSession();
 	    	session.persist(user);

@@ -20,4 +20,6 @@ public interface RulesDAO {
     public void deleteRules(Integer id);
     
     public boolean isDuplicate(RulesInfo rulesInfo);
+    
+    public boolean isLabCondition(RulesInfo rulesInfo);
 }
