@@ -184,6 +184,6 @@ public class TakingLessonController {
 		redirectAttributes.addFlashAttribute("message3", "Alınan ders eklendi.");
 
 //		return "redirect:/takingLessonList";
-		return "redirect:/addRules#takingLessonTab";
+		return "redirect:/addRules?id="+deptDAO.findDeptInfo(takingLessonInfo.getDeptId()).getUniId()+"&id2="+takingLessonInfo.getDeptId()+"#takingLessonTab";
 	}
 }

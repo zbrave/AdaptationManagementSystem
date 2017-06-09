@@ -11,9 +11,9 @@ public class UserRoleInfo {
 	public UserRoleInfo(){
 		
 	}
-	public UserRoleInfo(Integer id,UserInfo userInfo,String role){
+	public UserRoleInfo(Integer id,Integer userId,String role){
 		this.id=id;
-		this.userInfo=userInfo;
+		this.userId=userId;
 		this.role=role;
 	}
 	

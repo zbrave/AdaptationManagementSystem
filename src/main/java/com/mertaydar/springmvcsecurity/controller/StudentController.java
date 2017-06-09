@@ -30,6 +30,7 @@ import com.mertaydar.springmvcsecurity.dao.SubstituteLessonDAO;
 import com.mertaydar.springmvcsecurity.dao.TakingLessonDAO;
 import com.mertaydar.springmvcsecurity.dao.UniDAO;
 import com.mertaydar.springmvcsecurity.dao.UserDAO;
+import com.mertaydar.springmvcsecurity.dao.UserRoleDAO;
 import com.mertaydar.springmvcsecurity.model.DeptInfo;
 import com.mertaydar.springmvcsecurity.model.JSPLessonFormat;
 import com.mertaydar.springmvcsecurity.model.JSPStudentFormat;
@@ -68,6 +69,9 @@ public class StudentController {
 	private UserDAO userDAO;
 	
 	@Autowired
+	private UserRoleDAO userRoleDAO;
+	
+	@Autowired
 	private StudentDAO studentDAO;
 	
 	@Autowired
@@ -103,7 +107,9 @@ public class StudentController {
 	@RequestMapping(value = "/myAdapt", method = RequestMethod.GET)
 	public String myAdapt(Model model, Principal principal) {
 		UserInfo user = this.userDAO.findLoginUserInfo(principal.getName());
-		return "redirect:/getStudentData?id="+user.getStudentId().toString();
+		if (user.getStudentId() != null)
+			return "redirect:/getStudentData?id="+user.getStudentId().toString();
+		return "welcomePage";
 	}
 	
 	@RequestMapping(value = "/sendMail", method = RequestMethod.POST)
@@ -119,7 +125,7 @@ public class StudentController {
 			System.out.println("Mail cannot converted.");
 			e.printStackTrace();
 		}
-		String text = "Kullanıcı: "+principal.getName()+"\n\n";
+		String text = "Kullanıcı: "+principal.getName()+"\n\nE-mail: "+user.getEmail()+"\nTelefon: "+user.getTel()+"\nMesaj: ";
 		text = text.concat(mailInfo.getText());
 		mailSend.sendSimpleMessage(mailInfo.getTo(), mailInfo.getSubject(), text);
 		redirectAttributes.addFlashAttribute("message", "Mail Gönderildi.");
@@ -172,6 +178,7 @@ public class StudentController {
 			 model.addAttribute("no", stu.getNo());
 			 model.addAttribute("recordYear", stu.getRecordYear());
 			 model.addAttribute("adpScore", stu.getAdpScore());
+			 model.addAttribute("advisor", userDAO.findUserInfo(stu.getAdvisorId()));
 			 for (StudentLessonInfo tmp : listStuLes){
 				 SubstituteLessonInfo tmpSub = this.substituteLessonDAO.findSubstituteLessonInfo(tmp.getSubstituteLessonId());
 				 TakingLessonInfo tmpTak = this.takingLessonDAO.findTakingLessonInfo(tmp.getTakingLessonId());
@@ -179,12 +186,54 @@ public class StudentController {
 				 list.add(temp);
 			 }
 		}
-		List<UserInfo> students = userDAO.listUserInfos();
+		List<UserInfo> students = userDAO.listUserInfosRoleUser();
 		model.addAttribute("students", students);
 		model.addAttribute("lessons", list);
 		
 		List<UserInfo> admins = userDAO.listUserInfosRoleAdmin();
 		model.addAttribute("admins", admins);
+		
+		List<UserInfo> managers = userDAO.listUserInfosRoleManager();
+		model.addAttribute("managers", managers);
+		return "addStudentLesson";
+	}
+	
+	@RequestMapping("/getStudentData2")
+	public String getStudentData2(Model model, @RequestParam("id") Integer id) {
+		StudentInfo stu = this.studentDAO.findStudentInfo(id);
+		DeptInfo dept = null;
+		UniInfo uni = null; 
+		List<StudentLessonInfo> listStuLes = this.studentLessonDAO.listStudentLessonInfosForStudent(id);
+		List<JSPLessonFormat> list = new ArrayList<JSPLessonFormat>();
+		if (id != -1) {
+			 dept = this.deptDAO.findDeptInfo(stu.getDeptId());
+			 uni = this.uniDAO.findUniInfo(dept.getUniId());
+			 model.addAttribute("id", stu.getId());
+			 model.addAttribute("uni", uni.getName());
+			 model.addAttribute("dept", dept.getName());
+			 model.addAttribute("deptId", dept.getId());
+			 model.addAttribute("name", stu.getName());
+			 model.addAttribute("surname", stu.getSurname());
+			 model.addAttribute("no", stu.getNo());
+			 model.addAttribute("recordYear", stu.getRecordYear());
+			 model.addAttribute("adpScore", stu.getAdpScore());
+			 model.addAttribute("advisor", userDAO.findUserInfo(stu.getAdvisorId()));
+			 for (StudentLessonInfo tmp : listStuLes){
+				 SubstituteLessonInfo tmpSub = this.substituteLessonDAO.findSubstituteLessonInfo(tmp.getSubstituteLessonId());
+				 TakingLessonInfo tmpTak = this.takingLessonDAO.findTakingLessonInfo(tmp.getTakingLessonId());
+				 JSPLessonFormat temp = new JSPLessonFormat(tmp.getId(),tmpSub, tmpTak, tmp.getOrgMark(), tmp.getConvMark());
+				 list.add(temp);
+			 }
+		}
+		List<UserInfo> students = userDAO.listUserInfosRoleUser();
+		model.addAttribute("students", students);
+		model.addAttribute("lessons", list);
+		
+		List<UserInfo> admins = userDAO.listUserInfosRoleAdmin();
+		model.addAttribute("admins", admins);
+		
+		List<UserInfo> managers = userDAO.listUserInfosRoleManager();
+		model.addAttribute("managers", managers);
 		return "addStudentLesson";
 	}
 	
@@ -195,10 +244,11 @@ public class StudentController {
 	}
 	
 	@RequestMapping(value = "/Student", method = RequestMethod.GET)
-	public String Student(Model model, @RequestParam Integer pageid, @RequestParam(value = "searchTerm", required = false) String search, @RequestParam(value = "category", required = false) String category) {
+	public String Student(Model model, Principal principal, @RequestParam Integer pageid, @RequestParam(value = "searchTerm", required = false) String search, @RequestParam(value = "category", required = false) String category) {
 		
 		List<JSPStudentFormat> list = new ArrayList<JSPStudentFormat>();
-		int total = 2;  
+		int total = 10;  
+		Integer pageSize=null;
         if (pageid == 1){
         	
         }  
@@ -207,7 +257,14 @@ public class StudentController {
         }
         List<StudentInfo> listStu = null;
         if (search == null || search.isEmpty()) {
-        	listStu = studentDAO.listStudentInfos(pageid,total);
+        	if (userRoleDAO.getUserRoles(userDAO.findLoginUserInfo(principal.getName()).getId()).contains("ADMIN")){
+        		listStu = studentDAO.listStudentInfos(pageid,total);
+        		pageSize = studentDAO.listStudentInfos().size();
+        	}
+        	else if (userRoleDAO.getUserRoles(userDAO.findLoginUserInfo(principal.getName()).getId()).contains("MANAGER")) {
+        		listStu = studentDAO.listStudentInfosForAdv(pageid,total,userDAO.findLoginUserInfo(principal.getName()).getId());
+        		pageSize = studentDAO.listStudentInfosForAdvSize(userDAO.findLoginUserInfo(principal.getName()).getId()).size();
+        	}
         }
         else {
         	String decodedToUTF8;
@@ -218,10 +275,16 @@ public class StudentController {
     			System.out.println("Search term name cannot converted.");
     			e.printStackTrace();
     		}
-        	listStu = studentDAO.listStudentInfosBySearch(pageid,total,search,category);
+    		if (userRoleDAO.getUserRoles(userDAO.findLoginUserInfo(principal.getName()).getId()).contains("ADMIN")) {
+    			listStu = studentDAO.listStudentInfosBySearch(pageid,total,search,category);
+    			pageSize = studentDAO.listStudentInfosBySearchSize(search, category).size();
+    			System.out.println("admin searchs..total page"+total+" "+pageid);
+        	}
+    		else if (userRoleDAO.getUserRoles(userDAO.findLoginUserInfo(principal.getName()).getId()).contains("MANAGER")) {
+        		listStu = studentDAO.listStudentInfosBySearchForAdv(pageid,total,search,category,userDAO.findLoginUserInfo(principal.getName()).getId());
+        		pageSize = studentDAO.listStudentInfosBySearchForAdvSize(search, category, userDAO.findLoginUserInfo(principal.getName()).getId()).size();
+    		}
         }
-		Integer pageSize = studentDAO.listStudentInfos().size();
-		pageSize = (int) Math.ceil(pageSize / (float)total);
 		for (StudentInfo tmp : listStu){
 			 DeptInfo dept = this.deptDAO.findDeptInfo(tmp.getDeptId());
 			 UniInfo uni = this.uniDAO.findUniInfo(dept.getUniId());
@@ -235,6 +298,7 @@ public class StudentController {
 			 }
 			 list.add(temp);
 		 }
+		pageSize = (int) Math.ceil(pageSize / (float)total);
 		model.addAttribute("students", list);
 		model.addAttribute("pageSize", pageSize);
 		return "Student";
@@ -324,7 +388,7 @@ public class StudentController {
 			System.out.println("Bu id li öğrenci yok.");
 			return "redirect:/studentList";
 		}
-		List<UserInfo> admins = userDAO.listUserInfosRoleAdmin();
+		List<UserInfo> admins = userDAO.listUserInfosRoleManager();
 		System.out.println("admins size:"+admins.size());
 		model.addAttribute("advisorId", studentInfo.getAdvisorId());
 		model.addAttribute("advisors", admins);
@@ -340,7 +404,7 @@ public class StudentController {
 	}
 
 	@RequestMapping(value = "/saveStudent", method = RequestMethod.POST)
-	public String saveStudent(Model model, //
+	public String saveStudent(Model model, Principal principal, //
 			@ModelAttribute("studentForm") @Validated StudentInfo studentInfo, //
 			BindingResult result, //
 			final RedirectAttributes redirectAttributes) {
@@ -359,12 +423,25 @@ public class StudentController {
 			System.out.println("Uni name cannot converted.");
 			e.printStackTrace();
 		}
-			this.studentDAO.saveStudent(studentInfo);
-
-			// Important!!: Need @EnableWebMvc
-			// Add message to flash scope
-			redirectAttributes.addFlashAttribute("message5", "Öğrenci güncellendi.");
+		UserInfo user = userDAO.findLoginUserInfo(principal.getName());
+		List<String> userRoles = userRoleDAO.getUserRoles(user.getId());
+		boolean isManager = false;
+		for (String u : userRoles) {
+			if (u.contains("MANAGER")) {
+				isManager = true;
+			}
+		}
+		if (isManager) {
+			studentInfo.setAdvisorId(user.getId());
+		}
+		this.studentDAO.saveStudent(studentInfo);
 		
+		
+
+		// Important!!: Need @EnableWebMvc
+		// Add message to flash scope
+		redirectAttributes.addFlashAttribute("message5", "Öğrenci güncellendi.");
+	
 
 //		return "redirect:/studentList";
 		return "redirect:/Student?pageid=1";

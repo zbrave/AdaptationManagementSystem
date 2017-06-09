@@ -23,7 +23,7 @@ $(document).ready(function(){
           $("#sUniId").html(data);
           $("#sUniId").val('${uniId}');
       });
-	$.get("${pageContext.request.contextPath}/getDept?id=${studentForm.deptId}", null, function (data) {
+	$.get("${pageContext.request.contextPath}/getDept?id=${uniId}", null, function (data) {
       $("#sDeptId").html(data);
       $('#sDeptId').val('${studentForm.deptId}');
 	});

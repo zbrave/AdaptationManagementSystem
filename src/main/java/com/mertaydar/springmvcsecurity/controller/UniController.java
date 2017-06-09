@@ -57,7 +57,7 @@ public class UniController {
 		String res = "<option id=-1 value=-1>Üniversite seçin.</option>";
 		List<UniInfo> list = this.uniDAO.listUniInfos();
 		for (UniInfo tmp : list) {
-			res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+">"+tmp.getName()+"</option>");
+			res = res.concat("<option "+"id=\""+tmp.getId()+"\" value=\""+tmp.getId()+"\">"+tmp.getName()+"</option>");
 		}
 		return res;
 	}

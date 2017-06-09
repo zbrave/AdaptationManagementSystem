@@ -16,13 +16,17 @@ D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecur
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\UserDAO.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\entity\Report.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\entity\TakingLesson.java
+D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\model\CurriculumInfo.java
+D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\CurriculumDAO.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\TakingLessonDAO.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\impl\SubstituteLessonDAOImpl.java
+D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\entity\Curriculum.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\impl\RulesDAOImpl.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\model\DeptInfo.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\StudentLessonDAO.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\impl\ReportDAOImpl.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\model\JSPLessonFormat.java
+D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\impl\CurriculumDAOImpl.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\UniDAO.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\OurmarkDAO.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\ActivationDAO.java
@@ -41,6 +45,7 @@ D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecur
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\controller\OurmarkController.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\entity\Uni.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\config\WebMvcConfig.java
+D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\controller\CurriculumController.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\model\TakingLessonInfo.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\model\JSPStudentFormat.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\model\MarkInfo.java

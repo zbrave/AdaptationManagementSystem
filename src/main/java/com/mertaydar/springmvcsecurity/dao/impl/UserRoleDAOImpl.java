@@ -33,6 +33,20 @@ public class UserRoleDAOImpl implements UserRoleDAO {
         crit.add(Restrictions.eq("id", id));
         return (UserRole) crit.uniqueResult();
 	}
+	
+	@Override
+	public boolean isManager(Integer userid) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria crit = session.createCriteria(UserRole.class);
+        crit.add(Restrictions.eq("userId", userid));
+        crit.add(Restrictions.eq("role", "MANAGER"));
+        if (crit.list().isEmpty()) {
+        	return false;
+        }
+        else {
+        	return true;
+        }
+	}
 
 	@Override
 	public void saveUserRole(UserRoleInfo userRoleInfo) {
@@ -68,7 +82,7 @@ public class UserRoleDAOImpl implements UserRoleDAO {
         if (userRole == null) {
             return null;
         }
-		return new UserRoleInfo(userRole.getId(),userDAO.findUserInfo(userRole.getUserId()),userRole.getRole());
+		return new UserRoleInfo(userRole.getId(),userRole.getUserId(),userRole.getRole());
 	}
 
 	@Override

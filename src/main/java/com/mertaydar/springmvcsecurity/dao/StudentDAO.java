@@ -26,4 +26,16 @@ public interface StudentDAO {
     public void calcAdpAkts(Integer id, Integer coef);
     
     public void calcAdpCredit(Integer id, Integer coef);
+
+
+	List<StudentInfo> listStudentInfosForAdv(Integer pageid, Integer total, Integer userid);
+
+	List<StudentInfo> listStudentInfosBySearchForAdv(Integer pageid, Integer total, String val, String cate,
+			Integer userid);
+
+	List<StudentInfo> listStudentInfosBySearchForAdvSize(String val, String cate, Integer userid);
+
+	List<StudentInfo> listStudentInfosBySearchSize(String val, String cate);
+
+	List<StudentInfo> listStudentInfosForAdvSize(Integer userid);
 }

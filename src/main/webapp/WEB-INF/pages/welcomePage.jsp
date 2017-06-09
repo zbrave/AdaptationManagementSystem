@@ -9,9 +9,10 @@
 	<spring:url value="/resources/js/bootstrap.js" var="bootstrapJS" />
 	<spring:url value="/resources/others/ams.css" var="amsCSS" />
 	<spring:url value="/resources/others/ams.js" var="amsJS" />
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<spring:url value="/resources/js/jquery.min.js" var="jqueryJS" />
 	<link href="${bootstrapCSS}" rel="stylesheet" />
 	<script src="${bootstrapJS}"></script>
+	<script src="${jqueryJS}"></script>
 	<link href="${amsCSS}" rel="stylesheet" />
 	<script src="${amsJS}"></script>	
 	<title>${title}</title>

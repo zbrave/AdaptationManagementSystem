@@ -8,8 +8,9 @@ public class UserInfo {
     private String password;
     private String passwordConf;
     private Integer studentId;
+    private String tel;
     private boolean enabled;
-	
+    private boolean manager;
     public UserInfo() {
     	
     }
@@ -17,7 +18,7 @@ public class UserInfo {
     
 
 	public UserInfo(Integer id, String email, String username, String password, Integer studentId,
-			boolean enabled) {
+			boolean enabled, String tel) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -25,6 +26,7 @@ public class UserInfo {
 		this.password = password;
 		this.studentId = studentId;
 		this.enabled = enabled;
+		this.tel = tel;
 	}
 
 
@@ -83,6 +85,30 @@ public class UserInfo {
 
 	public void setStudentId(Integer studentId) {
 		this.studentId = studentId;
+	}
+
+
+
+	public String getTel() {
+		return tel;
+	}
+
+
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+
+
+
+	public boolean isManager() {
+		return manager;
+	}
+
+
+
+	public void setManager(boolean manager) {
+		this.manager = manager;
 	}
      
     

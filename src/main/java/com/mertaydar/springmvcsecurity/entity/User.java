@@ -19,6 +19,7 @@ public class User {
 	private String password;
 	private String email;
 	private Integer studentId;
+	private String tel;
 	private boolean enabled;
     
 	@Id
@@ -68,6 +69,13 @@ public class User {
 	}
 	public void setStudentId(Integer studentId) {
 		this.studentId = studentId;
+	}
+	@Column(name = "tel")
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
 	}
 	
 }

@@ -23,4 +23,6 @@ public interface StudentLessonDAO {
     public void deleteStudentLesson(Integer id);
     
     public boolean isDuplicate(StudentLessonInfo studentLessonInfo);
+
+	List<StudentLessonInfo> listStudentLessonInfosForStudentNoDuplicate(Integer id);
 }

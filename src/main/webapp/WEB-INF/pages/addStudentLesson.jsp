@@ -7,17 +7,17 @@
 <html>
 <head>
 <spring:url value="/resources/css/bootstrap.css" var="bootstrapCSS" />
+	<spring:url value="/resources/js/jquery.min.js" var="jqueryJS" />
 	<spring:url value="/resources/js/bootstrap.js" var="bootstrapJS" />
+	<spring:url value="/resources/js/bootstrap-confirmation.js" var="bootstrapConfirmationJS" />
 	<spring:url value="/resources/others/ams.css" var="amsCSS" />
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<link href="${bootstrapCSS}" rel="stylesheet" />
+	<script src="${jqueryJS}"></script>
 	<script src="${bootstrapJS}"></script>
+	<script src="${bootstrapConfirmationJS}"></script>
 	<link href="${amsCSS}" rel="stylesheet" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script
-  src="https://code.jquery.com/jquery-3.1.1.js"
-  integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
-  crossorigin="anonymous"></script>
+
   
 <script type="text/javascript">
 $(document).ready(function(){
@@ -70,6 +70,7 @@ $(document).ready(function(){
 							<th class="col-md-1 text-center">Soyad</th>
 							<th class="col-md-1 text-center">İntibak Yılı</th>
 							<th class="col-md-1 text-center">Kayıt Yılı</th>
+							<th class="col-md-1 text-center">Danışmanı</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -81,6 +82,7 @@ $(document).ready(function(){
 							<td class="col-md-1 text-center">${surname}</td>
 							<td class="col-md-1 text-center">${adpScore}</td>
 							<td class="col-md-1 text-center">${recordYear}</td>
+							<td class="col-md-1 text-center">${advisor.username}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -88,7 +90,7 @@ $(document).ready(function(){
 			</div>
 			<c:forEach var="role"
 					items="${pageContext['request'].userPrincipal.principal.authorities}">
-						<c:if test="${role.authority == 'ROLE_ADMIN' }">
+						<c:if test="${role.authority == 'ROLE_ADMIN' || role.authority == 'ROLE_MANAGER' }">
 				<div class="panel panel-primary panel-table">
               
               <div class="panel-body">
@@ -198,7 +200,7 @@ $(document).ready(function(){
 		</div>
 	</div>
 	<c:forEach var="role" items="${pageContext['request'].userPrincipal.principal.authorities}">
-						<c:if test="${role.authority == 'ROLE_ADMIN' }">
+						<c:if test="${role.authority == 'ROLE_ADMIN' || role.authority == 'ROLE_MANAGER' }">
 	<div class="col-lg-6">
 		<div class="panel panel-default panel-table">
               <div class="panel-heading">
@@ -237,7 +239,7 @@ $(document).ready(function(){
 								   	<td><input id="convMark" name="convMark" class="input-sm" style="width: 50px;" value="${info.subMark }" /></td>
 								   	<input id="id" name="id" type="hidden" value="${info.stuLesId }"/>
 								   	<td> 
-								   		<a class='btn btn-danger btn-xs' href="deleteStudentLesson?id=${info.stuLesId}&studentId=${id}"><span class="glyphicon glyphicon-edit"></span> Sil</a>
+								   		<a class='btn btn-danger btn-xs' href="deleteStudentLesson?id=${info.stuLesId}&studentId=${id}" data-toggle="confirmation" data-title="Bağlantılı tüm bilgiler bu işlemle birlikte silinecek. Emin misiniz?"><span class="glyphicon glyphicon-edit"></span> Sil</a>
 								   		<button type="submit" class="btn btn-info btn-xs" value="Ekle" >Not güncelle</button>
 								   	</td>
 								   	</form:form>
@@ -299,6 +301,7 @@ $(document).ready(function(){
 	</c:if>
 	</c:forEach>
 	</c:forEach>
+	<a class='btn btn-info btn-xs' href="word?id=${id}"><span class="glyphicon glyphicon-edit"></span> Rapor al</a>
 	<c:forEach var="role" items="${pageContext['request'].userPrincipal.principal.authorities}">
 		<c:if test="${role.authority == 'ROLE_USER' }">
 			<!-- Mail Form -->
@@ -310,11 +313,7 @@ $(document).ready(function(){
 					
 					<label class="control-label" style="margin-left: 10px;">Kime</label>
 								 			
-			   		<select id="to" class="form-control" name="to" style="width: 23%;" >
-			   			<c:forEach items="${admins}" var="info">
-			   				<option id="${info.email}" value="${info.email}">${info.username}</option>
-						</c:forEach>
-			   		</select>
+	   				<input name="to" id="${advisor.email}" value="${advisor.email}" placeholder="${advisor.username}" readonly/>
 
 					<label class="control-label" style="margin-left: 10px;">Konu</label>
 								 			
@@ -341,4 +340,10 @@ $(document).ready(function(){
 	</c:forEach>
 	</c:if>       
 </body>
+<script type="text/javascript">
+$('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+  // other options
+});
+</script>
 </html>

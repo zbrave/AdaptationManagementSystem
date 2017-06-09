@@ -18,13 +18,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.mertaydar.springmvcsecurity.dao.CurriculumDAO;
 import com.mertaydar.springmvcsecurity.dao.DeptDAO;
 import com.mertaydar.springmvcsecurity.dao.RulesDAO;
 import com.mertaydar.springmvcsecurity.dao.SubstituteLessonDAO;
 import com.mertaydar.springmvcsecurity.dao.TakingLessonDAO;
 import com.mertaydar.springmvcsecurity.dao.UniDAO;
+import com.mertaydar.springmvcsecurity.model.CurriculumInfo;
 import com.mertaydar.springmvcsecurity.model.DeptInfo;
 import com.mertaydar.springmvcsecurity.model.RulesInfo;
+import com.mertaydar.springmvcsecurity.model.SubstituteLessonInfo;
 import com.mertaydar.springmvcsecurity.model.TakingLessonInfo;
 import com.mertaydar.springmvcsecurity.model.UniInfo;
 
@@ -50,13 +53,20 @@ public class RulesController {
 	@Autowired
 	private RulesDAO rulesDAO;
 	
+	@Autowired
+	private CurriculumDAO curriculumDAO;
+	
 /* Rules Section */
 	
 	@RequestMapping(value = "/addRules", method = RequestMethod.GET)
 	public String addRules(Model model) {
-		List<RulesInfo> rules = rulesDAO.listRulesInfos();
-		model.addAttribute("rules", rules);
-		
+//		List<RulesInfo> rules = rulesDAO.listRulesInfos();
+//		model.addAttribute("rules", rules);
+		List<CurriculumInfo> curList = curriculumDAO.listCurriculumInfos();
+		model.addAttribute("curriculums", curList);
+		CurriculumInfo active = curriculumDAO.findCurriculumInfoActive();
+		List<SubstituteLessonInfo> list = substituteLessonDAO.listSubstituteLessonInfos(active.getId());
+		model.addAttribute("subLes", list);
 		return "addRules";
 	}
 	
@@ -66,10 +76,12 @@ public class RulesController {
 		System.out.println("id:"+id);
 		String res = "";
 		List<TakingLessonInfo> tl = takingLessonDAO.listTakingLessonFromDept(id);
+		CurriculumInfo curriculumInfo = curriculumDAO.findCurriculumInfoActive();
 		for (TakingLessonInfo t : tl) {
 			List<RulesInfo> rules = rulesDAO.listRulesForLesson(t.getId());
 			for (RulesInfo r : rules) {
-				res = res.concat("<tr><td>"+r.getId()+"</td>"+"<td>"+t.getName()+"</td><td>"+substituteLessonDAO.findSubstituteLesson(r.getSubstituteLessonId()).getName()+"</td><td><a href=\"deleteRules?id="+r.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Sil</a></td></tr>");
+				if (substituteLessonDAO.findSubstituteLessonInfo(r.getSubstituteLessonId()).getCurriculumId() == curriculumInfo.getId())
+					res = res.concat("<tr><td>"+r.getId()+"</td>"+"<td>"+t.getName()+"</td><td>"+substituteLessonDAO.findSubstituteLesson(r.getSubstituteLessonId()).getName()+"</td><td><a href=\"deleteRules?id="+r.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Sil</a></td></tr>");
 			}
 		}
 		return res;
@@ -165,7 +177,7 @@ public class RulesController {
 	public String deleteRules(Model model, @RequestParam("id") Integer id, final RedirectAttributes redirectAttributes) {
 		if (id != null) {
 			this.rulesDAO.deleteRules(id);
-			redirectAttributes.addFlashAttribute("message5", "Bölüm silindi.");
+			redirectAttributes.addFlashAttribute("message5", "Kural silindi.");
 		}
 		return "redirect:/addRules";
 	}
@@ -183,16 +195,20 @@ public class RulesController {
 		if (rulesDAO.isDuplicate(rulesInfo)){
 			redirectAttributes.addFlashAttribute("message5", "Kural zaten eklenmiş.");
 		}
+		else if (substituteLessonDAO.findSubstituteLessonInfo(rulesInfo.getSubstituteLessonId()).getLab() > takingLessonDAO.findTakingLessonInfo(rulesInfo.getTakingLessonId()).getLab()) {
+			redirectAttributes.addFlashAttribute("message5", "Lab. saati eşit veya büyük olmalı.");
+		}
 		else {
 			this.rulesDAO.saveRules(rulesInfo);
 
 			// Important!!: Need @EnableWebMvc
 			// Add message to flash scope
-			redirectAttributes.addFlashAttribute("message5", "Verilen Kural Eklendi.");
+			redirectAttributes.addFlashAttribute("message5", "Kural eklendi.");
 		}
+		int deptId = takingLessonDAO.findTakingLessonInfo(rulesInfo.getTakingLessonId()).getDeptId();; 
+		int uniId = deptDAO.findDeptInfo(deptId).getUniId();
 		
-
 //		return "redirect:/rulesList";
-		return "redirect:/addRules";
+		return "redirect:/addRules?id="+uniId+"&id2="+deptId;
 	}
 }

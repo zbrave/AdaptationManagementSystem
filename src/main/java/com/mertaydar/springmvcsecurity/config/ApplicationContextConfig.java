@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.mertaydar.springmvcsecurity.dao.ActivationDAO;
+import com.mertaydar.springmvcsecurity.dao.CurriculumDAO;
 import com.mertaydar.springmvcsecurity.dao.DeptDAO;
 import com.mertaydar.springmvcsecurity.dao.MarkDAO;
 import com.mertaydar.springmvcsecurity.dao.OurmarkDAO;
@@ -35,6 +36,7 @@ import com.mertaydar.springmvcsecurity.dao.UniDAO;
 import com.mertaydar.springmvcsecurity.dao.UserDAO;
 import com.mertaydar.springmvcsecurity.dao.UserRoleDAO;
 import com.mertaydar.springmvcsecurity.dao.impl.ActivationDAOImpl;
+import com.mertaydar.springmvcsecurity.dao.impl.CurriculumDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.DeptDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.MarkDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.OurmarkDAOImpl;
@@ -192,6 +194,11 @@ public class ApplicationContextConfig {
   @Bean(name = "ActivationDAO")
   public ActivationDAO getActivationDAO() {
 	  return new ActivationDAOImpl();
+  }
+  
+  @Bean(name = "CurriculumDAO")
+  public CurriculumDAO getCurriculumDAO() {
+	  return new CurriculumDAOImpl();
   }
   
   @Bean(name = "mailSend")

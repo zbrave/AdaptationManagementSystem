@@ -1,5 +1,6 @@
 package com.mertaydar.springmvcsecurity.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -16,6 +17,7 @@ import com.mertaydar.springmvcsecurity.dao.StudentLessonDAO;
 import com.mertaydar.springmvcsecurity.entity.Mark;
 import com.mertaydar.springmvcsecurity.entity.Ourmark;
 import com.mertaydar.springmvcsecurity.entity.StudentLesson;
+import com.mertaydar.springmvcsecurity.model.OurmarkInfo;
 import com.mertaydar.springmvcsecurity.model.StudentLessonInfo;
 
 public class StudentLessonDAOImpl implements StudentLessonDAO {
@@ -65,6 +67,60 @@ public class StudentLessonDAOImpl implements StudentLessonDAO {
         Query query = session.createQuery(sql);
         query.setParameter("code", id);
         return query.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<StudentLessonInfo> listStudentLessonInfosForStudentNoDuplicate(Integer id) {
+		// sql query has to have exact names from own class variable 
+		String sql = "Select new " + StudentLessonInfo.class.getName()//
+                + "(a.id, a.studentId, a.takingLessonId, a.substituteLessonId, a.orgMark, a.convMark) "//
+                + " from " + StudentLesson.class.getName() + " a Where a.studentId = :code";
+		System.out.println(sql.toString());
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(sql);
+        query.setParameter("code", id);
+        List<StudentLessonInfo> list = query.list();
+        List<StudentLessonInfo> list2 = new ArrayList<StudentLessonInfo>();
+        List<Integer> processed = new ArrayList<Integer>();
+        for (StudentLessonInfo l : list) {
+        	boolean dup = false;
+        	List<StudentLessonInfo> dupList = new ArrayList<StudentLessonInfo>();
+        	for (StudentLessonInfo k : list) {
+            	if (!processed.contains(l.getId()) && !processed.contains(k.getId()) && l.getId() != k.getId() && l.getSubstituteLessonId() == k.getSubstituteLessonId()){
+            		if (!dup && !processed.contains(l.getId())) {
+            			System.out.println("add duplist "+l.getId());
+            			dupList.add(l);
+            			processed.add(l.getId());
+            		}
+            		dup = true;
+            		boolean exist = false;
+            		for (StudentLessonInfo d : dupList){
+            			if (d.getId() == k.getId()) {
+            				exist = true;
+            			}
+            		}
+            		if (!exist && processed.add(k.getId())) {
+            			System.out.println("add dupblist "+k.getId());
+            			dupList.add(k);
+            			processed.add(k.getId());
+            		}
+            	}
+            }
+        	if (!dupList.isEmpty())
+        		list2.add(takeAverage(dupList));
+        }
+        for (StudentLessonInfo l : list) {
+        	boolean exist = false;
+        	for (StudentLessonInfo k : list2) {
+        		if (l.getSubstituteLessonId() == k.getSubstituteLessonId()) {
+        			exist = true;
+        		}
+        	}
+        	if (!exist)
+        		list2.add(l);
+        }
+        return list2;
 	}
 
 	@Override
@@ -225,6 +281,41 @@ public class StudentLessonDAOImpl implements StudentLessonDAO {
         if (crit2.list().isEmpty())
         	return "??";
         return ((Ourmark) crit2.uniqueResult()).getMark();
+	}
+	
+	public StudentLessonInfo takeAverage(List<StudentLessonInfo> list) {
+		List<Ourmark> marks = new ArrayList<Ourmark>();
+		System.out.println("takeavarage list size"+list.size());
+		for (StudentLessonInfo l : list) {
+			System.out.println("tules id: "+l.getId());
+		}
+		for (StudentLessonInfo l : list) {
+			Session session = sessionFactory.getCurrentSession();
+	        Criteria crit = session.createCriteria(Ourmark.class);
+	        crit.add(Restrictions.eq("mark", l.getConvMark()));
+	        if (!crit.list().isEmpty()) {
+	        	Ourmark our1 = ((Ourmark) crit.uniqueResult());
+		        marks.add(our1);
+	        }
+		}
+		float total = 0;
+		for (Ourmark m : marks) {
+			total += m.getValue();
+		}
+		total = total / marks.size();
+		System.out.println(total+" "+marks.size());
+		Session session = sessionFactory.getCurrentSession();
+        Criteria crit = session.createCriteria(Ourmark.class);
+        crit.add(Restrictions.eq("value", total));
+        if (crit.list().isEmpty()) {
+        	list.get(0).setConvMark("?");
+        	return list.get(0);
+        }
+        else {
+        	Ourmark our1 = ((Ourmark) crit.uniqueResult());
+	        list.get(0).setConvMark(our1.getMark());
+	        return list.get(0);
+        }
 	}
 
 }

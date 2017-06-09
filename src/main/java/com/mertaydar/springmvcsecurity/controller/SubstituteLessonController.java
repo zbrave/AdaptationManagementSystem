@@ -19,11 +19,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.mertaydar.springmvcsecurity.dao.CurriculumDAO;
 import com.mertaydar.springmvcsecurity.dao.DeptDAO;
 import com.mertaydar.springmvcsecurity.dao.RulesDAO;
 import com.mertaydar.springmvcsecurity.dao.SubstituteLessonDAO;
 import com.mertaydar.springmvcsecurity.dao.TakingLessonDAO;
 import com.mertaydar.springmvcsecurity.dao.UniDAO;
+import com.mertaydar.springmvcsecurity.entity.Curriculum;
+import com.mertaydar.springmvcsecurity.model.CurriculumInfo;
 import com.mertaydar.springmvcsecurity.model.DeptInfo;
 import com.mertaydar.springmvcsecurity.model.RulesInfo;
 import com.mertaydar.springmvcsecurity.model.SubstituteLessonInfo;
@@ -52,6 +55,9 @@ public class SubstituteLessonController {
 	@Autowired
 	private RulesDAO rulesDAO;
 	
+	@Autowired
+	private CurriculumDAO curriculumDAO;
+	
 	/* SubstituteLesson Controller Section */
 	@RequestMapping("/substituteLessonList")
 	public String substituteLessonList(Model model) {
@@ -65,9 +71,11 @@ public class SubstituteLessonController {
 	public String getSubstituteLessonById(@RequestParam Integer id) {
 		String res = "<option id=-1 value=-1>Ders seçin.</option>";
 		List<RulesInfo> listRules = this.rulesDAO.listRulesForLesson(id);
+		CurriculumInfo curriculumInfo = curriculumDAO.findCurriculumInfoActive();
 		for (RulesInfo tmp : listRules) {
 			SubstituteLessonInfo temp = this.substituteLessonDAO.findSubstituteLessonInfo(tmp.getSubstituteLessonId());
-			res = res.concat("<option "+"id="+temp.getId()+" value="+temp.getId()+">"+temp.getCode()+" "+temp.getName()+">Kredi: "+temp.getCredit()+"</option>");
+			if (temp.getCurriculumId() == curriculumInfo.getId())
+				res = res.concat("<option "+"id="+temp.getId()+" value="+temp.getId()+">"+temp.getCode()+" "+temp.getName()+">Kredi: "+temp.getCredit()+"</option>");
 		}
 		return res;
 	}
@@ -76,20 +84,26 @@ public class SubstituteLessonController {
 	@ResponseBody
 	public String getSubstituteLesson() {
 		String res = "<option id=-1 value=-1>Ders seçin.</option>";
+		CurriculumInfo cur = curriculumDAO.findCurriculumInfoActive();
 		List<SubstituteLessonInfo> list = this.substituteLessonDAO.listSubstituteLessonInfos();
 		for (SubstituteLessonInfo tmp : list) {
-			res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+">"+tmp.getCode()+" "+tmp.getName()+">Kredi: "+tmp.getCredit()+"</option>");
+			if (tmp.getCurriculumId() == cur.getId())
+				res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+">"+tmp.getCode()+" "+tmp.getName()+">Kredi: "+tmp.getCredit()+"</option>");
 		}
 		return res;
 	}
 	
 	@RequestMapping(value="/getSubstituteLessons",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
 	@ResponseBody
-	public String getSubstituteLessons() {
+	public String getSubstituteLessons(@RequestParam Integer curriculumId) {
 		String res = "";
+		CurriculumInfo cur = curriculumDAO.findCurriculumInfo(curriculumId);
+		if (cur == null || curriculumId == null)
+			return res;
 		List<SubstituteLessonInfo> list = this.substituteLessonDAO.listSubstituteLessonInfos();
 		for (SubstituteLessonInfo tmp : list) {
-			res = res.concat("<tr><td>"+tmp.getId()+"</td><td>"+tmp.getName()+"</td><td>"+tmp.getCode()+"</td><td>"+tmp.getLang()+"</td><td>"+tmp.getCredit()+"</td><td>"+tmp.getAkts()+"</td><td>"+tmp.getTerm()+"</td><td><a href=\"deleteSubstituteLesson?id="+tmp.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Sil</a></td></tr>");
+			if (tmp.getCurriculumId() == cur.getId())
+				res = res.concat("<tr><td>"+tmp.getId()+"</td><td>"+tmp.getName()+"</td><td>"+tmp.getCode()+"</td><td>"+tmp.getLang()+"</td><td>"+tmp.getCredit()+"</td><td>"+tmp.getAkts()+"</td><td>"+tmp.getTerm()+"</td><td><a href=\"deleteSubstituteLesson?id="+tmp.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Sil</a></td></tr>");
 		}
 		return res;
 	}

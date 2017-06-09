@@ -16,4 +16,6 @@ public interface SubstituteLessonDAO {
     public SubstituteLessonInfo findSubstituteLessonInfo(Integer id);
  
     public void deleteSubstituteLesson(Integer id);
+
+	List<SubstituteLessonInfo> listSubstituteLessonInfos(Integer curriculumId);
 }

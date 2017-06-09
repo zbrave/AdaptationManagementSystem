@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.mertaydar.springmvcsecurity.dao.DeptDAO;
 import com.mertaydar.springmvcsecurity.dao.StudentDAO;
 import com.mertaydar.springmvcsecurity.dao.StudentLessonDAO;
+import com.mertaydar.springmvcsecurity.dao.SubstituteLessonDAO;
 import com.mertaydar.springmvcsecurity.dao.TakingLessonDAO;
 import com.mertaydar.springmvcsecurity.dao.UniDAO;
 import com.mertaydar.springmvcsecurity.entity.Student;
@@ -20,6 +21,7 @@ import com.mertaydar.springmvcsecurity.entity.StudentLesson;
 import com.mertaydar.springmvcsecurity.model.DeptInfo;
 import com.mertaydar.springmvcsecurity.model.StudentInfo;
 import com.mertaydar.springmvcsecurity.model.StudentLessonInfo;
+import com.mertaydar.springmvcsecurity.model.SubstituteLessonInfo;
 import com.mertaydar.springmvcsecurity.model.TakingLessonInfo;
 import com.mertaydar.springmvcsecurity.model.UniInfo;
 
@@ -32,7 +34,7 @@ public class StudentDAOImpl implements StudentDAO {
 	private StudentLessonDAO studentLessonDAO;
 	
 	@Autowired
-	private TakingLessonDAO takingLessonDAO;
+	private SubstituteLessonDAO substituteLessonDAO;
 	
 	@Autowired
 	private DeptDAO deptDAO;
@@ -76,7 +78,94 @@ public class StudentDAOImpl implements StudentDAO {
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<StudentInfo> listStudentInfosForAdv(Integer pageid, Integer total, Integer userid) {
+		// sql query has to have exact names from own class variable 
+		String sql = "Select new " + StudentInfo.class.getName()//
+                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear, a.advisorId) "//
+                + " from " + Student.class.getName() + " a where advisorId="+userid;
+		System.out.println(sql.toString());
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(sql).setFirstResult(pageid-1).setMaxResults(total);
+        return query.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<StudentInfo> listStudentInfosForAdvSize(Integer userid) {
+		// sql query has to have exact names from own class variable 
+		String sql = "Select new " + StudentInfo.class.getName()//
+                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear, a.advisorId) "//
+                + " from " + Student.class.getName() + " a where advisorId="+userid;
+		System.out.println(sql.toString());
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(sql);
+        return query.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<StudentInfo> listStudentInfosBySearch(Integer pageid, Integer total, String val, String cate) {
+		// sql query has to have exact names from own class variable 
+		int to = pageid - 1;
+		int from = to + total;
+		if (cate.equals("deptId")) {
+			List<StudentInfo> list = new ArrayList<StudentInfo>();
+			List<DeptInfo> depts = this.deptDAO.listDeptInfoWithName(val);
+			if (depts == null || depts.isEmpty()) {
+				return list;
+			}
+			for (DeptInfo dept : depts) {
+				String sql = "Select new " + StudentInfo.class.getName()//
+		                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear, a.advisorId) "//
+		                + " from " + Student.class.getName() + " a where "+cate+" like :val";
+		        Session session = sessionFactory.getCurrentSession();
+		        Query query = session.createQuery(sql).setParameter("val", dept.getId());
+		        System.out.println(sql.toString());
+		        list.addAll(query.list());
+			}
+			if (list.size() < from) {
+				from = list.size();
+			}
+        	return list.subList(to, from);
+		}
+		else if (cate.equals("uni")) {
+			List<StudentInfo> list = new ArrayList<StudentInfo>();
+			List<UniInfo> unis = this.uniDAO.listUniInfoWithName(val);
+			List<DeptInfo> depts = new ArrayList<DeptInfo>();
+			if (unis == null || unis.isEmpty()) {
+				return list;
+			}
+			for (UniInfo uni : unis) {
+				 depts.addAll(this.deptDAO.listDeptFromUni(uni.getId()));
+			}
+			for (DeptInfo dept : depts) {
+				String sql = "Select new " + StudentInfo.class.getName()//
+		                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear, a.advisorId) "//
+		                + " from " + Student.class.getName() + " a where a.deptId like :val";
+		        Session session = sessionFactory.getCurrentSession();
+		        Query query = session.createQuery(sql).setParameter("val", dept.getId());
+		        System.out.println(sql.toString());
+		        list.addAll(query.list());
+			}
+			if (list.size() < from) {
+				from = list.size();
+			}
+        	return list.subList(to, from);
+		}
+		else {
+			String sql = "Select new " + StudentInfo.class.getName()//
+	                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear, a.advisorId) "//
+	                + " from " + Student.class.getName() + " a where "+cate+" like '%"+val+"%'";
+			System.out.println(sql.toString());
+	        Session session = sessionFactory.getCurrentSession();
+	        Query query = session.createQuery(sql).setFirstResult(pageid-1).setMaxResults(total);
+	        return query.list();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<StudentInfo> listStudentInfosBySearchSize(String val, String cate) {
 		// sql query has to have exact names from own class variable 
 		if (cate.equals("deptId")) {
 			List<StudentInfo> list = new ArrayList<StudentInfo>();
@@ -89,7 +178,7 @@ public class StudentDAOImpl implements StudentDAO {
 		                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear, a.advisorId) "//
 		                + " from " + Student.class.getName() + " a where "+cate+" like :val";
 		        Session session = sessionFactory.getCurrentSession();
-		        Query query = session.createQuery(sql).setParameter("val", dept.getId()).setFirstResult(pageid-1).setMaxResults(total);
+		        Query query = session.createQuery(sql).setParameter("val", dept.getId());
 		        System.out.println(sql.toString());
 		        list.addAll(query.list());
 			}
@@ -110,7 +199,7 @@ public class StudentDAOImpl implements StudentDAO {
 		                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear, a.advisorId) "//
 		                + " from " + Student.class.getName() + " a where a.deptId like :val";
 		        Session session = sessionFactory.getCurrentSession();
-		        Query query = session.createQuery(sql).setParameter("val", dept.getId()).setFirstResult(pageid-1).setMaxResults(total);
+		        Query query = session.createQuery(sql).setParameter("val", dept.getId());
 		        System.out.println(sql.toString());
 		        list.addAll(query.list());
 			}
@@ -122,7 +211,113 @@ public class StudentDAOImpl implements StudentDAO {
 	                + " from " + Student.class.getName() + " a where "+cate+" like '%"+val+"%'";
 			System.out.println(sql.toString());
 	        Session session = sessionFactory.getCurrentSession();
+	        Query query = session.createQuery(sql);
+	        return query.list();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<StudentInfo> listStudentInfosBySearchForAdv(Integer pageid, Integer total, String val, String cate, Integer userid) {
+		// sql query has to have exact names from own class variable 
+		if (cate.equals("deptId")) {
+			List<StudentInfo> list = new ArrayList<StudentInfo>();
+			List<DeptInfo> depts = this.deptDAO.listDeptInfoWithName(val);
+			if (depts == null || depts.isEmpty()) {
+				return list;
+			}
+			for (DeptInfo dept : depts) {
+				String sql = "Select new " + StudentInfo.class.getName()//
+		                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear, a.advisorId) "//
+		                + " from " + Student.class.getName() + " a where advisorId="+userid+" AND "+cate+" like :val";
+		        Session session = sessionFactory.getCurrentSession();
+		        Query query = session.createQuery(sql).setParameter("val", dept.getId()).setFirstResult(pageid-1).setMaxResults(total);
+		        System.out.println(sql.toString());
+		        list.addAll(query.list());
+			}
+        	return list;
+		}
+		else if (cate.equals("uni")) {
+			List<StudentInfo> list = new ArrayList<StudentInfo>();
+			List<UniInfo> unis = this.uniDAO.listUniInfoWithName(val);
+			List<DeptInfo> depts = new ArrayList<DeptInfo>();
+			if (unis == null || unis.isEmpty()) {
+				return list;
+			}
+			for (UniInfo uni : unis) {
+				 depts.addAll(this.deptDAO.listDeptFromUni(uni.getId()));
+			}
+			for (DeptInfo dept : depts) {
+				String sql = "Select new " + StudentInfo.class.getName()//
+		                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear, a.advisorId) "//
+		                + " from " + Student.class.getName() + " a where advisorId="+userid+" AND a.deptId like :val";
+		        Session session = sessionFactory.getCurrentSession();
+		        Query query = session.createQuery(sql).setParameter("val", dept.getId()).setFirstResult(pageid-1).setMaxResults(total);
+		        System.out.println(sql.toString());
+		        list.addAll(query.list());
+			}
+        	return list;
+		}
+		else {
+			String sql = "Select new " + StudentInfo.class.getName()//
+	                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear, a.advisorId) "//
+	                + " from " + Student.class.getName() + " a where advisorId="+userid+" AND "+cate+" like '%"+val+"%'";
+			System.out.println(sql.toString());
+	        Session session = sessionFactory.getCurrentSession();
 	        Query query = session.createQuery(sql).setFirstResult(pageid-1).setMaxResults(total);
+	        return query.list();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<StudentInfo> listStudentInfosBySearchForAdvSize(String val, String cate, Integer userid) {
+		// sql query has to have exact names from own class variable 
+		if (cate.equals("deptId")) {
+			List<StudentInfo> list = new ArrayList<StudentInfo>();
+			List<DeptInfo> depts = this.deptDAO.listDeptInfoWithName(val);
+			if (depts == null || depts.isEmpty()) {
+				return list;
+			}
+			for (DeptInfo dept : depts) {
+				String sql = "Select new " + StudentInfo.class.getName()//
+		                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear, a.advisorId) "//
+		                + " from " + Student.class.getName() + " a where advisorId="+userid+" AND "+cate+" like :val";
+		        Session session = sessionFactory.getCurrentSession();
+		        Query query = session.createQuery(sql).setParameter("val", dept.getId());
+		        System.out.println(sql.toString());
+		        list.addAll(query.list());
+			}
+        	return list;
+		}
+		else if (cate.equals("uni")) {
+			List<StudentInfo> list = new ArrayList<StudentInfo>();
+			List<UniInfo> unis = this.uniDAO.listUniInfoWithName(val);
+			List<DeptInfo> depts = new ArrayList<DeptInfo>();
+			if (unis == null || unis.isEmpty()) {
+				return list;
+			}
+			for (UniInfo uni : unis) {
+				 depts.addAll(this.deptDAO.listDeptFromUni(uni.getId()));
+			}
+			for (DeptInfo dept : depts) {
+				String sql = "Select new " + StudentInfo.class.getName()//
+		                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear, a.advisorId) "//
+		                + " from " + Student.class.getName() + " a where advisorId="+userid+" AND a.deptId like :val";
+		        Session session = sessionFactory.getCurrentSession();
+		        Query query = session.createQuery(sql).setParameter("val", dept.getId());
+		        System.out.println(sql.toString());
+		        list.addAll(query.list());
+			}
+        	return list;
+		}
+		else {
+			String sql = "Select new " + StudentInfo.class.getName()//
+	                + "(a.id, a.deptId, a.name, a.surname, a.no, a.adpScore, a.recordYear, a.advisorId) "//
+	                + " from " + Student.class.getName() + " a where advisorId="+userid+" AND "+cate+" like '%"+val+"%'";
+			System.out.println(sql.toString());
+	        Session session = sessionFactory.getCurrentSession();
+	        Query query = session.createQuery(sql);
 	        return query.list();
 		}
 	}
@@ -202,7 +397,7 @@ public class StudentDAOImpl implements StudentDAO {
 		int total = 0;
 		int val = -1;
 		for (StudentLessonInfo l : list) {
-			TakingLessonInfo les = takingLessonDAO.findTakingLessonInfo(l.getSubstituteLessonId());
+			SubstituteLessonInfo les = substituteLessonDAO.findSubstituteLessonInfo(l.getSubstituteLessonId());
 			total += les.getAkts();
 		}
 		if (total < coef){
@@ -229,8 +424,10 @@ public class StudentDAOImpl implements StudentDAO {
 		List<StudentLessonInfo> list = studentLessonDAO.listStudentLessonInfosForStudent(id);
 		int total = 0;
 		int val = -1;
+		System.out.println("id"+id+" coef"+coef);
 		for (StudentLessonInfo l : list) {
-			TakingLessonInfo les = takingLessonDAO.findTakingLessonInfo(l.getSubstituteLessonId());
+			System.out.println("x"+l.getId()+" "+l.getSubstituteLessonId());
+			SubstituteLessonInfo les = substituteLessonDAO.findSubstituteLessonInfo(l.getSubstituteLessonId());
 			total += les.getCredit();
 		}
 		System.out.println("tot"+total+" coef "+coef);

@@ -9,9 +9,10 @@
 	<spring:url value="/resources/js/bootstrap.js" var="bootstrapJS" />
 	<spring:url value="/resources/others/ams.css" var="amsCSS" />
 	<spring:url value="/resources/others/ams.js" var="amsJS" />
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<spring:url value="/resources/js/jquery.min.js" var="jqueryJS" />
 	<link href="${bootstrapCSS}" rel="stylesheet" />
 	<script src="${bootstrapJS}"></script>
+	<script src="${jqueryJS}"></script>
 	<link href="${amsCSS}" rel="stylesheet" />
 	<script src="${amsJS}"></script>
 	<title>Login</title>	
@@ -27,7 +28,7 @@
         <form method="post" action="${pageContext.request.contextPath}/j_spring_security_check" role="login" method='POST'>
           <img src="http://www.yildiz.edu.tr/images/files/ytulogopng.png" class="img-responsive" alt="" style="width:50%"/>
           <h3 class="text-center">Yıldız Teknik Üniversitesi</h3>
-		  <h4 class="text-center">İntibak Yonetim Sistemi</h4>
+		  <h4 class="text-center">İntibak Yönetim Sistemi</h4>
 		  <!-- /login?error=true -->
       <c:if test="${not empty signupMsg}">
          <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${signupMsg}
@@ -46,13 +47,13 @@
           
           <button type="submit" name="go" class="btn btn-lg btn-primary btn-block">Giriş Yap</button>
           <div>
-            <a href="#" onclick="$('#loginbox').hide(); $('#signupbox').show()">Yeni hesap ac</a> yada <a href="#">Sifremi unuttum</a>
+            <a href="#" onclick="$('#loginbox').hide(); $('#signupbox').show()">Yeni hesap aç</a> yada <a href="#">Şifremi unuttum</a>
           </div>
           
         </form>
         
         <div class="form-links">
-          <a href="#">www.ce.yildiz.edu.tr</a>
+          <a href="www.ce.yildiz.edu.tr">YTÜ Bilgisayar Müh. Bölümü Websitesi</a>
         </div>
       </section>  
       </div>
@@ -79,18 +80,18 @@
                 ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</a>
 		</div>
     </c:if>
-          <input type='text' class="form-control" id="username" placeholder="Kullanıcı adı" name='username' value=''>          
-          <input type='text' class="form-control" id="email" placeholder="E-posta adresi" name='email' value=''>
-          <input type='password' class="form-control" id="password" placeholder="Şifre" name='password' />
-          <input type='password' class="form-control" id="passwordConf" placeholder="Şifre doğrulama" name='passwordConf' />
-                    
+          <input type='text' class="form-control" id="username" placeholder="Kullanıcı adı" name='username' value='' required/>          
+          <input type='text' class="form-control" id="email" placeholder="E-posta adresi" name='email' value='' required/>
+          <input type='password' class="form-control" id="password" placeholder="Şifre" name='password' required/>
+          <input type='password' class="form-control" id="passwordConf" placeholder="Şifre doğrulama" name='passwordConf' required/>
+          <input type='text' class="form-control" id="tel" placeholder="Telefon" name='tel' required/>          
           
           <div class="pwstrength_viewport_progress"></div>
           
           
-          <button type="submit" name="go" class="btn btn-lg btn-primary btn-block">Kayıt ol</button>
+          <button type="submit" name="go" class="btn btn-lg btn-warning btn-block">Kayıt ol</button>
           <div>
-            <a href="#" onclick="$('#signupbox').hide(); $('#loginbox').show()">Yeni hesap ac</a> yada <a href="#">Sifremi unuttum</a>
+            <a href="#" onclick="$('#signupbox').hide(); $('#loginbox').show()">Giriş yap</a> yada <a href="#">Şifremi unuttum</a>
           </div>
           
         </form>

@@ -17,6 +17,7 @@
 	<script src="${bootstrapConfirmationJS}"></script>
 	<link href="${amsCSS}" rel="stylesheet" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <script type="text/javascript">
 $(document).ready(function(){
 	var getUrlParameter = function getUrlParameter(sParam) {
@@ -43,17 +44,17 @@ $(document).ready(function(){
 	console.log(l);
 	console.log(r);
 	if (search != undefined && cate != undefined) {
-		$("#lefta").attr("href", "listUser?pageid="+l+"&searchTerm="+search+"&category="+cate);
-		$("#righta").attr("href", "listUser?pageid="+r+"&searchTerm="+search+"&category="+cate);
+		$("#lefta").attr("href", "listManager?pageid="+l+"&searchTerm="+search+"&category="+cate);
+		$("#righta").attr("href", "listManager?pageid="+r+"&searchTerm="+search+"&category="+cate);
 		for (i = 1; i <= ${pageSize}; i++) {
-			$("#mid"+i).attr("href", "listUser?pageid="+i+"&searchTerm="+search+"&category="+cate);	
+			$("#mid"+i).attr("href", "listManager?pageid="+i+"&searchTerm="+search+"&category="+cate);	
 		}
 	}
 	else {
-		$("#lefta").attr("href", "listUser?pageid="+l);
-		$("#righta").attr("href", "listUser?pageid="+r);
+		$("#lefta").attr("href", "listManager?pageid="+l);
+		$("#righta").attr("href", "listManager?pageid="+r);
 		for (i = 1; i <= ${pageSize}; i++) {
-			$("#mid"+i).attr("href", "listUser?pageid="+i);	
+			$("#mid"+i).attr("href", "listManager?pageid="+i);	
 		}
 	}
 	if (pvar == 1) {
@@ -61,6 +62,10 @@ $(document).ready(function(){
 		$("#lefta").attr("href", "#");
 	}
 	if (pvar == ${pageSize}) {
+		$('#right').addClass("disabled");
+		$("#righta").attr("href", "#");
+	}
+	if (${pageSize} == 0) {
 		$('#right').addClass("disabled");
 		$("#righta").attr("href", "#");
 	}
@@ -82,13 +87,12 @@ $(document).ready(function(){
 	
 	<div class="container">
     <div class="row custyle">
-    	<form action="${pageContext.request.contextPath}/listUser" class="form-inline">
+    	<form action="${pageContext.request.contextPath}/listManager" class="form-inline">
     		<input type="hidden" name="pageid" value="1" />
 		    <input class="input-sm" name="searchTerm" placeholder="" />
 		    <select name="category" class="form-control" style="width: 15%">
 		    	<option value="username">Kullanıcı adı</option>
 		    	<option value="email">E-Mail</option>
-		    	<option value="studentId">Öğrenci Id</option>
 		    	<option value="enabled">Yasaklı</option>
 		    </select>
 		    <button class="btn btn-default">Ara</button>
@@ -109,7 +113,6 @@ $(document).ready(function(){
             <th>ID</th>
             <th>Kullanıcı adı</th>
             <th>E-Mail</th>
-            <th>Öğrenci Id</th>
             <th style="text-align: center;">Giriş yapabilir ?</th>
             <th class="text-center">Eylem</th>
         </tr>
@@ -119,7 +122,6 @@ $(document).ready(function(){
                 <td>${info.id}</td>
                 <td>${info.username}</td>
                 <td>${info.email}</td>
-                <td><a href="${pageContext.request.contextPath}/getStudentData?id=${info.studentId}">${info.studentId}</a></td>
                 <td>
                 	<c:if test="${info.enabled == true}">
                 		<label class="btn btn-block">
@@ -135,7 +137,7 @@ $(document).ready(function(){
                 <td class="text-center">
                	
                 <c:if test="${info.manager == true && empty info.studentId}">
-                	<a href="setManager?id=${info.id}" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> İntibak görevini sil</a>
+                	<a href="setManager?id=${info.id}" class="btn btn-danger btn-xs"  data-toggle="confirmation" data-btn-ok-label="Evet" data-btn-cancel-label="Hayır" data-title="Kişinin sorumlu olduğu intibaklar varsa danışman bilgileri boşa çıkacaktır. Emin misiniz?"><span class="glyphicon glyphicon-remove"></span> İntibak görevini sil</a>
             	</c:if>
             	<c:if test="${info.manager == false && empty info.studentId}">
             		<a href="setManager?id=${info.id}" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-plus"></span> İntibak görevi ata</a>
@@ -154,7 +156,7 @@ $(document).ready(function(){
     <ul class="pagination pull-right">
 	  <li id="left"><a id="lefta" href=""><span class="glyphicon glyphicon-chevron-left"></span></a></li>
 	  <c:forEach var="i" begin="1" end="${pageSize }">
-	  <li id="${i }"><a id="mid${i}" href="listUser?pageid=${i }">${i }</a></li>
+	  <li id="${i }"><a id="mid${i}" href="listManager?pageid=${i }">${i }</a></li>
 	  </c:forEach>
 	  <li id="right"><a id="righta" href=""><span class="glyphicon glyphicon-chevron-right"></span></a></li>
 	</ul>

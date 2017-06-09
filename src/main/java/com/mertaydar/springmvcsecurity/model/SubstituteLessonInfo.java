@@ -11,13 +11,15 @@ public class SubstituteLessonInfo {
 	private Integer akts;
 	private Integer term;
 	private Integer conditionId;
+	private Integer curriculumId;
+	private Integer base;
 	
 	public SubstituteLessonInfo() {
 		super();
 	}
 
 	public SubstituteLessonInfo(Integer id, String name, String code, String lang, Integer credit, Integer lab, Integer akts,
-			Integer term, Integer conditionId) {
+			Integer term, Integer conditionId, Integer curriculumId, Integer base) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -28,6 +30,8 @@ public class SubstituteLessonInfo {
 		this.akts = akts;
 		this.term = term;
 		this.conditionId = conditionId;
+		this.curriculumId = curriculumId;
+		this.base = base;
 	}
 
 
@@ -102,6 +106,22 @@ public class SubstituteLessonInfo {
 
 	public void setConditionId(Integer conditionId) {
 		this.conditionId = conditionId;
+	}
+
+	public Integer getCurriculumId() {
+		return curriculumId;
+	}
+
+	public void setCurriculumId(Integer curriculumId) {
+		this.curriculumId = curriculumId;
+	}
+
+	public Integer getBase() {
+		return base;
+	}
+
+	public void setBase(Integer base) {
+		this.base = base;
 	}
 	
 }

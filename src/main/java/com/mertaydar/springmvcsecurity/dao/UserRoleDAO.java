@@ -14,4 +14,5 @@ public interface UserRoleDAO {
 	
 	public List<String> getUserRoles(Integer userId);
 	public List<UserRoleInfo> listUserRoleInfos();
+	boolean isManager(Integer userid);
 }

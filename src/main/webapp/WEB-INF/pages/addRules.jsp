@@ -9,9 +9,10 @@
 <spring:url value="/resources/css/bootstrap.css" var="bootstrapCSS" />
 	<spring:url value="/resources/js/bootstrap.js" var="bootstrapJS" />
 	<spring:url value="/resources/others/ams.css" var="amsCSS" />
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<spring:url value="/resources/js/jquery.min.js" var="jqueryJS" />
 	<link href="${bootstrapCSS}" rel="stylesheet" />
 	<script src="${bootstrapJS}"></script>
+	<script src="${jqueryJS}"></script>
 	<link href="${amsCSS}" rel="stylesheet" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script
@@ -41,6 +42,11 @@ $(document).ready(function(){
 	        $('#marks > tbody:last-child').html(data);
 	    });
 	});
+	$('#curriculumId').on('change',function(){
+		$.get("${pageContext.request.contextPath}/getSubstituteLessons?curriculumId="+ $(this).children("option").filter(":selected").attr("id"), null, function (data) {
+	        $('#subLes > tbody:last-child').html(data);
+	    });
+	});
 	$('#deptId').on('change',function(){
 		$.get("${pageContext.request.contextPath}/getTakingLessons?id="+ $(this).children("option").filter(":selected").attr("id"), null, function (data) {
 	        $('#takLes > tbody:last-child').html(data);
@@ -63,6 +69,27 @@ $(document).ready(function(){
 	});
 });</script>
 <script type="text/javascript">
+
+function GetURLParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++)
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam)
+        {
+            return sParameterName[1];
+        }
+    }
+}
+function doActive() {
+		var x = $("#curriculumId").children("option").filter(":selected").attr("id");
+		window.location.href = '${pageContext.request.contextPath}/doActive?id='+x;
+	}
+
+</script>
+<script type="text/javascript">
 $(document).ready(function(){
 	$('#deptId2').on('change',function(){
 		$.get("${pageContext.request.contextPath}/getTakingLesson?id="+ $(this).children("option").filter(":selected").attr("id"), null, function (data) {
@@ -74,9 +101,6 @@ $(document).ready(function(){
 	});
 	$.get("${pageContext.request.contextPath}/getUnis", null, function (data) {
 	        $('#unis > tbody:last-child').html(data);
-	    });
-	$.get("${pageContext.request.contextPath}/getSubstituteLessons", null, function (data) {
-	        $('#subLes > tbody:last-child').html(data);
 	    });
 });</script>
 
@@ -91,6 +115,39 @@ $(document).ready(function(){
 </head>
 <body>
 	<%@include file="navbar.jsp" %>
+	
+	<div id="newStu" class="container modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none; margin-top: 50px;">
+		<div class="row">
+            <div class="panel panel-primary">
+            <div class="panel-heading">Yeni Müfredat Ekle<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</button></div>
+	            <div class="panel-body">
+	            <form:form action="saveCurriculum" method="POST" modelAttribute="curriculumForm">
+					<div class="form-group">
+						<input id="id" name="id" type="hidden" value=""/>
+						
+						<label class="control-label">Müfredat Yılı</label>
+									 			
+						<input id="year" name="year" class="form-control" value=""/>
+				    
+				    	<label class="control-label">Aktif yıl yapılsın mı ?</label>
+				                       
+				        <select id="enabled" class="form-control" name="enabled" >
+				        	<option value="1" selected>Evet</option>
+				        	<option value="0" selected>Hayır</option>
+				        </select>
+				          
+				        
+				        <br/>
+				        <button type="submit" class="btn btn-primary" value="Ekle" >Ekle</button> 
+			        </div>
+		        </form:form>
+		        </div>
+	        </div>
+        </div>
+	</div>
+	
 	<div class="col-lg-1"></div>
 	<!-- Forms -->
 	<div class="col-lg-5">
@@ -100,7 +157,7 @@ $(document).ready(function(){
 	            <form:form action="saveRules" method="POST" modelAttribute="rulesForm">
 					<div class="form-group">
 						<input id="id" name="id" type="hidden" value=""/>
-						
+
 						<label class="control-label">Üniversite Adı</label>
 									 			
 				   		<select id="uniId3" class="form-control" name="uniId3" ></select>
@@ -266,6 +323,10 @@ $(document).ready(function(){
 					            <label class="control-label">AKTS</label>
 					            
 					            <input id="akts" class="form-control input-sm" name="akts" type="text" value="" style="height: 35px!important"/>
+					            
+					            <label class="control-label">Lab Saati</label>
+					            
+					            <input id="lab" class="form-control input-sm" name="lab" type="text" value="" style="height: 35px!important"/>
 					 			
 					 			<label class="control-label">Ders Dönemi</label>
 					                       
@@ -300,9 +361,25 @@ $(document).ready(function(){
 						    </div>
 						</div>
                         <div class="tab-pane fade" id="substituteLessonTab">
+                        <label class="control-label">Müfredat yılı</label>
+                        <button onclick="doActive()" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Aktif yıl yap</button>
+                        <a href="#" class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#newStu" onclick="$('#newStu').show();"><b>+</b> Yeni Müfredat Ekle</a>
                         	<form:form action="saveSubstituteLesson" method="POST" modelAttribute="substituteLessonForm">
 					   			
 					   			<input id="id" name="id" type="hidden" value=""/>
+					            
+					            <select id="curriculumId" name="curriculumId" class="form-control">
+		                            <c:forEach items="${curriculums }" var="data" >
+		                            <c:choose>
+			                        	<c:when test="${data.enabled == true}">
+			                        		<option id="${data.id }" value="${data.id }" selected>${data.year }</option>
+			                        	</c:when>
+			                        	<c:otherwise>
+			                        		<option id="${data.id }" value="${data.id }" >${data.year }</option>
+			                        	</c:otherwise>
+			                        </c:choose>
+			                        </c:forEach>
+			                    </select>
 					            
 					            <label class="control-label">Ders Adı</label>
 					                       
@@ -323,6 +400,10 @@ $(document).ready(function(){
 					            <label class="control-label">AKTS</label>
 					            
 					            <input id="akts" class="form-control input-sm" name="akts" type="text" value="" style="height: 35px!important"/>
+					            
+					            <label class="control-label">Lab Saati</label>
+					            
+					            <input id="lab" class="form-control input-sm" name="lab" type="text" value="" style="height: 35px!important"/>
 					 			
 					 			<label class="control-label">Ders Dönemi</label>
 					                       
@@ -351,7 +432,18 @@ $(document).ready(function(){
 							        </tr>
 							    </thead>
 							   	<tbody>
-							   		
+						   			<c:forEach items="${subLes }" var="data">
+						   				<tr>
+						   					<td>${data.id }</td>
+						   					<td>${data.name }</td>
+						   					<td>${data.code }</td>
+						   					<td>${data.lang }</td>
+						   					<td>${data.credit }</td>
+						   					<td>${data.akts }</td>
+						   					<td>${data.term }</td>
+						   					<td><a href="deleteSubstituteLesson?id=${data.id }" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Sil</a></td>
+					   					</tr>
+						   			</c:forEach>
 							   	</tbody>
 							    </table>
 						    </div>
@@ -405,6 +497,9 @@ $(document).ready(function(){
     	</div>		
 	</div>
 	<script type="text/javascript">
+	$( document ).ready(function() {
+    
+
   	var url = document.location.toString();
 	if (url.match('#')) {
 	    $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
@@ -413,7 +508,40 @@ $(document).ready(function(){
 	// Change hash for page-reload
 	$('.nav-tabs a').on('shown.bs.tab', function (e) {
 	    window.location.hash = e.target.hash;
-	})
-  </script>
+	});
+	var val = GetURLParameter('id');
+	var val2 = GetURLParameter('id2');   // get params from URL
+	setTimeout(function() {
+		document.querySelector('#uniId [id="' + val + '"]').selected = true;
+		document.querySelector('#uniId2 [id="' + val + '"]').selected = true;
+		document.querySelector('#uniId3 [id="' + val + '"]').selected = true;
+		document.querySelector('#uniId4 [id="' + val + '"]').selected = true;
+		$.get("${pageContext.request.contextPath}/getDept?id="+ $("#uniId3").children("option").filter(":selected").attr("id"), null, function (data) {
+	        $("#deptId2").html(data);
+	    });
+	    $.get("${pageContext.request.contextPath}/getDept?id="+ $("#uniId2").children("option").filter(":selected").attr("id"), null, function (data) {
+	        $("#deptId").html(data);
+	    });
+	    $.get("${pageContext.request.contextPath}/getDepts?id="+ $("#uniId").children("option").filter(":selected").attr("id"), null, function (data) {
+	        $('#depts > tbody:last-child').html(data);
+	    });
+	    $.get("${pageContext.request.contextPath}/getMarks?id="+ $("#uniId4").children("option").filter(":selected").attr("id"), null, function (data) {
+	        $('#marks > tbody:last-child').html(data);
+	    });
+		setTimeout(function() {
+			document.querySelector('#deptId2 [id="' + val2 + '"]').selected = true;
+			document.querySelector('#deptId [id="' + val2 + '"]').selected = true;
+			$.get("${pageContext.request.contextPath}/getTakingLessons?id="+ $("#deptId").children("option").filter(":selected").attr("id"), null, function (data) {
+	        $('#takLes > tbody:last-child').html(data);
+	        $.get("${pageContext.request.contextPath}/getTakingLesson?id="+ $("#deptId2").children("option").filter(":selected").attr("id"), null, function (data) {
+		        $("#takingLessonId").html(data);
+		    });
+		    $.get("${pageContext.request.contextPath}/getRules?id="+ $("#deptId2").children("option").filter(":selected").attr("id"), null, function (data) {
+		        $('#rules > tbody:last-child').html(data);
+		    });
+	    });
+		}, 150);
+	}, 150);
+});  </script>
 </body>
 </html>

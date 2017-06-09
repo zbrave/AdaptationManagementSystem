@@ -31,8 +31,21 @@ public class SubstituteLessonDAOImpl implements SubstituteLessonDAO {
 	public List<SubstituteLessonInfo> listSubstituteLessonInfos() {
 		// sql query has to have exact names from own class variable 
 		String sql = "Select new " + SubstituteLessonInfo.class.getName()//
-                + "(a.id, a.name, a.code, a.lang, a.credit, a.lab, a.akts, a.term, a.conditionId) "//
+                + "(a.id, a.name, a.code, a.lang, a.credit, a.lab, a.akts, a.term, a.conditionId, a.curriculumId, a.base) "//
                 + " from " + SubstituteLesson.class.getName() + " a ";
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(sql);
+        return query.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SubstituteLessonInfo> listSubstituteLessonInfos(Integer curriculumId) {
+		// sql query has to have exact names from own class variable 
+		// get curri id from yead
+		String sql = "Select new " + SubstituteLessonInfo.class.getName()//
+                + "(a.id, a.name, a.code, a.lang, a.credit, a.lab, a.akts, a.term, a.conditionId, a.curriculumId, a.base) "//
+                + " from " + SubstituteLesson.class.getName() + " a where a.curriculumId="+curriculumId;
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery(sql);
         return query.list();
@@ -68,6 +81,8 @@ public class SubstituteLessonDAOImpl implements SubstituteLessonDAO {
         substituteLesson.setAkts(substituteLessonInfo.getAkts());
         substituteLesson.setLab(substituteLessonInfo.getLab());
         substituteLesson.setConditionId(substituteLessonInfo.getConditionId());
+        substituteLesson.setCurriculumId(substituteLessonInfo.getCurriculumId());
+        substituteLesson.setBase(substituteLessonInfo.getBase());
  
         if (isNew) {
             Session session = this.sessionFactory.getCurrentSession();
@@ -82,7 +97,7 @@ public class SubstituteLessonDAOImpl implements SubstituteLessonDAO {
         if (substituteLesson == null) {
             return null;
         }
-        return new SubstituteLessonInfo(substituteLesson.getId(), substituteLesson.getName(), substituteLesson.getCode(), substituteLesson.getLang(), substituteLesson.getCredit(), substituteLesson.getLab(), substituteLesson.getAkts(), substituteLesson.getTerm(), substituteLesson.getConditionId());
+        return new SubstituteLessonInfo(substituteLesson.getId(), substituteLesson.getName(), substituteLesson.getCode(), substituteLesson.getLang(), substituteLesson.getCredit(), substituteLesson.getLab(), substituteLesson.getAkts(), substituteLesson.getTerm(), substituteLesson.getConditionId(), substituteLesson.getCurriculumId(), substituteLesson.getBase());
 	}
 
 	@Override

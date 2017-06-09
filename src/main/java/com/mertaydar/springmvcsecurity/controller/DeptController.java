@@ -164,6 +164,6 @@ public class DeptController {
 		redirectAttributes.addFlashAttribute("message2", "Bölüm eklendi.");
 
 //		return "redirect:/deptList";
-		return "redirect:/addRules#deptTab";
+		return "redirect:/addRules?id="+deptInfo.getUniId()+"#deptTab";
 	}
 }

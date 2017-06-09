@@ -27,7 +27,17 @@ $(document).ready(function(){
 					<c:forEach var="role"
 					items="${pageContext['request'].userPrincipal.principal.authorities}">
 						<c:if test="${role.authority == 'ROLE_ADMIN' }">
-							<li id ="listUser"><a href="${pageContext.request.contextPath}/listUser?pageid=1"><span class="glyphicon glyphicon-log-in"></span> Kullanıcılar</a></li>
+							<li id ="listAdmin"><a href="${pageContext.request.contextPath}/listAdmin?pageid=1"><span class="glyphicon glyphicon-log-in"></span> Yöneticiler</a></li>
+							<li id ="listManager"><a href="${pageContext.request.contextPath}/listManager?pageid=1"><span class="glyphicon glyphicon-log-in"></span> İntibak Görevlileri</a></li>
+							<li id ="listUser"><a href="${pageContext.request.contextPath}/listUser?pageid=1"><span class="glyphicon glyphicon-log-in"></span> Öğrenciler</a></li>
+							<li id ="Student"><a href="${pageContext.request.contextPath}/Student?pageid=1"><span class="glyphicon glyphicon-log-in"></span> İntibaklar</a></li>
+							<li id="addRules"><a href="${pageContext.request.contextPath}/addRules" ><span class="glyphicon glyphicon-plus"></span> Yeni Kural</a></li>
+							<li id="Ourmark"><a href="${pageContext.request.contextPath}/Ourmark" ><span class="glyphicon glyphicon-plus"></span> Not Sistemi</a></li>
+						</c:if>
+					</c:forEach>
+					<c:forEach var="role"
+					items="${pageContext['request'].userPrincipal.principal.authorities}">
+						<c:if test="${role.authority == 'ROLE_MANAGER' }">
 							<li id ="Student"><a href="${pageContext.request.contextPath}/Student?pageid=1"><span class="glyphicon glyphicon-log-in"></span> Öğrenciler</a></li>
 							<li id="addRules"><a href="${pageContext.request.contextPath}/addRules" ><span class="glyphicon glyphicon-plus"></span> Yeni Kural</a></li>
 							<li id="Ourmark"><a href="${pageContext.request.contextPath}/Ourmark" ><span class="glyphicon glyphicon-plus"></span> Not Sistemi</a></li>

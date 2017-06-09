@@ -16,6 +16,18 @@ public interface UserDAO {
     public UserInfo findLoginUserInfo(String username);
     public List<UserInfo> listUserInfos();
     public List<UserInfo> listUserInfos(Integer pageid, Integer total);
-    public List<UserInfo> listUserInfosRoleAdmin();
     public List<UserInfo> listUserInfosBySearch(Integer pageid, Integer total, String val, String cate);
+	List<UserInfo> listUserInfosRoleManager();
+	List<UserInfo> listUserInfosBySearchSize(String val, String cate);
+	List<UserInfo> listUserInfosRoleUser();
+	List<UserInfo> listUserInfosBySearchRoleUser(Integer pageid, Integer total, String val, String cate);
+	List<UserInfo> listUserInfosBySearchSizeRoleUser(String val, String cate);
+	List<UserInfo> listUserInfosRoleUser(Integer pageid, Integer total);
+	List<UserInfo> listUserInfosBySearchSizeRoleManager(String val, String cate);
+	List<UserInfo> listUserInfosBySearchRoleManager(Integer pageid, Integer total, String val, String cate);
+	List<UserInfo> listUserInfosRoleManager(Integer pageid, Integer total);
+	List<UserInfo> listUserInfosRoleAdmin();
+	List<UserInfo> listUserInfosRoleAdmin(Integer pageid, Integer total);
+	List<UserInfo> listUserInfosBySearchRoleAdmin(Integer pageid, Integer total, String val, String cate);
+	List<UserInfo> listUserInfosBySearchSizeRoleAdmin(String val, String cate);
 }

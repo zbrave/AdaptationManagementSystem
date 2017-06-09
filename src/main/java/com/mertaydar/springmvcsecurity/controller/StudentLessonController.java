@@ -195,7 +195,7 @@ public class StudentLessonController {
 			}
 			else {
 				SubstituteLessonInfo sub = substituteLessonDAO.findSubstituteLessonInfo(cond_id);
-				redirectAttributes.addFlashAttribute("message", "Koşul: "+sub.getCode());
+				redirectAttributes.addFlashAttribute("message", "Koşul: "+sub.getCode()+" "+sub.getName());
 			}
 		}
 		else if (substituteLessonDAO.findSubstituteLessonInfo(studentLessonInfo.getSubstituteLessonId()).getLab() > takingLessonDAO.findTakingLessonInfo(studentLessonInfo.getTakingLessonId()).getLab()) {

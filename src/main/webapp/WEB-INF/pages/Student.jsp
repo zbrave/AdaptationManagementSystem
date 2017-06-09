@@ -7,17 +7,16 @@
 <html>
 <head>
 <spring:url value="/resources/css/bootstrap.css" var="bootstrapCSS" />
+	<spring:url value="/resources/js/jquery.min.js" var="jqueryJS" />
 	<spring:url value="/resources/js/bootstrap.js" var="bootstrapJS" />
+	<spring:url value="/resources/js/bootstrap-confirmation.js" var="bootstrapConfirmationJS" />
 	<spring:url value="/resources/others/ams.css" var="amsCSS" />
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<link href="${bootstrapCSS}" rel="stylesheet" />
+	<script src="${jqueryJS}"></script>
 	<script src="${bootstrapJS}"></script>
+	<script src="${bootstrapConfirmationJS}"></script>
 	<link href="${amsCSS}" rel="stylesheet" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script
-  src="https://code.jquery.com/jquery-3.1.1.js"
-  integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
-  crossorigin="anonymous"></script>
   
    <script type="text/javascript">
 $(document).ready(function(){
@@ -50,11 +49,27 @@ $(document).ready(function(){
 	    }
 	};
 	var pvar = getUrlParameter('pageid');
+	var search = getUrlParameter('searchTerm');
+	var cate = getUrlParameter('category');
 	$('#' + pvar).addClass("active");
-	console.log(pvar-1);
-	console.log(pvar+1);
-	$("#lefta").attr("href", "Student?pageid="+pvar-1);
-	$("#righta").attr("href", "Student?pageid="+pvar+1);
+	pvar = parseInt(pvar,10);
+	var l = pvar-1;
+	var r = pvar+1;
+	console.log(pvar);
+	if (search != undefined && cate != undefined) {
+		$("#lefta").attr("href", "Student?pageid="+l+"&searchTerm="+search+"&category="+cate);
+		$("#righta").attr("href", "Student?pageid="+r+"&searchTerm="+search+"&category="+cate);
+		for (i = 1; i <= ${pageSize}; i++) {
+			$("#mid"+i).attr("href", "Student?pageid="+i+"&searchTerm="+search+"&category="+cate);	
+		}
+	}
+	else {
+		$("#lefta").attr("href", "Student?pageid="+l);
+		$("#righta").attr("href", "Student?pageid="+r);
+		for (i = 1; i <= ${pageSize}; i++) {
+			$("#mid"+i).attr("href", "Student?pageid="+i);	
+		}
+	}
 	if (pvar == 1) {
 		$('#left').addClass("disabled");
 		$("#lefta").attr("href", "#");
@@ -172,9 +187,10 @@ $(document).ready(function(){
                 <td>${info.recordYear}</td>
                 <td>${info.advisor}</td>
                 <td class="text-center">
+                <a class='btn btn-info btn-xs' href="getStudentData2?id=${info.id}"><span class="glyphicon glyphicon-edit"></span> ÇAP yap</a>
                 <a class='btn btn-info btn-xs' href="getStudentData?id=${info.id}"><span class="glyphicon glyphicon-edit"></span> İntibak yap</a>
-                <a class='btn btn-info btn-xs' href="editStudent?id=${info.id}"><span class="glyphicon glyphicon-edit"></span> Edit</a> 
-                <a href="deleteStudent?id=${info.id}" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Del</a>
+                <a class='btn btn-success btn-xs' href="editStudent?id=${info.id}"><span class="glyphicon glyphicon-edit"></span> Değiştir</a> 
+                <a href="deleteStudent?id=${info.id}" class="btn btn-danger btn-xs" data-toggle="confirmation" data-btn-ok-label="Evet" data-btn-cancel-label="Hayır" data-title="Bağlantılı tüm bilgiler bu işlemle birlikte silinecek. Emin misiniz?"><span class="glyphicon glyphicon-remove"></span> Sil</a>
                 </td>
             </tr>
         </c:forEach>
@@ -182,9 +198,9 @@ $(document).ready(function(){
     <ul class="pagination pull-right">
 	  <li id="left"><a id="lefta" href=""><span class="glyphicon glyphicon-chevron-left"></span></a></li>
 	  <c:forEach var="i" begin="1" end="${pageSize }">
-	  <li id="${i }"><a href="Student?pageid=${i }">${i }</a></li>
+	  <li id="${i }"><a id="mid${i }" href="Student?pageid=${i }">${i }</a></li>
 	  </c:forEach>
-	  <li id="right"><a href=""><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+	  <li id="right"><a id="righta" href=""><span class="glyphicon glyphicon-chevron-right"></span></a></li>
 	</ul>
     </div>
     <c:if test="${not empty message5}">
@@ -194,4 +210,10 @@ $(document).ready(function(){
 </div>
 
 </body>
+<script type="text/javascript">
+$('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+  // other options
+});
+</script>
 </html>
