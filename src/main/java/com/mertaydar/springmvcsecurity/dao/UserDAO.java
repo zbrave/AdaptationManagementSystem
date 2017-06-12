@@ -30,4 +30,12 @@ public interface UserDAO {
 	List<UserInfo> listUserInfosRoleAdmin(Integer pageid, Integer total);
 	List<UserInfo> listUserInfosBySearchRoleAdmin(Integer pageid, Integer total, String val, String cate);
 	List<UserInfo> listUserInfosBySearchSizeRoleAdmin(String val, String cate);
+	List<UserInfo> listUserInfosBySearchSizeRoleNewUser(String val, String cate);
+	List<UserInfo> listUserInfosBySearchRoleNewUser(Integer pageid, Integer total, String val, String cate);
+	List<UserInfo> listUserInfosRoleNewUser(Integer pageid, Integer total);
+	List<UserInfo> listUserInfosRoleNewUser();
+	List<UserInfo> listUserInfosBySearchSizeRoleUserStu(String val, String cate);
+	List<UserInfo> listUserInfosBySearchRoleUserStu(Integer pageid, Integer total, String val, String cate);
+	List<UserInfo> listUserInfosRoleUserStu(Integer pageid, Integer total);
+	List<UserInfo> listUserInfosRoleUserStu();
 }

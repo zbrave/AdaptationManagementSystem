@@ -11,6 +11,7 @@ public class UserInfo {
     private String tel;
     private boolean enabled;
     private boolean manager;
+    private Integer totalWeight;
     public UserInfo() {
     	
     }
@@ -109,6 +110,18 @@ public class UserInfo {
 
 	public void setManager(boolean manager) {
 		this.manager = manager;
+	}
+
+
+
+	public Integer getTotalWeight() {
+		return totalWeight;
+	}
+
+
+
+	public void setTotalWeight(Integer totalWeight) {
+		this.totalWeight = totalWeight;
 	}
      
     

@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="tag" uri="/WEB-INF/taglibs/customTaglib.tld"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
  
 <!DOCTYPE html>
@@ -13,13 +14,9 @@
 	<link href="${bootstrapCSS}" rel="stylesheet" />
 	<script src="${bootstrapJS}"></script>
 	<script src="${jqueryJS}"></script>
+	
 	<link href="${amsCSS}" rel="stylesheet" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script
-  src="https://code.jquery.com/jquery-3.1.1.js"
-  integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
-  crossorigin="anonymous"></script>
-
 
   <script type='text/javascript' src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
   
@@ -67,6 +64,14 @@ $(document).ready(function(){
 	        $("#deptId2").html(data);
 	    });
 	});
+	$('#curriculumId').on('change',function(){
+		$.get("${pageContext.request.contextPath}/getSubstituteLessonCur?id="+ $(this).children("option").filter(":selected").attr("id"), null, function (data) {
+			$("#conditionId").html(data);
+	    });
+		$.get("${pageContext.request.contextPath}/getPoolLesson?id="+ $(this).children("option").filter(":selected").attr("id"), null, function (data) {
+			$("#base3").html(data);
+	    });
+	});
 });</script>
 <script type="text/javascript">
 
@@ -86,9 +91,14 @@ function GetURLParameter(sParam)
 function doActive() {
 		var x = $("#curriculumId").children("option").filter(":selected").attr("id");
 		window.location.href = '${pageContext.request.contextPath}/doActive?id='+x;
-	}
+}
+function delCurriculum() {
+	var x = $("#curriculumId").children("option").filter(":selected").attr("id");
+	window.location.href = '${pageContext.request.contextPath}/deleteCurriculum?id='+x;
+}
 
 </script>
+
 <script type="text/javascript">
 $(document).ready(function(){
 	$('#deptId2').on('change',function(){
@@ -150,7 +160,7 @@ $(document).ready(function(){
 	
 	<div class="col-lg-1"></div>
 	<!-- Forms -->
-	<div class="col-lg-5">
+	<div class="col-lg-4">
 		<div class="row">
             <div class="panel panel-default">
 	            <div class="panel-body">
@@ -174,7 +184,7 @@ $(document).ready(function(){
 				                       
 				        <select id="substituteLessonId" class="form-control" name="substituteLessonId" ></select>
 				        
-				        <button type="submit" class="btn btn-default" value="Ekle" >Ekle</button>
+				        <button type="submit" class="btn btn-primary" value="Ekle" >Ekle</button>
 							        
 				        <c:if test="${not empty message5}">
 						   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message5}
@@ -190,7 +200,7 @@ $(document).ready(function(){
 				            <th>ID</th>
 				            <th>Alınan Ders</th>
 				            <th>Sayılan Ders</th>
-				            <th class="text-center">Eylem</th>
+				            <th>Eylem</th>
 				        </tr>
 				    </thead>
 				   	<tbody>
@@ -204,7 +214,7 @@ $(document).ready(function(){
 	</div>
 	<div class="col-lg-1"></div>
 	<!-- Uni Form(Right Panel) -->
-	<div class="col-lg-4">
+	<div class="col-lg-5">
 		<div class="row">
             <div class="panel with-nav-tabs panel-default">
                 <div class="panel-heading">
@@ -227,7 +237,7 @@ $(document).ready(function(){
 					
 					              	<input id="name" class="form-control input-sm" name="name" type="text" value="" style="height: 35px!important" />
 					
-					    	       	<button type="submit" class="btn btn-default" value="Ekle" >Ekle</button>
+					    	       	<button type="submit" class="btn btn-primary" value="Ekle" >Ekle</button>
 					           		
 					           		<c:if test="${not empty message1}">
 									   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message1}
@@ -243,7 +253,7 @@ $(document).ready(function(){
 							        <tr>
 							            <th>ID</th>
 							            <th>Üniversite Adı</th>
-							            <th class="text-center">Eylem</th>
+							            <th>Eylem</th>
 							        </tr>
 							    </thead>
 							   	<tbody>
@@ -266,7 +276,7 @@ $(document).ready(function(){
 					
 					               	<input id="name" class="form-control input-sm" name="name" type="text" value="" style="height: 35px!important"/>
 					               	
-					               	<button type="submit" class="btn btn-default" value="Ekle" >Ekle</button>
+					               	<button type="submit" class="btn btn-primary" value="Ekle" >Ekle</button>
 							        
 							        <c:if test="${not empty message2}">
 									   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message2}
@@ -282,7 +292,7 @@ $(document).ready(function(){
 							        <tr>
 							            <th>ID</th>
 							            <th>Bölüm Adı</th>
-							            <th class="text-center">Eylem</th>
+							            <th>Eylem</th>
 							        </tr>
 							    </thead>
 							   	<tbody>
@@ -332,7 +342,7 @@ $(document).ready(function(){
 					                       
 					            <input id="term" class="form-control input-sm" name="term" type="text" value="" style="height: 35px!important"/>
 					 			
-					           	<button type="submit" class="btn btn-default" value="Ekle" >Ekle</button>
+					           	<button type="submit" class="btn btn-primary" value="Ekle" >Ekle</button>
 							        
 						        <c:if test="${not empty message3}">
 								   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message3}
@@ -349,9 +359,10 @@ $(document).ready(function(){
 							            <th>Kodu</th>
 							            <th>Dili</th>
 							            <th>Kredi</th>
+							            <th>Lab.</th>
 							            <th>AKTS</th>
 							            <th>Dönem</th>
-							            <th class="text-center">Eylem</th>
+							            <th>Eylem</th>
 							        </tr>
 							    </thead>
 							   	<tbody>
@@ -362,7 +373,8 @@ $(document).ready(function(){
 						</div>
                         <div class="tab-pane fade" id="substituteLessonTab">
                         <label class="control-label">Müfredat yılı</label>
-                        <button onclick="doActive()" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Aktif yıl yap</button>
+                        <button onclick="doActive()" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-ok"></span> Aktif yıl yap</button>
+                        <button onclick="delCurriculum()" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Müfredat yılını sil</button>
                         <a href="#" class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#newStu" onclick="$('#newStu').show();"><b>+</b> Yeni Müfredat Ekle</a>
                         	<form:form action="saveSubstituteLesson" method="POST" modelAttribute="substituteLessonForm">
 					   			
@@ -407,7 +419,45 @@ $(document).ready(function(){
 					 			
 					 			<label class="control-label">Ders Dönemi</label>
 					                       
-					            <input id="term" class="form-control input-sm" name="term" type="text" value="" style="height: 35px!important"/>
+					            <input id="term2" class="form-control input-sm" name="term" type="text" value="" style="height: 35px!important"/>
+					            
+					            <label class="control-label">Ders şartı</label>
+					            
+					            <select id="conditionId" name="conditionId" class="form-control">
+		                            <c:forEach items="${subLes }" var="data" >
+		                        		<option id="${data.id }" value="${data.id }" >${data.name }</option>
+			                        </c:forEach>
+			                    </select>
+			                    <br>
+			                    	<p id="demo"></p>
+			                    <div id="tab" class="btn-group btn-group-justified" data-toggle="buttons">
+							        <a id="p1" href="#pool1" class="btn btn-success active" data-toggle="tab" onclick="setPool(1)">
+							          <input type="radio" class="pool1" />Havuz Dersi Değil
+							        </a>
+							        <a id="p2" href="#pool2" class="btn btn-success" data-toggle="tab" onclick="setPool(2)" >
+							          <input type="radio" class="pool2" />Yeni Havuz Aç
+							        </a>
+							        <a id="p3" href="#pool3" class="btn btn-success" data-toggle="tab" onclick="setPool(3)">
+							          <input type="radio" class="pool3" />Havuz Dersi Seç
+							        </a>
+							      </div>
+
+							      <div class="tab-content">
+							        <div class="tab-pane active" id="pool1">
+							        <input id="base" class="form-control input-sm" name="base" type="hidden" value=""/>
+							        </div>
+							        <div class="tab-pane" id="pool2">
+							        	<input id="base2" class="form-control input-sm pool2target" name="base" type="text" value="" style="height: 35px!important" disabled/>
+							        </div>
+							        <div class="tab-pane" id="pool3">
+										<select id="base3" name="base" class="form-control" disabled>
+				                            <c:forEach items="${pool }" var="data" >
+				                        		<option value="${data }H" >${data}</option>
+					                        </c:forEach>
+					                    </select>
+									</div>
+							      </div>
+			                    
 					 			<div class="clearfix"></div><br/>
 					           	<button type="submit" class="btn btn-primary" value="Ekle">Ekle</button>
 							        
@@ -422,31 +472,40 @@ $(document).ready(function(){
 							    <thead>
 							        <tr>
 							            <th>ID</th>
-							            <th>Adı</th>
+							            <th width="15%">Adı</th>
 							            <th>Kodu</th>
 							            <th>Dili</th>
 							            <th>Kredi</th>
+							            <th>Lab.</th>
 							            <th>AKTS</th>
 							            <th>Dönem</th>
-							            <th class="text-center">Eylem</th>
+							            <th width="15%">Önkoşul</th>
+							            <th>Tip</th>
+							            <th>Eylem</th>
 							        </tr>
 							    </thead>
 							   	<tbody>
-						   			<c:forEach items="${subLes }" var="data">
+						   			<c:forEach items="${subLes2 }" var="data">
 						   				<tr>
 						   					<td>${data.id }</td>
 						   					<td>${data.name }</td>
 						   					<td>${data.code }</td>
 						   					<td>${data.lang }</td>
 						   					<td>${data.credit }</td>
+						   					<td>${data.lab }</td>
 						   					<td>${data.akts }</td>
 						   					<td>${data.term }</td>
-						   					<td><a href="deleteSubstituteLesson?id=${data.id }" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Sil</a></td>
+						   					<td><c:forEach items="${subLes }" var="data2"><c:if test="${data2.id == data.conditionId }">${data2.name }</c:if></c:forEach></td>
+						   					<td>${data.base }</td>
+						   					<td><a href="editSubstituteLesson?id=${data.id }" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-edit"></span> Değiştir</a>
+						   					<a href="deleteSubstituteLesson?id=${data.id }" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Sil</a></td>
 					   					</tr>
 						   			</c:forEach>
 							   	</tbody>
 							    </table>
 						    </div>
+						    <tag:paginate max="15" offset="${offset}" count="${count}"
+						uri="addRules2" next="&raquo;" previous="&laquo;" />
                         </div>
                         <div class="tab-pane fade" id="markTab">
 							<form:form action="saveMark" method="POST" modelAttribute="markForm">
@@ -465,7 +524,7 @@ $(document).ready(function(){
 
 									<input id="value" class="form-control input-sm" name="value" type="text" value="" style="height: 35px!important" />
 
-					    	       	<button type="submit" class="btn btn-default" value="Ekle" >Ekle</button>
+					    	       	<button type="submit" class="btn btn-primary" value="Ekle" >Ekle</button>
 					           		
 					           		<c:if test="${not empty message1}">
 									   <div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${message6}
@@ -482,7 +541,7 @@ $(document).ready(function(){
 							            <th>ID</th>
 							            <th>Harf notu</th>
 							            <th>Puanı</th>
-							            <th class="text-center">Eylem</th>
+							            <th>Eylem</th>
 							        </tr>
 							    </thead>
 							   	<tbody>
@@ -543,5 +602,27 @@ $(document).ready(function(){
 		}, 150);
 	}, 150);
 });  </script>
+<script type="text/javascript">
+	function setPool(id) {
+		if (id == 1) {
+			document.getElementById('base2').setAttribute('disabled', 'disabled');
+			document.getElementById('base3').setAttribute('disabled', 'disabled');
+			document.getElementById('term2').removeAttribute('readonly');
+		}
+		if (id == 2) {
+			document.getElementById('base2').removeAttribute('disabled');
+			document.getElementById('base3').setAttribute('disabled', 'disabled');
+			document.getElementById('base').setAttribute('disabled', 'disabled');
+			document.getElementById('term2').removeAttribute('readonly');
+		}
+		if (id == 3) {
+			document.getElementById('base3').removeAttribute('disabled');
+			document.getElementById('base2').setAttribute('disabled', 'disabled');
+			document.getElementById('base').setAttribute('disabled', 'disabled');
+			document.getElementById('term2').value=0;
+			document.getElementById('term2').setAttribute('readonly', 'readonly');
+		}
+}
+</script>
 </body>
 </html>

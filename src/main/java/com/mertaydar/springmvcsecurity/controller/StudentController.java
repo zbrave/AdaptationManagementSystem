@@ -42,6 +42,7 @@ import com.mertaydar.springmvcsecurity.model.SubstituteLessonInfo;
 import com.mertaydar.springmvcsecurity.model.TakingLessonInfo;
 import com.mertaydar.springmvcsecurity.model.UniInfo;
 import com.mertaydar.springmvcsecurity.model.UserInfo;
+import com.mertaydar.springmvcsecurity.model.UserRoleInfo;
 
 @Controller
 //Enable Hibernate Transaction.
@@ -91,6 +92,64 @@ public class StudentController {
 		user.setStudentId(id);
 		this.userDAO.saveUser(user);
 		return "redirect:/getStudentData?id="+id.toString();
+	}
+	
+	@RequestMapping(value = "/setUserToStudent", method = RequestMethod.GET)
+	public String setUserToStudent(Model model, @RequestParam("id") Integer id,
+			final RedirectAttributes redirectAttributes) {
+		if (id == null) {
+			return "listNewUser?pageid=1";
+		}
+		UserInfo user = this.userDAO.findUserInfo(id);
+		userRoleDAO.saveUserRole(new UserRoleInfo(null, user.getId(), "USER"));
+		return "redirect:/listUser?pageid=1";
+	}
+	
+	@RequestMapping(value = "/setUserToAdmin", method = RequestMethod.GET)
+	public String setUserToAdmin(Model model, @RequestParam("id") Integer id,
+			final RedirectAttributes redirectAttributes) {
+		if (id == null) {
+			return "listNewUser?pageid=1";
+		}
+		UserInfo user = this.userDAO.findUserInfo(id);
+		userRoleDAO.saveUserRole(new UserRoleInfo(null, user.getId(), "ADMIN"));
+		return "redirect:/listAdmin?pageid=1";
+	}
+	
+	@RequestMapping(value = "/setAdminToUser", method = RequestMethod.GET)
+	public String setAdminToUser(Model model, @RequestParam("id") Integer id,
+			final RedirectAttributes redirectAttributes) {
+		if (id == null) {
+			return "listUser?pageid=1";
+		}
+		UserInfo userInfo = this.userDAO.findUserInfo(id);
+		if (userRoleDAO.getUserRoles(userInfo.getId()).contains("ADMIN")) {
+			List<UserRoleInfo> list = userRoleDAO.listUserRoleInfos();
+			for (UserRoleInfo l : list) {
+				if (l.getUserId() == userInfo.getId() && l.getRole().equals("ADMIN")) {
+					userRoleDAO.deleteUserRole(l.getId());
+				}
+			}
+		}
+		return "redirect:/listNewUser?pageid=1";
+	}
+	
+	@RequestMapping(value = "/setStudentToUser", method = RequestMethod.GET)
+	public String setStudentToUser(Model model, @RequestParam("id") Integer id,
+			final RedirectAttributes redirectAttributes) {
+		if (id == null) {
+			return "listUser?pageid=1";
+		}
+		UserInfo userInfo = this.userDAO.findUserInfo(id);
+		if (userRoleDAO.getUserRoles(userInfo.getId()).contains("USER")) {
+			List<UserRoleInfo> list = userRoleDAO.listUserRoleInfos();
+			for (UserRoleInfo l : list) {
+				if (l.getUserId() == userInfo.getId() && l.getRole().equals("USER")) {
+					userRoleDAO.deleteUserRole(l.getId());
+				}
+			}
+		}
+		return "redirect:/listNewUser?pageid=1";
 	}
 	
 	@RequestMapping(value="/getStudent",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
@@ -164,6 +223,8 @@ public class StudentController {
 		StudentInfo stu = this.studentDAO.findStudentInfo(id);
 		DeptInfo dept = null;
 		UniInfo uni = null; 
+		int count = 0;
+		int count2 = 0;
 		List<StudentLessonInfo> listStuLes = this.studentLessonDAO.listStudentLessonInfosForStudent(id);
 		List<JSPLessonFormat> list = new ArrayList<JSPLessonFormat>();
 		if (id != -1) {
@@ -182,6 +243,39 @@ public class StudentController {
 			 for (StudentLessonInfo tmp : listStuLes){
 				 SubstituteLessonInfo tmpSub = this.substituteLessonDAO.findSubstituteLessonInfo(tmp.getSubstituteLessonId());
 				 TakingLessonInfo tmpTak = this.takingLessonDAO.findTakingLessonInfo(tmp.getTakingLessonId());
+				 if (tmpSub.getBase() != null) {
+					 List<SubstituteLessonInfo> tmpSub2 = this.substituteLessonDAO.listSubstituteLessonInfos();
+					 for (SubstituteLessonInfo t : tmpSub2) {
+						 if (tmpSub.getBase().equals(t.getBase()+"H")) {
+							 tmpSub.setTerm(t.getTerm());
+							 break;
+						 }
+					 }
+					 // MS1
+					 for (SubstituteLessonInfo t : tmpSub2) {
+						 if (tmpSub.getBase().equals("MS1H") && tmpSub.getBase().equals(t.getBase()+"H")) {
+							 if (count == 0) {
+								 tmpSub.setTerm(t.getTerm());
+								 break;
+							 }
+							 else {
+								 count--;
+							 }
+						 }
+					 }
+					 // MS2
+					 for (SubstituteLessonInfo t : tmpSub2) {
+						 if (tmpSub.getBase().equals("MS2H") && tmpSub.getBase().equals(t.getBase()+"H")) {
+							 if (count2 == 0) {
+								 tmpSub.setTerm(t.getTerm());
+								 break;
+							 }
+							 else {
+								 count2--;
+							 }
+						 }
+					 }
+				 }
 				 JSPLessonFormat temp = new JSPLessonFormat(tmp.getId(),tmpSub, tmpTak, tmp.getOrgMark(), tmp.getConvMark());
 				 list.add(temp);
 			 }
@@ -362,9 +456,9 @@ public class StudentController {
 		//				       model.addAttribute("skills", list);
 
 		if (studentInfo.getId() == null) {
-			model.addAttribute("formTitle", "Create Student");
+			model.addAttribute("formTitle", "Yeni Öğrenci Kaydı");
 		} else {
-			model.addAttribute("formTitle", "Edit Student");
+			model.addAttribute("formTitle", "Öğrenci Formu");
 		}
 
 		return "formStudent";

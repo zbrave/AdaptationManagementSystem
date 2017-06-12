@@ -18,4 +18,14 @@ public interface SubstituteLessonDAO {
     public void deleteSubstituteLesson(Integer id);
 
 	List<SubstituteLessonInfo> listSubstituteLessonInfos(Integer curriculumId);
+
+	List<String> listPoolLessons();
+
+	List<String> listPoolLessonsByCurriculum(Integer id);
+
+	List<SubstituteLessonInfo> listSubstituteLessonInfosPagination(Integer curriculumId, Integer offset,
+			Integer maxResults);
+
+
+	Long count(Integer currId);
 }

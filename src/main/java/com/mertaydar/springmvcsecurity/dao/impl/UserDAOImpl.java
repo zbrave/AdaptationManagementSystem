@@ -178,6 +178,207 @@ public class UserDAOImpl implements UserDAO {
         }
         return userInfos;
 	}
+	/* ListUserStu func. */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserInfo> listUserInfosRoleUserStu() {
+        boolean isManager = false;
+		Session session = sessionFactory.getCurrentSession();
+        Criteria crit = session.createCriteria(User.class);
+        List<User> users =(List<User>) crit.list();
+        List<UserInfo> userInfos=new ArrayList<UserInfo>();
+        for(User u : users){
+        	isManager = false;
+        	List<String> roles = userRoleDAO.getUserRoles(u.getId());
+        	for (String s : roles) {
+        		if (s.equals("USER")) {
+        			isManager = true;
+        		}
+        	}
+        	if (isManager == true && u.getStudentId() != null)
+        		userInfos.add((UserInfo)findUserInfo(u.getId()));
+        }
+        return userInfos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserInfo> listUserInfosRoleUserStu(Integer pageid, Integer total) {
+		// sql query has to have exact names from own class variable 
+		String sql = "Select new " + UserInfo.class.getName()//
+                + "(a.id, a.email, a.username, a.password, a.studentId, a.enabled, a.tel) "//
+                + " from " + User.class.getName() + " a ";
+		System.out.println(sql.toString());
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(sql);
+        List<UserInfo> users = query.list();
+        List<UserInfo> userInfos = new ArrayList<UserInfo>();
+        for(UserInfo u : users){
+        	boolean isManager = false;
+        	List<String> roles = userRoleDAO.getUserRoles(u.getId());
+        	for (String s : roles) {
+        		if (s.equals("USER")) {
+        			isManager = true;
+        		}
+        	}
+        	if (isManager == true && u.getStudentId() != null)
+        		userInfos.add((UserInfo)findUserInfo(u.getId()));
+        }
+        if (pageid+total-1 < userInfos.size())
+        	return userInfos.subList(pageid-1, pageid+total-1);
+        return userInfos.subList(pageid-1, userInfos.size());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserInfo> listUserInfosBySearchRoleUserStu(Integer pageid, Integer total, String val, String cate) {
+		// sql query has to have exact names from own class variable 
+		String sql = "Select new " + UserInfo.class.getName()//
+                + "(a.id, a.email, a.username, a.password, a.studentId, a.enabled, a.tel) "//
+                + " from " + User.class.getName() + " a where "+cate+" like '%"+val+"%'";
+		System.out.println(sql.toString());
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(sql);
+        List<UserInfo> users = query.list();
+        List<UserInfo> userInfos = new ArrayList<UserInfo>();
+        for(UserInfo u : users){
+        	boolean isManager = false;
+        	List<String> roles = userRoleDAO.getUserRoles(u.getId());
+        	for (String s : roles) {
+        		if (s.equals("USER")) {
+        			isManager = true;
+        		}
+        	}
+        	if (isManager == true && u.getStudentId() != null)
+        		userInfos.add((UserInfo)findUserInfo(u.getId()));
+        }
+        if (pageid+total-1 < userInfos.size())
+        	return userInfos.subList(pageid-1, pageid+total-1);
+        return userInfos.subList(pageid-1, userInfos.size());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserInfo> listUserInfosBySearchSizeRoleUserStu(String val, String cate) {
+		// sql query has to have exact names from own class variable 
+		String sql = "Select new " + UserInfo.class.getName()//
+                + "(a.id, a.email, a.username, a.password, a.studentId, a.enabled, a.tel) "//
+                + " from " + User.class.getName() + " a where "+cate+" like '%"+val+"%'";
+		System.out.println(sql.toString());
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(sql);
+        List<UserInfo> users = query.list();
+        List<UserInfo> userInfos = new ArrayList<UserInfo>();
+        for(UserInfo u : users){
+        	boolean isManager = false;
+        	List<String> roles = userRoleDAO.getUserRoles(u.getId());
+        	for (String s : roles) {
+        		if (s.equals("USER")) {
+        			isManager = true;
+        		}
+        	}
+        	if (isManager == true && u.getStudentId() != null)
+        		userInfos.add((UserInfo)findUserInfo(u.getId()));
+        }
+        return userInfos;
+	}
+	
+	/* ListNewUser func. */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserInfo> listUserInfosRoleNewUser() {
+        boolean isManager = false;
+		Session session = sessionFactory.getCurrentSession();
+        Criteria crit = session.createCriteria(User.class);
+        List<User> users =(List<User>) crit.list();
+        List<UserInfo> userInfos=new ArrayList<UserInfo>();
+        for(User u : users){
+        	isManager = false;
+        	List<String> roles = userRoleDAO.getUserRoles(u.getId());
+    		if (roles.isEmpty()) {
+    			isManager = true;
+    		}
+        	if (isManager == true)
+        		userInfos.add((UserInfo)findUserInfo(u.getId()));
+        }
+        return userInfos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserInfo> listUserInfosRoleNewUser(Integer pageid, Integer total) {
+		// sql query has to have exact names from own class variable 
+		String sql = "Select new " + UserInfo.class.getName()//
+                + "(a.id, a.email, a.username, a.password, a.studentId, a.enabled, a.tel) "//
+                + " from " + User.class.getName() + " a ";
+		System.out.println(sql.toString());
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(sql);
+        List<UserInfo> users = query.list();
+        List<UserInfo> userInfos = new ArrayList<UserInfo>();
+        for(UserInfo u : users){
+        	boolean isManager = false;
+        	List<String> roles = userRoleDAO.getUserRoles(u.getId());
+        	if (roles.isEmpty()) {
+    			isManager = true;
+    		}
+        	if (isManager == true)
+        		userInfos.add((UserInfo)findUserInfo(u.getId()));
+        }
+        if (pageid+total-1 < userInfos.size())
+        	return userInfos.subList(pageid-1, pageid+total-1);
+        return userInfos.subList(pageid-1, userInfos.size());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserInfo> listUserInfosBySearchRoleNewUser(Integer pageid, Integer total, String val, String cate) {
+		// sql query has to have exact names from own class variable 
+		String sql = "Select new " + UserInfo.class.getName()//
+                + "(a.id, a.email, a.username, a.password, a.studentId, a.enabled, a.tel) "//
+                + " from " + User.class.getName() + " a where "+cate+" like '%"+val+"%'";
+		System.out.println(sql.toString());
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(sql);
+        List<UserInfo> users = query.list();
+        List<UserInfo> userInfos = new ArrayList<UserInfo>();
+        for(UserInfo u : users){
+        	boolean isManager = false;
+        	List<String> roles = userRoleDAO.getUserRoles(u.getId());
+        	if (roles.isEmpty()) {
+    			isManager = true;
+    		}
+        	if (isManager == true)
+        		userInfos.add((UserInfo)findUserInfo(u.getId()));
+        }
+        if (pageid+total-1 < userInfos.size())
+        	return userInfos.subList(pageid-1, pageid+total-1);
+        return userInfos.subList(pageid-1, userInfos.size());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserInfo> listUserInfosBySearchSizeRoleNewUser(String val, String cate) {
+		// sql query has to have exact names from own class variable 
+		String sql = "Select new " + UserInfo.class.getName()//
+                + "(a.id, a.email, a.username, a.password, a.studentId, a.enabled, a.tel) "//
+                + " from " + User.class.getName() + " a where "+cate+" like '%"+val+"%'";
+		System.out.println(sql.toString());
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(sql);
+        List<UserInfo> users = query.list();
+        List<UserInfo> userInfos = new ArrayList<UserInfo>();
+        for(UserInfo u : users){
+        	boolean isManager = false;
+        	List<String> roles = userRoleDAO.getUserRoles(u.getId());
+        	if (roles.isEmpty()) {
+    			isManager = true;
+    		}
+        	if (isManager == true)
+        		userInfos.add((UserInfo)findUserInfo(u.getId()));
+        }
+        return userInfos;
+	}
 	
 	/* ListManager func. */
 	@SuppressWarnings("unchecked")

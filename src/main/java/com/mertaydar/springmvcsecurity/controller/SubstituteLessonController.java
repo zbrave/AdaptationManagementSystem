@@ -1,6 +1,7 @@
 package com.mertaydar.springmvcsecurity.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,14 +71,25 @@ public class SubstituteLessonController {
 	@ResponseBody
 	public String getSubstituteLessonById(@RequestParam Integer id) {
 		String res = "<option id=-1 value=-1>Ders seçin.</option>";
-		List<RulesInfo> listRules = this.rulesDAO.listRulesForLesson(id);
-		CurriculumInfo curriculumInfo = curriculumDAO.findCurriculumInfoActive();
-		for (RulesInfo tmp : listRules) {
-			SubstituteLessonInfo temp = this.substituteLessonDAO.findSubstituteLessonInfo(tmp.getSubstituteLessonId());
-			if (temp.getCurriculumId() == curriculumInfo.getId())
-				res = res.concat("<option "+"id="+temp.getId()+" value="+temp.getId()+">"+temp.getCode()+" "+temp.getName()+">Kredi: "+temp.getCredit()+"</option>");
+		if (id == -1) {
+			CurriculumInfo cur = curriculumDAO.findCurriculumInfoActive();
+			List<SubstituteLessonInfo> list = this.substituteLessonDAO.listSubstituteLessonInfos();
+			for (SubstituteLessonInfo tmp : list) {
+				if (tmp.getCurriculumId() == cur.getId())
+					res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+">"+tmp.getCode()+" "+tmp.getName()+">Kredi: "+tmp.getCredit()+"</option>");
+			}
+			return res;
 		}
-		return res;
+		else {
+			List<RulesInfo> listRules = this.rulesDAO.listRulesForLesson(id);
+			CurriculumInfo curriculumInfo = curriculumDAO.findCurriculumInfoActive();
+			for (RulesInfo tmp : listRules) {
+				SubstituteLessonInfo temp = this.substituteLessonDAO.findSubstituteLessonInfo(tmp.getSubstituteLessonId());
+				if (temp.getCurriculumId() == curriculumInfo.getId())
+					res = res.concat("<option "+"id="+temp.getId()+" value="+temp.getId()+">"+temp.getCode()+" "+temp.getName()+">Kredi: "+temp.getCredit()+"</option>");
+			}
+			return res;
+		}
 	}
 	
 	@RequestMapping(value="/getSubstituteLesson",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
@@ -85,6 +97,19 @@ public class SubstituteLessonController {
 	public String getSubstituteLesson() {
 		String res = "<option id=-1 value=-1>Ders seçin.</option>";
 		CurriculumInfo cur = curriculumDAO.findCurriculumInfoActive();
+		List<SubstituteLessonInfo> list = this.substituteLessonDAO.listSubstituteLessonInfos();
+		for (SubstituteLessonInfo tmp : list) {
+			if (tmp.getCurriculumId() == cur.getId())
+				res = res.concat("<option "+"id="+tmp.getId()+" value="+tmp.getId()+">"+tmp.getCode()+" "+tmp.getName()+">Kredi: "+tmp.getCredit()+"</option>");
+		}
+		return res;
+	}
+	
+	@RequestMapping(value="/getSubstituteLessonCur",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
+	@ResponseBody
+	public String getSubstituteLessonCur(@RequestParam Integer id) {
+		String res = "<option id=\"\" value=\"\">Şart yok.</option>";
+		CurriculumInfo cur = curriculumDAO.findCurriculumInfo(id);
 		List<SubstituteLessonInfo> list = this.substituteLessonDAO.listSubstituteLessonInfos();
 		for (SubstituteLessonInfo tmp : list) {
 			if (tmp.getCurriculumId() == cur.getId())
@@ -103,7 +128,7 @@ public class SubstituteLessonController {
 		List<SubstituteLessonInfo> list = this.substituteLessonDAO.listSubstituteLessonInfos();
 		for (SubstituteLessonInfo tmp : list) {
 			if (tmp.getCurriculumId() == cur.getId())
-				res = res.concat("<tr><td>"+tmp.getId()+"</td><td>"+tmp.getName()+"</td><td>"+tmp.getCode()+"</td><td>"+tmp.getLang()+"</td><td>"+tmp.getCredit()+"</td><td>"+tmp.getAkts()+"</td><td>"+tmp.getTerm()+"</td><td><a href=\"deleteSubstituteLesson?id="+tmp.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Sil</a></td></tr>");
+				res = res.concat("<tr><td>"+tmp.getId()+"</td><td>"+tmp.getName()+"</td><td>"+tmp.getCode()+"</td><td>"+tmp.getLang()+"</td><td>"+tmp.getCredit()+"</td><td>"+tmp.getLab()+"</td><td>"+tmp.getAkts()+"</td><td>"+tmp.getTerm()+"</td><td>"+tmp.getConditionId()+"</td><td>"+tmp.getBase()+"</td><td><a href=\"editSubstituteLesson?id="+tmp.getId()+"\" class=\"btn btn-info btn-xs\"><span class=\"glyphicon glyphicon-edit\"></span> Değiştir</a><a href=\"deleteSubstituteLesson?id="+tmp.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Sil</a></td></tr>");
 		}
 		return res;
 	}
@@ -153,6 +178,19 @@ public class SubstituteLessonController {
 
 		model.addAttribute("takingLessonMap", takingLessonMap);
 		
+		CurriculumInfo active = curriculumDAO.findCurriculumInfoActive();
+		List<String> pool = substituteLessonDAO.listPoolLessonsByCurriculum(active.getId());
+		model.addAttribute("pool", pool);
+		
+		
+		List<SubstituteLessonInfo> list = new ArrayList<SubstituteLessonInfo>();
+		SubstituteLessonInfo first = new SubstituteLessonInfo();
+		first.setName("Şart yok.");
+		list.add(first);
+		List<SubstituteLessonInfo> list2 = substituteLessonDAO.listSubstituteLessonInfos();
+		list.addAll(list2);
+		model.addAttribute("subLes", list);
+		
 
 		//				       List<String> list = dataForSkills();
 		//				       model.addAttribute("skills", list);
@@ -162,6 +200,8 @@ public class SubstituteLessonController {
 		} else {
 			model.addAttribute("formTitle", "Edit SubstituteLesson");
 		}
+		List<CurriculumInfo> curList = curriculumDAO.listCurriculumInfos();
+		model.addAttribute("curriculums", curList);
 
 		return "formSubstituteLesson";
 	}

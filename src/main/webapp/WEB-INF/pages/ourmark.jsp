@@ -77,8 +77,8 @@
                 <td>${info.mark}</td>
                 <td>${info.value}</td>
                 <td class="text-center">
-                <a class='btn btn-info btn-xs' href="editOurmark?id=${info.id}"><span class="glyphicon glyphicon-edit"></span> Edit</a> 
-                <a href="deleteOurmark?id=${info.id}" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Del</a>
+                <a class='btn btn-info btn-xs' href="editOurmark?id=${info.id}"><span class="glyphicon glyphicon-edit"></span> Değiştir</a> 
+                <a href="deleteOurmark?id=${info.id}" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Sil</a>
                 </td>
             </tr>
         </c:forEach>

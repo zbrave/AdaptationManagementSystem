@@ -108,6 +108,7 @@ $(document).ready(function(){
             <th>ID</th>
             <th>Kullanıcı adı</th>
             <th>E-Mail</th>
+            <th>Telefon</th>
             <th style="text-align: center;">Giriş yapabilir ?</th>
             <th class="text-center">Eylem</th>
         </tr>
@@ -117,6 +118,7 @@ $(document).ready(function(){
                 <td>${info.id}</td>
                 <td>${info.username}</td>
                 <td>${info.email}</td>
+                <td>${info.tel}</td>
                 <td>
                 	<c:if test="${info.enabled == true}">
                 		<label class="btn btn-block">
@@ -130,12 +132,11 @@ $(document).ready(function(){
                 	</c:if>
                 </td>
                 <td class="text-center">
-               	
-                <c:if test="${info.manager == true && empty info.studentId}">
-                	<a href="setManager?id=${info.id}" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> İntibak görevini sil</a>
+               	<c:if test="${info.manager == false && empty info.studentId && info.id != user.id}">
+                	<a href="setAdminToUser?id=${info.id}" class="btn btn-danger btn-xs" data-toggle="confirmation" data-btn-ok-label="Evet" data-btn-cancel-label="Hayır" data-title="Kişinin yönetici yetkisi kaldırılacak. Emin misiniz?"><span class="glyphicon glyphicon-remove"></span> Yönetici görevini sil</a>
             	</c:if>
-            	<c:if test="${info.manager == false && empty info.studentId}">
-            		<a href="setManager?id=${info.id}" class="btn btn-success btn-xs" data-toggle="confirmation" data-btn-ok-label="Evet" data-btn-cancel-label="Hayır" data-title="Kişinin yönetici yetkisi kaldırılacak. Emin misiniz?"><span class="glyphicon glyphicon-plus"></span> İntibak görevi ata</a>
+            	<c:if test="${info.manager == true && empty info.studentId && info.id != user.id}">
+            		<a href="setUserToAdmin?id=${info.id}" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-plus"></span> Yönetici görevi ata</a>
             	</c:if>
                 <c:if test="${info.manager == false && info.enabled == true && user.id != info.id}">
                 	<a class='btn btn-warning btn-xs' href="banUser?id=${info.id}"><span class="glyphicon glyphicon-edit"></span> Yasakla</a>

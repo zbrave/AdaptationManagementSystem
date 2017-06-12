@@ -68,7 +68,7 @@ public class UniController {
 		String res = "";
 		List<UniInfo> list = this.uniDAO.listUniInfos();
 		for (UniInfo tmp : list) {
-			res = res.concat("<tr><td>"+tmp.getId()+"</td><td>"+tmp.getName()+"</td><td><a href=\"deleteUni?id="+tmp.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Sil</a></td></tr>");
+			res = res.concat("<tr><td>"+tmp.getId()+"</td><td>"+tmp.getName()+"</td><td><a href=\"editUni?id="+tmp.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Değiştir</a><a href=\"deleteUni?id="+tmp.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Sil</a></td></tr>");
 		}
 		return res;
 	}

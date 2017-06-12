@@ -279,7 +279,7 @@ public class StudentLessonDAOImpl implements StudentLessonDAO {
         Criteria crit2 = session.createCriteria(Ourmark.class);
         crit2.add(Restrictions.eq("value", ((Mark) crit.uniqueResult()).getValue()));
         if (crit2.list().isEmpty())
-        	return "??";
+        	return ((Mark) crit.uniqueResult()).getValue().toString();
         return ((Ourmark) crit2.uniqueResult()).getMark();
 	}
 	
@@ -308,7 +308,7 @@ public class StudentLessonDAOImpl implements StudentLessonDAO {
         Criteria crit = session.createCriteria(Ourmark.class);
         crit.add(Restrictions.eq("value", total));
         if (crit.list().isEmpty()) {
-        	list.get(0).setConvMark("?");
+        	list.get(0).setConvMark(total+"");
         	return list.get(0);
         }
         else {

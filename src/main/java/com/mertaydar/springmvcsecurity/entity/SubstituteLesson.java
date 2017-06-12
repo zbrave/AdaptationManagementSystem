@@ -43,14 +43,14 @@ public class SubstituteLesson implements Serializable {
 	@Column(name = "curriculum_id", nullable = false)
 	private Integer curriculumId;
 	
-	@Column(name = "base", nullable = false)
-	private Integer base;
+	@Column(name = "base", nullable = true, length = 5)
+	private String base;
 	
-	public Integer getBase() {
+	public String getBase() {
 		return base;
 	}
 
-	public void setBase(Integer base) {
+	public void setBase(String base) {
 		this.base = base;
 	}
 

@@ -2,17 +2,19 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
 	<spring:url value="/resources/css/bootstrap.css" var="bootstrapCSS" />
+	<spring:url value="/resources/css/style.css" var="styleCSS" />
 	<spring:url value="/resources/js/bootstrap.js" var="bootstrapJS" />
 	<spring:url value="/resources/others/ams.css" var="amsCSS" />
 	<spring:url value="/resources/others/ams.js" var="amsJS" />
 	<spring:url value="/resources/js/jquery.min.js" var="jqueryJS" />
 	<link href="${bootstrapCSS}" rel="stylesheet" />
-	<script src="${bootstrapJS}"></script>
 	<script src="${jqueryJS}"></script>
+	<script src="${bootstrapJS}"></script>
 	<link href="${amsCSS}" rel="stylesheet" />
 	<script src="${amsJS}"></script>
 	<title>Login</title>	
@@ -47,7 +49,7 @@
           
           <button type="submit" name="go" class="btn btn-lg btn-primary btn-block">Giriş Yap</button>
           <div>
-            <a href="#" onclick="$('#loginbox').hide(); $('#signupbox').show()">Yeni hesap aç</a> yada <a href="#">Şifremi unuttum</a>
+            <a href="#" onclick="$('#loginbox').hide(); $('#signupbox').show()">Yeni hesap aç</a> yada <a href="" data-toggle="modal" data-target="#passForgot">Şifremi unuttum</a>
           </div>
           
         </form>
@@ -91,7 +93,7 @@
           
           <button type="submit" name="go" class="btn btn-lg btn-warning btn-block">Kayıt ol</button>
           <div>
-            <a href="#" onclick="$('#signupbox').hide(); $('#loginbox').show()">Giriş yap</a> yada <a href="#">Şifremi unuttum</a>
+            <a href="#" onclick="$('#signupbox').hide(); $('#loginbox').show()">Giriş yap</a> yada <a href="" data-toggle="modal" data-target="#passForgot">Şifremi unuttum</a>
           </div>
           
         </form>
@@ -102,8 +104,25 @@
       </section>  
       </div>
       
-      <div class="col-md-4"></div>
       
+      <!-- Modal -->
+<div class="modal fade" id="passForgot" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 
   </div>
   </div>

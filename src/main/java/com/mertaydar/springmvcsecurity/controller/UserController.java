@@ -20,6 +20,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mertaydar.springmvcsecurity.dao.ActivationDAO;
+import com.mertaydar.springmvcsecurity.dao.StudentDAO;
 import com.mertaydar.springmvcsecurity.dao.UserDAO;
 import com.mertaydar.springmvcsecurity.dao.UserRoleDAO;
 import com.mertaydar.springmvcsecurity.entity.Activation;
@@ -36,6 +37,9 @@ public class UserController {
 	
 	@Autowired
 	private UserDAO userDAO;
+	
+	@Autowired
+	private StudentDAO studentDAO;
 	
 	@Autowired
 	private UserRoleDAO userRoleDAO;
@@ -102,7 +106,7 @@ public class UserController {
 				userRoleDAO.saveUserRole(new UserRoleInfo(null, user.getId(), "ADMIN"));
 			}
 			else {
-				userRoleDAO.saveUserRole(new UserRoleInfo(null, user.getId(), "USER"));	
+//				userRoleDAO.saveUserRole(new UserRoleInfo(null, user.getId(), "USER"));	
 			}
 			redirectAttributes.addFlashAttribute("signupMsg", "Hesabınız aktif edildi.");
 			return "redirect:/login";
@@ -155,6 +159,49 @@ public class UserController {
 		return "listUser";
 	}
 	
+	@RequestMapping(value = "/listNewUser", method = RequestMethod.GET)
+	public String listNewUser(Model model, Principal principal, @RequestParam Integer pageid, @RequestParam(value = "searchTerm", required = false) String search, @RequestParam(value = "category", required = false) String category) {
+		int total = 10;  
+		Integer pageSize;
+        if (pageid == 1){
+        	
+        }  
+        else {  
+            pageid = (pageid-1)*total+1;  
+        }
+        UserInfo user = userDAO.findLoginUserInfo(principal.getName());
+        model.addAttribute("user", user);
+		List<UserInfo> users = null;
+        if (search == null || search.isEmpty()) {
+        	users = userDAO.listUserInfosRoleNewUser(pageid,total);
+        	pageSize = userDAO.listUserInfosRoleNewUser().size();
+        }
+        else {
+        	String decodedToUTF8;
+    		try {
+    			decodedToUTF8 = new String(search.getBytes("ISO-8859-1"), "UTF-8");
+    			search = (decodedToUTF8);
+    		} catch (UnsupportedEncodingException e) {
+    			System.out.println("Search term name cannot converted.");
+    			e.printStackTrace();
+    		}
+        	users = userDAO.listUserInfosBySearchRoleNewUser(pageid,total,search,category);
+        	pageSize = userDAO.listUserInfosBySearchSizeRoleNewUser(search, category).size();
+        }
+		pageSize = (int) Math.ceil(pageSize / (float)total);
+		model.addAttribute("pageSize", pageSize);
+		for (UserInfo u : users) {
+			if (userRoleDAO.isManager(u.getId())) {
+				u.setManager(true);
+			}
+			else {
+				u.setManager(false);
+			}
+		}
+		model.addAttribute("users", users);
+		return "listNewUser";
+	}
+	
 	@RequestMapping(value = "/listManager", method = RequestMethod.GET)
 	public String listManager(Model model, Principal principal, @RequestParam Integer pageid, @RequestParam(value = "searchTerm", required = false) String search, @RequestParam(value = "category", required = false) String category) {
 		int total = 10;  
@@ -189,6 +236,7 @@ public class UserController {
 		for (UserInfo u : users) {
 			if (userRoleDAO.isManager(u.getId())) {
 				u.setManager(true);
+				u.setTotalWeight(studentDAO.listStudentInfosForAdvSize(u.getId()).size());
 			}
 			else {
 				u.setManager(false);
@@ -246,9 +294,22 @@ public class UserController {
 		if (id == null) {
 			return "listUser";
 		}
+		UserInfo user = userDAO.findUserInfo(id);
+		List<String> roles = userRoleDAO.getUserRoles(user.getId());
 		this.userDAO.deleteUser(id);
 		redirectAttributes.addFlashAttribute("message", "Kullanıcı silindi.");
-		return "redirect:/listUser?pageid=1";
+		for (String r : roles) {
+			if (r.equals("ADMIN")){
+				return "redirect:/listAdmin?pageid=1";
+			}
+			if (r.equals("MANAGER")){
+				return "redirect:/listManager?pageid=1";
+			}
+			if (r.equals("USER")){
+				return "redirect:/listUser?pageid=1";
+			}
+		}
+		return "redirect:/listNewUser?pageid=1";
 	}
 	
 	@RequestMapping(value = "/banUser", method = RequestMethod.GET)
@@ -295,11 +356,11 @@ public class UserController {
 					userRoleDAO.deleteUserRole(l.getId());
 				}
 			}
-			userRoleDAO.saveUserRole(new UserRoleInfo(null, userInfo.getId(), "ADMIN"));
+//			userRoleDAO.saveUserRole(new UserRoleInfo(null, userInfo.getId(), "ADMIN"));
 			redirectAttributes.addFlashAttribute("message", "İntibak görevi geri alındı.");
 		}
 		this.userDAO.saveUser(userInfo);
 		
-		return "redirect:/listAdmin?pageid=1";
+		return "redirect:/listNewUser?pageid=1";
 	}
 }

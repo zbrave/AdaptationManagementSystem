@@ -187,8 +187,12 @@ $(document).ready(function(){
                 <td>${info.recordYear}</td>
                 <td>${info.advisor}</td>
                 <td class="text-center">
+                <c:if test="${info.uniName == 'Yıldız Teknik Üniversitesi' }">
                 <a class='btn btn-info btn-xs' href="getStudentData2?id=${info.id}"><span class="glyphicon glyphicon-edit"></span> ÇAP yap</a>
+                </c:if>
+                <c:if test="${info.uniName != 'Yıldız Teknik Üniversitesi' }">
                 <a class='btn btn-info btn-xs' href="getStudentData?id=${info.id}"><span class="glyphicon glyphicon-edit"></span> İntibak yap</a>
+                </c:if>
                 <a class='btn btn-success btn-xs' href="editStudent?id=${info.id}"><span class="glyphicon glyphicon-edit"></span> Değiştir</a> 
                 <a href="deleteStudent?id=${info.id}" class="btn btn-danger btn-xs" data-toggle="confirmation" data-btn-ok-label="Evet" data-btn-cancel-label="Hayır" data-title="Bağlantılı tüm bilgiler bu işlemle birlikte silinecek. Emin misiniz?"><span class="glyphicon glyphicon-remove"></span> Sil</a>
                 </td>

@@ -113,6 +113,7 @@ $(document).ready(function(){
             <th>ID</th>
             <th>Kullanıcı adı</th>
             <th>E-Mail</th>
+            <th>Sorumlu intibak</th>
             <th style="text-align: center;">Giriş yapabilir ?</th>
             <th class="text-center">Eylem</th>
         </tr>
@@ -122,6 +123,7 @@ $(document).ready(function(){
                 <td>${info.id}</td>
                 <td>${info.username}</td>
                 <td>${info.email}</td>
+                <td>${info.totalWeight}</td>
                 <td>
                 	<c:if test="${info.enabled == true}">
                 		<label class="btn btn-block">
@@ -137,13 +139,13 @@ $(document).ready(function(){
                 <td class="text-center">
                	
                 <c:if test="${info.manager == true && empty info.studentId}">
-                	<a href="setManager?id=${info.id}" class="btn btn-danger btn-xs"  data-toggle="confirmation" data-btn-ok-label="Evet" data-btn-cancel-label="Hayır" data-title="Kişinin sorumlu olduğu intibaklar varsa danışman bilgileri boşa çıkacaktır. Emin misiniz?"><span class="glyphicon glyphicon-remove"></span> İntibak görevini sil</a>
+                	<a href="setManager?id=${info.id}" class="btn btn-warning btn-xs"  data-toggle="confirmation" data-btn-ok-label="Evet" data-btn-cancel-label="Hayır" data-title="Kişinin sorumlu olduğu intibaklar varsa danışman bilgileri boşa çıkacaktır. Emin misiniz?"><span class="glyphicon glyphicon-remove"></span> İntibak görevini sil</a>
             	</c:if>
             	<c:if test="${info.manager == false && empty info.studentId}">
-            		<a href="setManager?id=${info.id}" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-plus"></span> İntibak görevi ata</a>
+            		<a href="setManager?id=${info.id}" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-plus"></span> İntibak görevi ata</a>
             	</c:if>
                 <c:if test="${info.manager == false && info.enabled == true && user.id != info.id}">
-                	<a class='btn btn-warning btn-xs' href="banUser?id=${info.id}"><span class="glyphicon glyphicon-edit"></span> Yasakla</a>
+                	<a class='btn btn-info btn-xs' href="banUser?id=${info.id}"><span class="glyphicon glyphicon-edit"></span> Yasakla</a>
             	</c:if>
             	<c:if test="${info.manager == false && info.enabled == false && user.id != info.id}">
                 	<a class='btn btn-info btn-xs' href="banUser?id=${info.id}"><span class="glyphicon glyphicon-edit"></span> Yasağı Kaldır</a>

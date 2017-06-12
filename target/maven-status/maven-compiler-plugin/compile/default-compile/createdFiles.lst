@@ -7,6 +7,7 @@ com\mertaydar\springmvcsecurity\controller\MarkController.class
 com\mertaydar\springmvcsecurity\config\WebMvcConfig.class
 com\mertaydar\springmvcsecurity\authentication\MyDBAuthenticationService.class
 com\mertaydar\springmvcsecurity\entity\Mark.class
+com\mertaydar\springmvcsecurity\dao\impl\CurriculumDAOImpl.class
 com\mertaydar\springmvcsecurity\dao\impl\StudentDAOImpl.class
 com\mertaydar\springmvcsecurity\entity\Ourmark.class
 com\mertaydar\springmvcsecurity\entity\Student.class
@@ -18,6 +19,7 @@ com\mertaydar\springmvcsecurity\controller\TakingLessonController.class
 com\mertaydar\springmvcsecurity\dao\impl\SubstituteLessonDAOImpl.class
 com\mertaydar\springmvcsecurity\dao\ActivationDAO.class
 com\mertaydar\springmvcsecurity\dao\impl\UserDAOImpl.class
+com\mertaydar\springmvcsecurity\pagination\PaginationTaglib.class
 com\mertaydar\springmvcsecurity\dao\impl\MailSendImpl.class
 com\mertaydar\springmvcsecurity\dao\impl\OurmarkDAOImpl.class
 com\mertaydar\springmvcsecurity\entity\User.class
@@ -26,12 +28,15 @@ com\mertaydar\springmvcsecurity\controller\StudentController.class
 com\mertaydar\springmvcsecurity\dao\UniDAO.class
 com\mertaydar\springmvcsecurity\dao\StudentDAO.class
 com\mertaydar\springmvcsecurity\controller\StudentLessonController.class
+com\mertaydar\springmvcsecurity\entity\Curriculum.class
 com\mertaydar\springmvcsecurity\model\RulesInfo.class
 com\mertaydar\springmvcsecurity\dao\impl\ReportDAOImpl.class
 com\mertaydar\springmvcsecurity\dao\impl\UserRoleDAOImpl.class
+com\mertaydar\springmvcsecurity\controller\CurriculumController.class
 com\mertaydar\springmvcsecurity\dao\impl\StudentLessonDAOImpl.class
 com\mertaydar\springmvcsecurity\entity\Activation.class
 com\mertaydar\springmvcsecurity\dao\impl\DeptDAOImpl.class
+com\mertaydar\springmvcsecurity\model\CurriculumInfo.class
 com\mertaydar\springmvcsecurity\dao\impl\UniDAOImpl.class
 com\mertaydar\springmvcsecurity\controller\RulesController.class
 com\mertaydar\springmvcsecurity\model\StudentInfo.class
@@ -57,7 +62,6 @@ com\mertaydar\springmvcsecurity\dao\RulesDAO.class
 com\mertaydar\springmvcsecurity\controller\OurmarkController.class
 com\mertaydar\springmvcsecurity\entity\UserRole.class
 com\mertaydar\springmvcsecurity\model\MailInfo.class
-com\mertaydar\springmvcsecurity\controller\PasswordEncoderGenerator.class
 com\mertaydar\springmvcsecurity\model\UserRoleInfo.class
 com\mertaydar\springmvcsecurity\dao\impl\MarkDAOImpl.class
 com\mertaydar\springmvcsecurity\dao\impl\TakingLessonDAOImpl.class
@@ -68,6 +72,7 @@ com\mertaydar\springmvcsecurity\dao\MailSend.class
 com\mertaydar\springmvcsecurity\model\StudentLessonInfo.class
 com\mertaydar\springmvcsecurity\entity\StudentLesson.class
 com\mertaydar\springmvcsecurity\model\ReportInfo.class
+com\mertaydar\springmvcsecurity\dao\CurriculumDAO.class
 com\mertaydar\springmvcsecurity\dao\OurmarkDAO.class
 com\mertaydar\springmvcsecurity\entity\Rules.class
 com\mertaydar\springmvcsecurity\config\SpringSecurityInitializer.class

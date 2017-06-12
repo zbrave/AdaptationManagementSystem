@@ -12,14 +12,14 @@ public class SubstituteLessonInfo {
 	private Integer term;
 	private Integer conditionId;
 	private Integer curriculumId;
-	private Integer base;
+	private String base;
 	
 	public SubstituteLessonInfo() {
 		super();
 	}
 
 	public SubstituteLessonInfo(Integer id, String name, String code, String lang, Integer credit, Integer lab, Integer akts,
-			Integer term, Integer conditionId, Integer curriculumId, Integer base) {
+			Integer term, Integer conditionId, Integer curriculumId, String base) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -116,11 +116,11 @@ public class SubstituteLessonInfo {
 		this.curriculumId = curriculumId;
 	}
 
-	public Integer getBase() {
+	public String getBase() {
 		return base;
 	}
 
-	public void setBase(Integer base) {
+	public void setBase(String base) {
 		this.base = base;
 	}
 	

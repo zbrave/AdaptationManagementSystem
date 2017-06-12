@@ -10,6 +10,7 @@ public class JSPLessonFormat {
 	private String takCode;
 	private String subCode;
 	private String subLang;
+	private Integer subLab;
 	private String takLang;
 	private Integer takCredit;
 	private Integer subCredit;
@@ -19,6 +20,7 @@ public class JSPLessonFormat {
 	private Integer takTerm;
 	private String subMark;
 	private String takMark;
+	private Integer takLab;
 	
 	public JSPLessonFormat() {
 		
@@ -34,6 +36,7 @@ public class JSPLessonFormat {
 		this.subName = sub.getName();
 		this.subTerm = sub.getTerm();
 		this.subMark = convMark;
+		this.subLab = sub.getLab();
 		if (tak == null) {
 			this.takId = 0;
 			this.takAkts = 0;
@@ -42,6 +45,7 @@ public class JSPLessonFormat {
 			this.takLang = "MUAF";
 			this.takName = "MUAF";
 			this.takTerm = 0;
+			this.takLab = 0;
 			this.takMark = orgMark;
 		}else {
 			this.takId = tak.getId();
@@ -52,6 +56,7 @@ public class JSPLessonFormat {
 			this.takName = tak.getName();
 			this.takTerm = tak.getTerm();
 			this.takMark = orgMark;
+			this.takLab = tak.getLab();
 		}
 	}
 	
@@ -158,6 +163,22 @@ public class JSPLessonFormat {
 
 	public void setStuLesId(Integer stuLesId) {
 		this.stuLesId = stuLesId;
+	}
+
+	public Integer getSubLab() {
+		return subLab;
+	}
+
+	public void setSubLab(Integer subLab) {
+		this.subLab = subLab;
+	}
+
+	public Integer getTakLab() {
+		return takLab;
+	}
+
+	public void setTakLab(Integer takLab) {
+		this.takLab = takLab;
 	}
 	
 	

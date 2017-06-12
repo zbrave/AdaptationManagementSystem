@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.mertaydar.springmvcsecurity.dao.DeptDAO;
 import com.mertaydar.springmvcsecurity.dao.UniDAO;
 import com.mertaydar.springmvcsecurity.model.DeptInfo;
+import com.mertaydar.springmvcsecurity.model.TakingLessonInfo;
 import com.mertaydar.springmvcsecurity.model.UniInfo;
 
 @Controller
@@ -62,7 +63,7 @@ public class DeptController {
 		String res = "";
 		List<DeptInfo> list = this.deptDAO.listDeptFromUni(id);
 		for (DeptInfo tmp : list) {
-			res = res.concat("<tr><td>"+tmp.getId()+"</td><td>"+tmp.getName()+"</td><td><a href=\"deleteDept?id="+tmp.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Sil</a></td></tr>");
+			res = res.concat("<tr><td>"+tmp.getId()+"</td><td>"+tmp.getName()+"</td><td><a href=\"editDept?id="+tmp.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Değiştir</a><a href=\"deleteDept?id="+tmp.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Sil</a></td></tr>");
 		}
 		return res;
 	}
@@ -131,8 +132,10 @@ public class DeptController {
 	@RequestMapping("/deleteDept")
 	public String deleteDept(Model model, @RequestParam("id") Integer id, final RedirectAttributes redirectAttributes) {
 		if (id != null) {
+			DeptInfo dep = deptDAO.findDeptInfo(id);
 			this.deptDAO.deleteDept(id);
 			redirectAttributes.addFlashAttribute("message2", "Bölüm silindi.");
+			return "redirect:/addRules?id="+dep.getUniId()+"&id2="+dep.getId()+"#deptTab";
 		}
 		return "redirect:/addRules#deptTab";
 	}

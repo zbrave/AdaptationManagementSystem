@@ -15,7 +15,7 @@
 	<script src="${bootstrapJS}"></script>
 	<link href="${amsCSS}" rel="stylesheet" />
 	<script src="${amsJS}"></script>	
-	<title>${title}</title>
+	<title>${formTitle}</title>
 </head>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -49,9 +49,7 @@ $(document).ready(function(){
   <div class="container">
 		<div class="row">
             <div class="panel panel-primary">
-            <div class="panel-heading">Öğrenci Değişiklik Formu<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-					</button></div>
+            <div class="panel-heading">Öğrenci Değişiklik Formu</div>
 	            <div class="panel-body">
  
    <form:form action="saveStudent" method="POST" modelAttribute="studentForm">
@@ -103,8 +101,8 @@ $(document).ready(function(){
       </form:select>
       <form:errors path="advisorId" class="error-message" />
           
-      <button class="btn btn-primary" type="  " value="Submit" >Ekle</button>
-      <button class="btn btn-danger"><a href="${pageContext.request.contextPath}/Student?pageid=1">Cancel</a></button>
+      <button class="btn btn-primary" type="  " value="Submit" >Güncelle</button>
+      <button class="btn btn-danger"><a href="${pageContext.request.contextPath}/Student?pageid=1">İptal</a></button>
      </div>    
    </form:form>
  </div>

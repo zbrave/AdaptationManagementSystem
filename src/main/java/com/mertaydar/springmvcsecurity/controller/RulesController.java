@@ -1,5 +1,6 @@
 package com.mertaydar.springmvcsecurity.controller;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,15 +60,61 @@ public class RulesController {
 /* Rules Section */
 	
 	@RequestMapping(value = "/addRules", method = RequestMethod.GET)
-	public String addRules(Model model) {
+	public String addRules(Model model, Integer offset, Integer maxResults) {
 //		List<RulesInfo> rules = rulesDAO.listRulesInfos();
 //		model.addAttribute("rules", rules);
 		List<CurriculumInfo> curList = curriculumDAO.listCurriculumInfos();
 		model.addAttribute("curriculums", curList);
 		CurriculumInfo active = curriculumDAO.findCurriculumInfoActive();
-		List<SubstituteLessonInfo> list = substituteLessonDAO.listSubstituteLessonInfos(active.getId());
+		List<SubstituteLessonInfo> list = new ArrayList<SubstituteLessonInfo>();
+		SubstituteLessonInfo first = new SubstituteLessonInfo();
+		first.setName("Şart yok.");
+		list.add(first);
+		List<SubstituteLessonInfo> list2 = substituteLessonDAO.listSubstituteLessonInfosPagination(active.getId(), offset, maxResults);
+		List<SubstituteLessonInfo> list3 = substituteLessonDAO.listSubstituteLessonInfos();
+		list.addAll(list3);
 		model.addAttribute("subLes", list);
+		model.addAttribute("subLes2", list2);
+		List<String> pool = substituteLessonDAO.listPoolLessonsByCurriculum(active.getId());
+		model.addAttribute("pool", pool);
+		model.addAttribute("count", substituteLessonDAO.count(active.getId()));
+		model.addAttribute("offset", offset);
 		return "addRules";
+	}
+	
+	@RequestMapping(value = "/addRules2", method = RequestMethod.GET)
+	public String addRules2(Model model, Integer offset, Integer maxResults) {
+//		List<RulesInfo> rules = rulesDAO.listRulesInfos();
+//		model.addAttribute("rules", rules);
+		List<CurriculumInfo> curList = curriculumDAO.listCurriculumInfos();
+		model.addAttribute("curriculums", curList);
+		CurriculumInfo active = curriculumDAO.findCurriculumInfoActive();
+		List<SubstituteLessonInfo> list = new ArrayList<SubstituteLessonInfo>();
+		SubstituteLessonInfo first = new SubstituteLessonInfo();
+		first.setName("Şart yok.");
+		list.add(first);
+		List<SubstituteLessonInfo> list2 = substituteLessonDAO.listSubstituteLessonInfosPagination(active.getId(), offset, maxResults);
+		List<SubstituteLessonInfo> list3 = substituteLessonDAO.listSubstituteLessonInfos();
+		list.addAll(list3);
+		model.addAttribute("subLes", list);
+		model.addAttribute("subLes2", list2);
+		List<String> pool = substituteLessonDAO.listPoolLessonsByCurriculum(active.getId());
+		model.addAttribute("pool", pool);
+		model.addAttribute("count", substituteLessonDAO.count(active.getId()));
+		model.addAttribute("offset", offset);
+		return "redirect:/addRules#substituteLessonTab";
+	}
+	
+	@RequestMapping(value="/getPoolLesson",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
+	@ResponseBody
+	public String getPoolLesson(@RequestParam Integer id) {
+		String res = "";
+		List<String> pool = substituteLessonDAO.listPoolLessonsByCurriculum(id);
+		for (String tmp : pool) {
+				String tmp2 = tmp.concat("H");
+				res = res.concat("<option "+"id=\""+tmp+"\" value=\""+tmp2+"\">"+tmp+"</option>");
+		}
+		return res;
 	}
 	
 	@RequestMapping(value="/getRules",method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
@@ -176,8 +223,12 @@ public class RulesController {
 	@RequestMapping("/deleteRules")
 	public String deleteRules(Model model, @RequestParam("id") Integer id, final RedirectAttributes redirectAttributes) {
 		if (id != null) {
+			RulesInfo rul = rulesDAO.findRulesInfo(id);
+			TakingLessonInfo tak = takingLessonDAO.findTakingLessonInfo(rul.getTakingLessonId());
+			DeptInfo dep = deptDAO.findDeptInfo(tak.getDeptId());
 			this.rulesDAO.deleteRules(id);
 			redirectAttributes.addFlashAttribute("message5", "Kural silindi.");
+			return "redirect:/addRules?id="+dep.getUniId()+"&id2="+dep.getId();
 		}
 		return "redirect:/addRules";
 	}

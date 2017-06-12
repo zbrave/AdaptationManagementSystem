@@ -67,7 +67,7 @@ public class TakingLessonController {
 		String res = "";
 		List<TakingLessonInfo> list = this.takingLessonDAO.listTakingLessonFromDept(id);
 		for (TakingLessonInfo tmp : list) {
-			res = res.concat("<tr><td>"+tmp.getId()+"</td><td>"+tmp.getName()+"</td><td>"+tmp.getCode()+"</td><td>"+tmp.getLang()+"</td><td>"+tmp.getCredit()+"</td><td>"+tmp.getAkts()+"</td><td>"+tmp.getTerm()+"</td><td><a href=\"deleteTakingLesson?id="+tmp.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Sil</a></td></tr>");
+			res = res.concat("<tr><td>"+tmp.getId()+"</td><td>"+tmp.getName()+"</td><td>"+tmp.getCode()+"</td><td>"+tmp.getLang()+"</td><td>"+tmp.getCredit()+"</td><td>"+tmp.getLab()+"</td><td>"+tmp.getAkts()+"</td><td>"+tmp.getTerm()+"</td><td><a href=\"editTakingLesson?id="+tmp.getId()+"\" class=\"btn btn-info btn-xs\"><span class=\"glyphicon glyphicon-edit\"></span> Değiştir</a><a href=\"deleteTakingLesson?id="+tmp.getId()+"\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove\"></span> Sil</a></td></tr>");
 		}
 		return res;
 	}
@@ -152,8 +152,11 @@ public class TakingLessonController {
 	@RequestMapping("/deleteTakingLesson")
 	public String deleteTakingLesson(Model model, @RequestParam("id") Integer id, final RedirectAttributes redirectAttributes) {
 		if (id != null) {
+			TakingLessonInfo tak = takingLessonDAO.findTakingLessonInfo(id);
+			DeptInfo dep = deptDAO.findDeptInfo(tak.getDeptId());
 			this.takingLessonDAO.deleteTakingLesson(id);
 			redirectAttributes.addFlashAttribute("message3", "Ders Silindi.");
+			return "redirect:/addRules?id="+dep.getUniId()+"&id2="+dep.getId()+"#takingLessonTab";
 		}
 		return "redirect:/addRules#takingLessonTab";
 	}

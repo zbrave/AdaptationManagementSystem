@@ -31,12 +31,26 @@ $(document).ready(function(){
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#takingLessonId").change(function(){
-    $.get("${pageContext.request.contextPath}/getSubstituteLessonById?id="+$(this).children("option").filter(":selected").attr("id") , null, function (data) {
-        $("#substituteLessonId").html(data);
-    });
-});
+	    $.get("${pageContext.request.contextPath}/getSubstituteLessonById?id="+$(this).children("option").filter(":selected").attr("id") , null, function (data) {
+	        $("#substituteLessonId").html(data);
+	    });
+	});
 });</script>
-<title>Create substituteLesson</title>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#takingLessonId").change(function(){
+		var id = $(this).children("option").filter(":selected").attr("id");
+		console.log("id: "+id);
+		if (id == -1) {
+			document.getElementById('orgMark').setAttribute('readonly', 'readonly');
+		}
+		else {
+			document.getElementById('orgMark').removeAttribute('readonly');
+		}
+	});
+});
+</script>
+<title>Öğrenci İntibak Formu</title>
 <style>
 .error-message {
    color: red;
@@ -47,7 +61,24 @@ $(document).ready(function(){
 </head>
 <body>
 	<%@include file="navbar.jsp" %>
-	
+	<div id="newStu" class="container modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none; margin-top: 50px;">
+		<div class="row">
+            <div class="panel panel-primary">
+            <div class="panel-heading">İntibak Yılı Hesapla<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</button></div>
+	            <div class="panel-body">
+		        	<form:form class="form-inline" action="${pageContext.request.contextPath}/calcAdp" method="GET">
+			    		<input type="hidden" class="form-control" name="id" value="${id}" />
+					    <label class="control-label" style="margin-left: 10px;">Katsayı</label>
+					    <input class="input-sm" class="form-control" name="coef" placeholder="Katsayı girin" />
+					    <select name="type" class="form-control"><option value="Credit">Kredi</option><option value="Akts">AKTS</option></select>
+					    <button class="btn btn-default btn-xs">Hesapla</button>   
+					</form:form>
+		        </div>
+	        </div>
+        </div>
+	</div>
 	<div class="col-lg-1"></div>
 	<!-- Forms -->
 	<div class="col-lg-10">
@@ -56,7 +87,13 @@ $(document).ready(function(){
 	        <div class="panel panel-default panel-table">
               <div class="panel-heading">
                 <div class="row">
-                    <h3 class="panel-title text-center">Öğrenci bilgisi</h3>
+                    <h3 class="panel-title text-center">Öğrenci bilgisi<c:forEach var="role" items="${pageContext['request'].userPrincipal.principal.authorities}">
+		<c:if test="${role.authority == 'ROLE_ADMIN' || role.authority == 'ROLE_MANAGER' }"><c:if test="${uni != 'Yıldız Teknik Üniversitesi'}">
+	<a class='btn btn-info btn-xs' href="word?id=${id}"><span class="glyphicon glyphicon-edit"></span> Rapor al</a>
+	</c:if>
+	<c:if test="${uni == 'Yıldız Teknik Üniversitesi'}">
+	<a class='btn btn-info btn-xs' href="word2?id=${id}"><span class="glyphicon glyphicon-edit"></span> Rapor al</a>
+	</c:if></c:if></c:forEach></h3>
                 </div>
               </div>
               <div class="panel-body">
@@ -68,7 +105,8 @@ $(document).ready(function(){
 							<th class="col-md-1 text-center">Numara</th>
 							<th class="col-md-2 text-center">Ad</th>
 							<th class="col-md-1 text-center">Soyad</th>
-							<th class="col-md-1 text-center">İntibak Yılı</th>
+							<th class="col-md-1 text-center">İntibak Yılı<c:forEach var="role" items="${pageContext['request'].userPrincipal.principal.authorities}">
+		<c:if test="${role.authority == 'ROLE_ADMIN' || role.authority == 'ROLE_MANAGER' }"><a href="#" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#newStu" onclick="$('#newStu').show();"><b>+</b> Hesapla</a></c:if></c:forEach></th>
 							<th class="col-md-1 text-center">Kayıt Yılı</th>
 							<th class="col-md-1 text-center">Danışmanı</th>
 						</tr>
@@ -102,15 +140,15 @@ $(document).ready(function(){
 								
 								<label class="control-label" style="margin-left: 10px;">Alınan Ders</label>
 											 			
-						   		<select id="takingLessonId" class="form-control" name="takingLessonId" style="width: 23%;" ></select>
+						   		<select id="takingLessonId" class="form-control" name="takingLessonId" style="width: 31%;" ></select>
 
 								<label class="control-label" style="margin-left: 10px;">Sayılan Ders</label>
 											 			
-						   		<select id="substituteLessonId" class="form-control" name="substituteLessonId" style="width: 23%;" ></select>
+						   		<select id="substituteLessonId" class="form-control" name="substituteLessonId" style="width: 31%;" ></select>
 						   		
 						   		<label class="control-label" style="margin-left: 10px;">Not</label>
 						   		
-						   		<input id="orgMark" class="form-control" style="width: 5%;" name="orgMark" type="text" value=""/>
+						   		<input id="orgMark" class="form-control" style="width: 5%;" name="orgMark" type="text" value="" readonly/>
 						   		
 						   		<input id="convMark" name="convMark" type="hidden" value=""/>
 						   		
@@ -142,15 +180,6 @@ $(document).ready(function(){
 				        	</div>
 				        </form:form>
 		        </div>
-		        <div class="panel-body">
-		        	<form:form class="form-inline" action="${pageContext.request.contextPath}/calcAdp" method="GET">
-			    		<input type="hidden" class="form-control" name="id" value="${id}" />
-					    <label class="control-label" style="margin-left: 10px;">İntibak Yılı Hesapla</label>
-					    <input class="input-sm" class="form-control" name="coef" placeholder="Katsayı girin" />
-					    <select name="type" class="form-control"><option value="Credit">Kredi</option><option value="Akts">AKTS</option></select>
-					    <button class="btn btn-default btn-xs">Hesapla</button>   
-					</form:form>
-		        </div>
 			</div>
 			</c:if>
 			</c:forEach>
@@ -178,6 +207,7 @@ $(document).ready(function(){
 							<th>Dersin dili</th>
 							<th>Kredi</th>
 							<th>AKTS</th>
+							<th>Lab</th>
 							<th>Başarı notu</th>
 						</tr>
 					</thead>
@@ -236,7 +266,7 @@ $(document).ready(function(){
 								   	<td> ${info.subCredit}  </td>
 								   	<td> ${info.subAkts}  </td>
 								   	<form:form action="updateStudentLesson" class="form-inline" method="POST" modelAttribute="studentLessonForm">
-								   	<td><input id="convMark" name="convMark" class="input-sm" style="width: 50px;" value="${info.subMark }" /></td>
+								   	<td><input id="convMark" name="convMark" class="input-sm" style="width: 60px;" value="${info.subMark }" /></td>
 								   	<input id="id" name="id" type="hidden" value="${info.stuLesId }"/>
 								   	<td> 
 								   		<a class='btn btn-danger btn-xs' href="deleteStudentLesson?id=${info.stuLesId}&studentId=${id}" data-toggle="confirmation" data-title="Bağlantılı tüm bilgiler bu işlemle birlikte silinecek. Emin misiniz?"><span class="glyphicon glyphicon-edit"></span> Sil</a>
@@ -301,9 +331,8 @@ $(document).ready(function(){
 	</c:if>
 	</c:forEach>
 	</c:forEach>
-	<a class='btn btn-info btn-xs' href="word?id=${id}"><span class="glyphicon glyphicon-edit"></span> Rapor al</a>
 	<c:forEach var="role" items="${pageContext['request'].userPrincipal.principal.authorities}">
-		<c:if test="${role.authority == 'ROLE_USER' }">
+		<c:if test="${role.authority == 'ROLE_USER' && not empty advisor.email }">
 			<!-- Mail Form -->
 			<form:form action="sendMail" class="form-inline" method="POST" modelAttribute="mailForm">
 				<div class="col-lg-3"></div>

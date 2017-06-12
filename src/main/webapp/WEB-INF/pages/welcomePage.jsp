@@ -11,10 +11,11 @@
 	<spring:url value="/resources/others/ams.js" var="amsJS" />
 	<spring:url value="/resources/js/jquery.min.js" var="jqueryJS" />
 	<link href="${bootstrapCSS}" rel="stylesheet" />
-	<script src="${bootstrapJS}"></script>
 	<script src="${jqueryJS}"></script>
+	<script src="${bootstrapJS}"></script>
 	<link href="${amsCSS}" rel="stylesheet" />
-	<script src="${amsJS}"></script>	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js"></script>
 	<title>${title}</title>
 </head>
 <script type="text/javascript">
@@ -34,14 +35,37 @@ $.get("http://freegeoip.net/json/", function (response) {
                 <hr style="margin:8px auto">
                 <c:forEach var="role"
 					items="${pageContext['request'].userPrincipal.principal.authorities}">
-					<c:if test="${role.authority == 'ROLE_SUPER_ADMIN' }">
-						<span class="label label-primary"><c:out value="SUPER ADMIN" /></span>
-					</c:if>
 					<c:if test="${role.authority == 'ROLE_ADMIN' }">
-						<span class="label label-info"><c:out value="ADMIN" /></span>
+				<div id="canvas-holder" style="width:20%; margin-left: 765px;">
+					<h2>İntibak Görevlileri Yük Dağılımı</h2>
+					<canvas id="myChart"  />
+			    </div>
+				<script>
+				var ctx = document.getElementById("myChart").getContext('2d');
+				var myChart = new Chart(ctx, {
+				  type: 'pie',
+				  data: {
+				    labels: [${users}],
+				    datasets: [{
+				      backgroundColor: [${colors}],
+				      data: [${numbers}]
+				    }]
+				  }
+				});
+				</script>
+				</c:if>
+				</c:forEach>
+                <hr style="margin:8px auto">
+                <c:forEach var="role"
+					items="${pageContext['request'].userPrincipal.principal.authorities}">
+					<c:if test="${role.authority == 'ROLE_ADMIN' }">
+						<span class="label label-info"><c:out value="Yönetici" /></span>
+					</c:if>
+					<c:if test="${role.authority == 'ROLE_MANAGER' }">
+						<span class="label label-info"><c:out value="İntibak Görevlisi" /></span>
 					</c:if>
 					<c:if test="${role.authority == 'ROLE_USER' }">
-						<span class="label label-default"><c:out value="USER" /></span>
+						<span class="label label-default"><c:out value="Öğrenci" /></span>
 					</c:if>
 				</c:forEach>
             </div>

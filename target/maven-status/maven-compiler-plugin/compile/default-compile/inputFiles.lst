@@ -8,7 +8,6 @@ D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecur
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\impl\ActivationDAOImpl.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\config\WebSecurityConfig.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\controller\MarkController.java
-D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\controller\PasswordEncoderGenerator.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\model\RulesInfo.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\controller\DeptController.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\impl\StudentLessonDAOImpl.java
@@ -62,6 +61,7 @@ D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecur
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\impl\DeptDAOImpl.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\model\SubstituteLessonInfo.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\MarkDAO.java
+D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\pagination\PaginationTaglib.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\dao\impl\OurmarkDAOImpl.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\entity\Dept.java
 D:\Yazilim\eclipse_neon workspace\AMS\src\main\java\com\mertaydar\springmvcsecurity\model\ReportInfo.java

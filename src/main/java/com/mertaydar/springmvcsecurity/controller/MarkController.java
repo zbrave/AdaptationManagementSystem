@@ -130,8 +130,10 @@ public class MarkController {
 	@RequestMapping("/deleteMark")
 	public String deleteMark(Model model, @RequestParam("id") Integer id, final RedirectAttributes redirectAttributes) {
 		if (id != null) {
+			MarkInfo mark = markDAO.findMarkInfo(id);
 			this.markDAO.deleteMark(id);
 			redirectAttributes.addFlashAttribute("message2", "Not silindi.");
+			return "redirect:/addRules?id="+mark.getUniId()+"#markTab";
 		}
 		return "redirect:/addRules#markTab";
 	}
@@ -163,6 +165,6 @@ public class MarkController {
 		redirectAttributes.addFlashAttribute("message6", "Not eklendi.");
 
 //		return "redirect:/markList";
-		return "redirect:/addRules#markTab";
+		return "redirect:/addRules?id="+markInfo.getUniId()+"#markTab";
 	}
 }

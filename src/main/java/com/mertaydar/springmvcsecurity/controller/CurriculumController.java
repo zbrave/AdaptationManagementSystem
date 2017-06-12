@@ -28,7 +28,12 @@ public class CurriculumController {
 	
 	@RequestMapping("/deleteCurriculum")
 	public String deleteCurriculum(Model model, @RequestParam("id") Integer id, final RedirectAttributes redirectAttributes) {
-		if (id != null) {
+		CurriculumInfo cur = curriculumDAO.findCurriculumInfo(id);
+		if (cur.getEnabled()) {
+			redirectAttributes.addFlashAttribute("message1", "Aktif müfredat yılı silinemez.");
+			return "redirect:/addRules#substituteLessonTab";
+		}
+		else if (id != null) {
 			this.curriculumDAO.deleteCurriculum(id);
 			redirectAttributes.addFlashAttribute("message1", "Müfredat yılı silindi.");
 		}
@@ -53,9 +58,8 @@ public class CurriculumController {
 			BindingResult result, //
 			final RedirectAttributes redirectAttributes) {
 
-
 		if (result.hasErrors()) {
-			System.out.println("Error curriculum delete.");
+			System.out.println("Error curriculum on save.");
 		}
 		
 		this.curriculumDAO.saveCurriculum(curriculumInfo);

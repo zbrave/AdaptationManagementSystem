@@ -203,6 +203,7 @@ public class StudentLessonController {
 		}
 		else {
 			this.studentLessonDAO.saveStudentLesson(studentLessonInfo);
+			redirectAttributes.addFlashAttribute("message", "Ders eklendi.");
 		}
 
 //		return "redirect:/studentLessonList";
