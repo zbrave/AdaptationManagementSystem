@@ -10,9 +10,11 @@
 <spring:url value="/resources/css/bootstrap.css" var="bootstrapCSS" />
 	<spring:url value="/resources/js/bootstrap.js" var="bootstrapJS" />
 	<spring:url value="/resources/others/ams.css" var="amsCSS" />
+	<spring:url value="/resources/js/bootstrap-confirmation.js" var="bootstrapConfirmationJS" />
 	<spring:url value="/resources/js/jquery.min.js" var="jqueryJS" />
 	<link href="${bootstrapCSS}" rel="stylesheet" />
 	<script src="${bootstrapJS}"></script>
+	<script src="${bootstrapConfirmationJS}"></script>
 	<script src="${jqueryJS}"></script>
 	
 	<link href="${amsCSS}" rel="stylesheet" />
@@ -139,7 +141,7 @@ $(document).ready(function(){
 						
 						<label class="control-label">Müfredat Yılı</label>
 									 			
-						<input id="year" name="year" class="form-control" value=""/>
+						<input id="year" name="year" class="form-control" value="" required="required"/>
 				    
 				    	<label class="control-label">Aktif yıl yapılsın mı ?</label>
 				                       
@@ -170,19 +172,19 @@ $(document).ready(function(){
 
 						<label class="control-label">Üniversite Adı</label>
 									 			
-				   		<select id="uniId3" class="form-control" name="uniId3" ></select>
+				   		<select id="uniId3" class="form-control" name="uniId3" required="required"></select>
 				    
 				    	<label class="control-label">Bölüm Adı</label>
 				                       
-				        <select id="deptId2" class="form-control" name="deptId2" ></select>
+				        <select id="deptId2" class="form-control" name="deptId2" required="required"></select>
 				          
 				        <label class="control-label">Alınan Ders Adı</label>
 				                       
-				        <select id="takingLessonId" class="form-control" name="takingLessonId" ></select>
+				        <select id="takingLessonId" class="form-control" name="takingLessonId" required="required"></select>
 				        
 				        <label class="control-label">Sayılan Ders Adı</label>
 				                       
-				        <select id="substituteLessonId" class="form-control" name="substituteLessonId" ></select>
+				        <select id="substituteLessonId" class="form-control" name="substituteLessonId" required="required"></select>
 				        
 				        <button type="submit" class="btn btn-primary" value="Ekle" >Ekle</button>
 							        
@@ -235,7 +237,7 @@ $(document).ready(function(){
 					       			
 						        	<label class="control-label">Üniversite Adı</label>
 					
-					              	<input id="name" class="form-control input-sm" name="name" type="text" value="" style="height: 35px!important" />
+					              	<input id="name" class="form-control input-sm" name="name" type="text" value="" style="height: 35px!important" required="required"/>
 					
 					    	       	<button type="submit" class="btn btn-primary" value="Ekle" >Ekle</button>
 					           		
@@ -270,11 +272,11 @@ $(document).ready(function(){
 					
 					 				<label class="control-label">Üniversite Adı</label>
 					
-							       	<select id="uniId" class="form-control" name="uniId" ></select>
+							       	<select id="uniId" class="form-control" name="uniId" required="required"></select>
 					
 							       	<label class="control-label">Bölüm Adı</label>
 					
-					               	<input id="name" class="form-control input-sm" name="name" type="text" value="" style="height: 35px!important"/>
+					               	<input id="name" class="form-control input-sm" name="name" type="text" value="" style="height: 35px!important" required="required"/>
 					               	
 					               	<button type="submit" class="btn btn-primary" value="Ekle" >Ekle</button>
 							        
@@ -308,39 +310,39 @@ $(document).ready(function(){
 					 			
 					 			<label class="control-label">Üniversite Adı</label>
 					 			
-					       		<select id="uniId2" class="form-control" name="uniId2" ></select>
+					       		<select id="uniId2" class="form-control" name="uniId2" required="required"></select>
 							    
 							    <label class="control-label">Bölüm Adı</label>
 							                       
-					            <select id="deptId" class="form-control" name="deptId" ></select>
+					            <select id="deptId" class="form-control" name="deptId" required="required"></select>
 					            
 					            <label class="control-label">Ders Adı</label>
 					                       
-					            <input id="name" class="form-control input-sm" name="name" type="text" value="" style="height: 35px!important"/>
+					            <input id="name" class="form-control input-sm" name="name" type="text" value="" style="height: 35px!important" required="required"/>
 					            
 					            <label class="control-label">Ders Kodu</label>
 					                       
-					            <input id="code" class="form-control input-sm" name="code" type="text" value="" style="height: 35px!important"/>
+					            <input id="code" class="form-control input-sm" name="code" type="text" value="" style="height: 35px!important" required="required"/>
 					            
 					            <label class="control-label">Ders Dili</label>
 					                       
-					            <input id="lang" class="form-control input-sm" name="lang" type="text" value="" style="height: 35px!important"/>
+					            <input id="lang" class="form-control input-sm" name="lang" type="text" value="" style="height: 35px!important" required="required"/>
 					            
 					            <label class="control-label">Kredi</label>
 					            
-					            <input id="credit" class="form-control input-sm" name="credit" type="text" value="" style="height: 35px!important"/>
+					            <input id="credit" class="form-control input-sm" name="credit" type="text" value="" style="height: 35px!important" required="required"/>
 					            
 					            <label class="control-label">AKTS</label>
 					            
-					            <input id="akts" class="form-control input-sm" name="akts" type="text" value="" style="height: 35px!important"/>
+					            <input id="akts" class="form-control input-sm" name="akts" type="text" value="" style="height: 35px!important" required="required"/>
 					            
 					            <label class="control-label">Lab Saati</label>
 					            
-					            <input id="lab" class="form-control input-sm" name="lab" type="text" value="" style="height: 35px!important"/>
+					            <input id="lab" class="form-control input-sm" name="lab" type="text" value="" style="height: 35px!important" required="required" />
 					 			
 					 			<label class="control-label">Ders Dönemi</label>
 					                       
-					            <input id="term" class="form-control input-sm" name="term" type="text" value="" style="height: 35px!important"/>
+					            <input id="term" class="form-control input-sm" name="term" type="text" value="" style="height: 35px!important" required="required"/>
 					 			
 					           	<button type="submit" class="btn btn-primary" value="Ekle" >Ekle</button>
 							        
@@ -374,7 +376,7 @@ $(document).ready(function(){
                         <div class="tab-pane fade" id="substituteLessonTab">
                         <label class="control-label">Müfredat yılı</label>
                         <button onclick="doActive()" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-ok"></span> Aktif yıl yap</button>
-                        <button onclick="delCurriculum()" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Müfredat yılını sil</button>
+                        <button onclick="delCurriculum()" class="btn btn-danger btn-xs" data-toggle="confirmation" data-btn-ok-label="Evet" data-btn-cancel-label="Hayır" data-title="Bağlantılı tüm bilgiler bu işlemle birlikte silinecek. Emin misiniz?"><span class="glyphicon glyphicon-remove"></span> Müfredat yılını sil</button>
                         <a href="#" class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#newStu" onclick="$('#newStu').show();"><b>+</b> Yeni Müfredat Ekle</a>
                         	<form:form action="saveSubstituteLesson" method="POST" modelAttribute="substituteLessonForm">
 					   			
@@ -395,31 +397,31 @@ $(document).ready(function(){
 					            
 					            <label class="control-label">Ders Adı</label>
 					                       
-					            <input id="name" class="form-control input-sm" name="name" type="text" value="" style="height: 35px!important"/>
+					            <input id="name" class="form-control input-sm" name="name" type="text" value="" style="height: 35px!important" required="required"/>
 					            
 					            <label class="control-label">Ders Kodu</label>
 					                       
-					            <input id="code" class="form-control input-sm" name="code" type="text" value="" style="height: 35px!important"/>
+					            <input id="code" class="form-control input-sm" name="code" type="text" value="" style="height: 35px!important" required="required"/>
 					            
 					            <label class="control-label">Ders Dili</label>
 					                       
-					            <input id="lang" class="form-control input-sm" name="lang" type="text" value="" style="height: 35px!important"/>
+					            <input id="lang" class="form-control input-sm" name="lang" type="text" value="" style="height: 35px!important" required="required"/>
 					            
 					            <label class="control-label">Kredi</label>
 					            
-					            <input id="credit" class="form-control input-sm" name="credit" type="text" value="" style="height: 35px!important"/>
+					            <input id="credit" class="form-control input-sm" name="credit" type="text" value="" style="height: 35px!important" required="required"/>
 					            
 					            <label class="control-label">AKTS</label>
 					            
-					            <input id="akts" class="form-control input-sm" name="akts" type="text" value="" style="height: 35px!important"/>
+					            <input id="akts" class="form-control input-sm" name="akts" type="text" value="" style="height: 35px!important" required="required"/>
 					            
 					            <label class="control-label">Lab Saati</label>
 					            
-					            <input id="lab" class="form-control input-sm" name="lab" type="text" value="" style="height: 35px!important"/>
+					            <input id="lab" class="form-control input-sm" name="lab" type="text" value="" style="height: 35px!important" required="required"/>
 					 			
 					 			<label class="control-label">Ders Dönemi</label>
 					                       
-					            <input id="term2" class="form-control input-sm" name="term" type="text" value="" style="height: 35px!important"/>
+					            <input id="term2" class="form-control input-sm" name="term" type="text" value="" style="height: 35px!important" required="required"/>
 					            
 					            <label class="control-label">Ders şartı</label>
 					            
@@ -608,15 +610,18 @@ $(document).ready(function(){
 			document.getElementById('base2').setAttribute('disabled', 'disabled');
 			document.getElementById('base3').setAttribute('disabled', 'disabled');
 			document.getElementById('term2').removeAttribute('readonly');
+			document.getElementById('base2').removeAttribute('required');
 		}
 		if (id == 2) {
 			document.getElementById('base2').removeAttribute('disabled');
+			document.getElementById('base2').setAttribute('required', 'required');
 			document.getElementById('base3').setAttribute('disabled', 'disabled');
 			document.getElementById('base').setAttribute('disabled', 'disabled');
 			document.getElementById('term2').removeAttribute('readonly');
 		}
 		if (id == 3) {
 			document.getElementById('base3').removeAttribute('disabled');
+			document.getElementById('base2').removeAttribute('required');
 			document.getElementById('base2').setAttribute('disabled', 'disabled');
 			document.getElementById('base').setAttribute('disabled', 'disabled');
 			document.getElementById('term2').value=0;
@@ -625,4 +630,10 @@ $(document).ready(function(){
 }
 </script>
 </body>
+<script type="text/javascript">
+$('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+  // other options
+});
+</script>
 </html>

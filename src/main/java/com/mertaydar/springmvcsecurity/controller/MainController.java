@@ -87,8 +87,10 @@ public class MainController {
 	private CurriculumDAO curriculumDAO;
 	
 	@RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
-	public String welcomePage(Model model) {
+	public String welcomePage(Model model, Principal principal) {
 		model.addAttribute("title", "İntibak Yönetim Sistemi");
+		UserInfo user = userDAO.findLoginUserInfo(principal.getName());
+		model.addAttribute("userInfo", user);
 		List<UserInfo> users = userDAO.listUserInfosRoleManager();
 		String res1 = "";
 		String res2 = "";

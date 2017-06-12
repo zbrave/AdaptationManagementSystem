@@ -38,4 +38,5 @@ public interface UserDAO {
 	List<UserInfo> listUserInfosBySearchRoleUserStu(Integer pageid, Integer total, String val, String cate);
 	List<UserInfo> listUserInfosRoleUserStu(Integer pageid, Integer total);
 	List<UserInfo> listUserInfosRoleUserStu();
+	UserInfo findLoginUserInfoWithEmail(String email);
 }

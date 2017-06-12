@@ -58,7 +58,7 @@ $(document).ready(function(){
 		<form:hidden path="id" />
 	       
 	       
-	       <label class="control-label">Üniversite Adı</label>
+	       <label class="control-label">Üniversite Adı</label><form:errors path="name" class="error-message" />
 	                  
 	       <form:input id="name" path="name" class="form-control input-sm" name="name" type="text" value="" style="height: 35px!important"/>
 	       

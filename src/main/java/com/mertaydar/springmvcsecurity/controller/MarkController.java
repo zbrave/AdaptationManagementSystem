@@ -132,7 +132,7 @@ public class MarkController {
 		if (id != null) {
 			MarkInfo mark = markDAO.findMarkInfo(id);
 			this.markDAO.deleteMark(id);
-			redirectAttributes.addFlashAttribute("message2", "Not silindi.");
+			redirectAttributes.addFlashAttribute("message6", "Not silindi.");
 			return "redirect:/addRules?id="+mark.getUniId()+"#markTab";
 		}
 		return "redirect:/addRules#markTab";

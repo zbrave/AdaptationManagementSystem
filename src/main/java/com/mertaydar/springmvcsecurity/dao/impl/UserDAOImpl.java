@@ -74,6 +74,19 @@ public class UserDAOImpl implements UserDAO {
         Query query = session.createQuery(sql).setFirstResult(pageid-1).setMaxResults(total);
         return query.list();
 	}
+	
+	@Override
+	public UserInfo findLoginUserInfoWithEmail(String email) {
+		Session session = sessionFactory.getCurrentSession();
+        Criteria crit = session.createCriteria(User.class);
+        crit.add(Restrictions.eq("email", email));
+        User user = (User) crit.uniqueResult();
+        if (user == null) {
+            return null;
+        }
+        return new UserInfo(user.getId(),user.getEmail(),user.getUsername(),user.getPassword(),user.getStudentId(),user.isEnabled(),user.getTel());
+	}
+	
 	/* ListUser func. */
 	@SuppressWarnings("unchecked")
 	@Override

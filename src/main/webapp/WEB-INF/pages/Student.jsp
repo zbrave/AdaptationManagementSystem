@@ -108,27 +108,27 @@ $(document).ready(function(){
 						
 						<label class="control-label">Üniversite Adı</label>
 									 			
-				   		<select id="uniId" class="form-control" name="uniId" ></select>
+				   		<select id="uniId" class="form-control" name="uniId" required="required"></select>
 				    
 				    	<label class="control-label">Bölüm Adı</label>
 				                       
-				        <select id="deptId" class="form-control" name="deptId" ></select>
+				        <select id="deptId" class="form-control" name="deptId" required="required"></select>
 				          
 				        <label class="control-label">Ad</label>
 				                       
-				        <input id="name" class="form-control" name="name" />
+				        <input id="name" class="form-control" name="name" required="required"/>
 				        
 				        <label class="control-label">Soyad</label>
 				                       
-				        <input id="surname" class="form-control" name="surname" />
+				        <input id="surname" class="form-control" name="surname" required="required"/>
 				        
 				        <label class="control-label">Numara</label>
 				                       
-				        <input id="no" class="form-control" name="no" />
+				        <input id="no" class="form-control" name="no" required="required"/>
 				        
 				        <label class="control-label">Kayıt Yılı</label>
 				                       
-				        <input id="recordYear" class="form-control" name="recordYear" />
+				        <input id="recordYear" class="form-control" name="recordYear" required="required"/>
 				        <br/>
 				        <button type="submit" class="btn btn-primary" value="Ekle" >Ekle</button> 
 			        </div>

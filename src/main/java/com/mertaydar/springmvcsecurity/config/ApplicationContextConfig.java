@@ -27,6 +27,7 @@ import com.mertaydar.springmvcsecurity.dao.CurriculumDAO;
 import com.mertaydar.springmvcsecurity.dao.DeptDAO;
 import com.mertaydar.springmvcsecurity.dao.MarkDAO;
 import com.mertaydar.springmvcsecurity.dao.OurmarkDAO;
+import com.mertaydar.springmvcsecurity.dao.PassactivationDAO;
 import com.mertaydar.springmvcsecurity.dao.RulesDAO;
 import com.mertaydar.springmvcsecurity.dao.StudentDAO;
 import com.mertaydar.springmvcsecurity.dao.StudentLessonDAO;
@@ -40,6 +41,7 @@ import com.mertaydar.springmvcsecurity.dao.impl.CurriculumDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.DeptDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.MarkDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.OurmarkDAOImpl;
+import com.mertaydar.springmvcsecurity.dao.impl.PassactivationDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.RulesDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.StudentDAOImpl;
 import com.mertaydar.springmvcsecurity.dao.impl.StudentLessonDAOImpl;
@@ -194,6 +196,11 @@ public class ApplicationContextConfig {
   @Bean(name = "ActivationDAO")
   public ActivationDAO getActivationDAO() {
 	  return new ActivationDAOImpl();
+  }
+  
+  @Bean(name = "PassactivationDAO")
+  public PassactivationDAO getPassactivationDAO() {
+	  return new PassactivationDAOImpl();
   }
   
   @Bean(name = "CurriculumDAO")

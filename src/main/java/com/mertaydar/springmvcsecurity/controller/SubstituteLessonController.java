@@ -178,6 +178,8 @@ public class SubstituteLessonController {
 
 		model.addAttribute("takingLessonMap", takingLessonMap);
 		
+		model.addAttribute("cond", substituteLessonInfo.getConditionId());
+		
 		CurriculumInfo active = curriculumDAO.findCurriculumInfoActive();
 		List<String> pool = substituteLessonDAO.listPoolLessonsByCurriculum(active.getId());
 		model.addAttribute("pool", pool);
@@ -244,6 +246,7 @@ public class SubstituteLessonController {
 
 
 		if (result.hasErrors()) {
+			redirectAttributes.addFlashAttribute("message4", "Girilen veriler hatalı. Kontrol edin.");
 			return this.formSubstituteLesson(model, substituteLessonInfo);
 		}
 		String decodedToUTF8;
@@ -259,7 +262,7 @@ public class SubstituteLessonController {
 
 		// Important!!: Need @EnableWebMvc
 		// Add message to flash scope
-		redirectAttributes.addFlashAttribute("message4", "Verilen Ders Eklendi.");
+		redirectAttributes.addFlashAttribute("message4", "Ders eklendi/güncellendi.");
 
 //		return "redirect:/substituteLessonList";
 		return "redirect:/addRules#substituteLessonTab";

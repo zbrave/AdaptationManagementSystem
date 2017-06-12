@@ -179,6 +179,7 @@ public class StudentLessonController {
 			}
 			else {
 				this.studentLessonDAO.saveStudentLessonExempt(studentLessonInfo);
+				redirectAttributes.addFlashAttribute("message", "Ders eklendi.");
 			}
 		}
 		else if (substituteLessonDAO.findSubstituteLessonInfo(studentLessonInfo.getSubstituteLessonId()).getConditionId() != null) {
@@ -192,6 +193,7 @@ public class StudentLessonController {
 			}
 			if (alrdy) {
 				this.studentLessonDAO.saveStudentLesson(studentLessonInfo);
+				redirectAttributes.addFlashAttribute("message", "Ders eklendi.");
 			}
 			else {
 				SubstituteLessonInfo sub = substituteLessonDAO.findSubstituteLessonInfo(cond_id);

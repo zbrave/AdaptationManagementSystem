@@ -220,6 +220,7 @@ $(document).ready(function(){
 								  	<td> ${info.takLang}  </td>
 								   	<td> ${info.takCredit}  </td>
 								   	<td> ${info.takAkts}  </td>
+								   	<td> ${info.takLab}  </td>
 								   	<td> ${info.takMark}  </td>
 								</tr>
 							</c:if>
@@ -252,6 +253,7 @@ $(document).ready(function(){
 							<th>Dersin dili</th>
 							<th>Kredi</th>
 							<th>AKTS</th>
+							<th>Lab</th>
 							<th>Başarı notu</th>
 							<th>Eylem</th>
 						</tr>
@@ -265,11 +267,12 @@ $(document).ready(function(){
 								  	<td> ${info.subLang}  </td>
 								   	<td> ${info.subCredit}  </td>
 								   	<td> ${info.subAkts}  </td>
+								   	<td> ${info.subLab}  </td>
 								   	<form:form action="updateStudentLesson" class="form-inline" method="POST" modelAttribute="studentLessonForm">
 								   	<td><input id="convMark" name="convMark" class="input-sm" style="width: 60px;" value="${info.subMark }" /></td>
 								   	<input id="id" name="id" type="hidden" value="${info.stuLesId }"/>
 								   	<td> 
-								   		<a class='btn btn-danger btn-xs' href="deleteStudentLesson?id=${info.stuLesId}&studentId=${id}" data-toggle="confirmation" data-title="Bağlantılı tüm bilgiler bu işlemle birlikte silinecek. Emin misiniz?"><span class="glyphicon glyphicon-edit"></span> Sil</a>
+								   		<a class='btn btn-danger btn-xs' href="deleteStudentLesson?id=${info.stuLesId}&studentId=${id}" data-toggle="confirmation" data-btn-ok-label="Evet" data-btn-cancel-label="Hayır" data-title=" Emin misiniz?"><span class="glyphicon glyphicon-edit"></span> Sil</a>
 								   		<button type="submit" class="btn btn-info btn-xs" value="Ekle" >Not güncelle</button>
 								   	</td>
 								   	</form:form>
@@ -307,6 +310,7 @@ $(document).ready(function(){
 							<th>Dersin dili</th>
 							<th>Kredi</th>
 							<th>AKTS</th>
+							<th>Lab</th>
 							<th>Başarı notu</th>
 						</tr>
 					</thead>
@@ -319,6 +323,7 @@ $(document).ready(function(){
 								  	<td> ${info.subLang}  </td>
 								   	<td> ${info.subCredit}  </td>
 								   	<td> ${info.subAkts}  </td>
+								   	<td> ${info.subLab}  </td>
 								   	<td> ${info.subMark}  </td>
 								</tr>
 							</c:if>

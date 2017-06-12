@@ -3,6 +3,7 @@ package com.mertaydar.springmvcsecurity.controller;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +21,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mertaydar.springmvcsecurity.dao.ActivationDAO;
+import com.mertaydar.springmvcsecurity.dao.MailSend;
+import com.mertaydar.springmvcsecurity.dao.PassactivationDAO;
 import com.mertaydar.springmvcsecurity.dao.StudentDAO;
 import com.mertaydar.springmvcsecurity.dao.UserDAO;
 import com.mertaydar.springmvcsecurity.dao.UserRoleDAO;
@@ -27,6 +30,8 @@ import com.mertaydar.springmvcsecurity.entity.Activation;
 import com.mertaydar.springmvcsecurity.model.StudentInfo;
 import com.mertaydar.springmvcsecurity.model.UserInfo;
 import com.mertaydar.springmvcsecurity.model.UserRoleInfo;
+
+import com.mertaydar.springmvcsecurity.entity.Passactivation;
 
 @Controller
 //Enable Hibernate Transaction.
@@ -45,7 +50,13 @@ public class UserController {
 	private UserRoleDAO userRoleDAO;
 	
 	@Autowired
+	private PassactivationDAO passactivationDAO;
+	
+	@Autowired
 	private ActivationDAO activationDAO;
+	
+	@Autowired
+	private MailSend mailSend;
 	
 	@RequestMapping(value = "/saveUser", method = RequestMethod.POST)
 	public String saveUser(Model model, //
@@ -92,6 +103,81 @@ public class UserController {
 //		return "redirect:/deptList";
 		return "redirect:/login";
 	}
+	
+	@RequestMapping(value = "/changePass", method = RequestMethod.POST)
+	public String changePass(Model model, Principal principal, @ModelAttribute("userForm") @Validated UserInfo userInfo,final RedirectAttributes redirectAttributes) {
+		if(userInfo.getPassword().equals(userInfo.getPasswordConf())) {
+			System.out.println("Pass equals");
+			UserInfo user = userDAO.findLoginUserInfo(principal.getName());
+			PasswordEncoder encoder = new BCryptPasswordEncoder();
+			user.setPassword(encoder.encode(userInfo.getPassword()));
+			userDAO.saveUser(user);
+			redirectAttributes.addFlashAttribute("msg", "Şifreniz değiştirildi.");
+			return "redirect:/userInfo";
+		}
+		redirectAttributes.addFlashAttribute("msg", "Şifre eşleşmedi. Girdileri kontrol edin");
+		return "redirect:/welcome";
+	}
+	
+	@RequestMapping(value = "/forgotPass", method = RequestMethod.POST)
+	public String forgotPass(Model model, @ModelAttribute ("userForm") @Validated UserInfo userInfo,	final RedirectAttributes redirectAttributes) {
+		if (userDAO.findLoginUserInfoWithEmail(userInfo.getEmail()) == null) {
+			redirectAttributes.addFlashAttribute("msg", "E-mail bulunamadı.");
+			return "redirect:/login";
+		}
+		else {
+			String code = getSaltString();
+			passactivationDAO.savePassactivation(new Passactivation(null, userDAO.findLoginUserInfoWithEmail(userInfo.getEmail()).getId(), code ));
+			mailSend.sendSimpleMessage(userInfo.getEmail(), "Şifre yenileme", "http://localhost:8080/AMS/repass?code="+code);
+			redirectAttributes.addFlashAttribute("signupMsg", "Şifre yenileme linki yollandı.");;
+			return "redirect:/login";
+		}
+	}
+	
+	@RequestMapping(value = "/repass", method = RequestMethod.GET)
+	public String repass(Model model, @RequestParam String code,	final RedirectAttributes redirectAttributes) {
+		Passactivation act = passactivationDAO.findPassactivationWithCode(code);
+		if (act != null) {
+			System.out.println("act uid:"+act.getUserId());
+			UserInfo user = userDAO.findUserInfo(act.getUserId());
+			System.out.println(user.getUsername());
+			model.addAttribute("user", user);
+			model.addAttribute("signupMsgSuccess", "Yeni şifrenizi  giriniz.");
+			return "newPass";
+		}
+		else {
+			return "redirect:/403";
+		}
+	}
+	
+	@RequestMapping(value = "/refreshPass", method = RequestMethod.POST)
+	public String refreshPass(Model model, Principal principal, @ModelAttribute("userForm") @Validated UserInfo userInfo,final RedirectAttributes redirectAttributes) {
+		if(userInfo.getPassword().equals(userInfo.getPasswordConf())) {
+			System.out.println("Pass equals");
+			UserInfo user = userDAO.findUserInfo(userInfo.getId());
+			PasswordEncoder encoder = new BCryptPasswordEncoder();
+			user.setPassword(encoder.encode(userInfo.getPassword()));
+			userDAO.saveUser(user);
+			redirectAttributes.addFlashAttribute("signupMsg", "Şifreniz değiştirildi.");
+			passactivationDAO.deletePassactivationWithUser(userInfo.getId());
+			return "redirect:/login";
+		}
+		redirectAttributes.addFlashAttribute("signupMsg", "Şifreniz değiştirilemedi.");
+		return "redirect:/login";
+	}
+	
+	protected String getSaltString() {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 18) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        String saltStr = salt.toString();
+        return saltStr;
+
+    }
 	
 	@RequestMapping(value = "/activate", method = RequestMethod.GET)
 	public String activate(Model model, @RequestParam String code,	final RedirectAttributes redirectAttributes) {

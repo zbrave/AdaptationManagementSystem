@@ -246,6 +246,9 @@ public class RulesController {
 		if (rulesDAO.isDuplicate(rulesInfo)){
 			redirectAttributes.addFlashAttribute("message5", "Kural zaten eklenmiş.");
 		}
+		else if (rulesInfo.getSubstituteLessonId() < 1 || rulesInfo.getTakingLessonId() < 1) {
+			redirectAttributes.addFlashAttribute("message5", "Hatalı kural seçimi.");
+		}
 		else if (substituteLessonDAO.findSubstituteLessonInfo(rulesInfo.getSubstituteLessonId()).getLab() > takingLessonDAO.findTakingLessonInfo(rulesInfo.getTakingLessonId()).getLab()) {
 			redirectAttributes.addFlashAttribute("message5", "Lab. saati eşit veya büyük olmalı.");
 		}
@@ -256,8 +259,11 @@ public class RulesController {
 			// Add message to flash scope
 			redirectAttributes.addFlashAttribute("message5", "Kural eklendi.");
 		}
-		int deptId = takingLessonDAO.findTakingLessonInfo(rulesInfo.getTakingLessonId()).getDeptId();; 
-		int uniId = deptDAO.findDeptInfo(deptId).getUniId();
+		int deptId = 0, uniId = 0;
+		if (rulesInfo.getTakingLessonId() > 0)
+			deptId = takingLessonDAO.findTakingLessonInfo(rulesInfo.getTakingLessonId()).getDeptId();
+		if (deptId > 0)
+			uniId = deptDAO.findDeptInfo(deptId).getUniId();
 		
 //		return "redirect:/rulesList";
 		return "redirect:/addRules?id="+uniId+"&id2="+deptId;

@@ -184,7 +184,7 @@ public class TakingLessonController {
 
 		// Important!!: Need @EnableWebMvc1
 		// Add message to flash scope
-		redirectAttributes.addFlashAttribute("message3", "Alınan ders eklendi.");
+		redirectAttributes.addFlashAttribute("message3", "Ders eklendi/güncellendi.");
 
 //		return "redirect:/takingLessonList";
 		return "redirect:/addRules?id="+deptDAO.findDeptInfo(takingLessonInfo.getDeptId()).getUniId()+"&id2="+takingLessonInfo.getDeptId()+"#takingLessonTab";

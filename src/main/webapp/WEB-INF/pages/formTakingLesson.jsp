@@ -57,31 +57,31 @@ $(document).ready(function(){
 		<form:hidden path="id" />
 	       <form:hidden path="deptId" />
 	       
-	       <label class="control-label">Ders Adı</label>
+	       <label class="control-label">Ders Adı</label><form:errors path="name" class="error-message" />
 	                  
 	       <form:input id="name" path="name" class="form-control input-sm" name="name" type="text" value="" style="height: 35px!important"/>
 	       
-	       <label class="control-label">Ders Kodu</label>
+	       <label class="control-label">Ders Kodu</label><form:errors path="code" class="error-message" />
 	                  
 	       <form:input id="code" path="code" class="form-control input-sm" name="code" type="text" value="" style="height: 35px!important"/>
 	       
-	       <label class="control-label">Ders Dili</label>
+	       <label class="control-label">Ders Dili</label><form:errors path="lang" class="error-message" />
 	                  
 	       <form:input id="lang" path="lang" class="form-control input-sm" name="lang" type="text" value="" style="height: 35px!important"/>
 	       
-	       <label class="control-label">Kredi</label>
+	       <label class="control-label">Kredi</label><form:errors path="credit" class="error-message" />
 	       
 	       <form:input id="credit" path="credit" class="form-control input-sm" name="credit" type="text" value="" style="height: 35px!important"/>
 	       
-	       <label class="control-label">AKTS</label>
+	       <label class="control-label">AKTS</label><form:errors path="akts" class="error-message" />
 	       
 	       <form:input id="akts" path="akts" class="form-control input-sm" name="akts" type="text" value="" style="height: 35px!important"/>
 	       
-	       <label class="control-label">Lab Saati</label>
+	       <label class="control-label">Lab Saati</label><form:errors path="lab" class="error-message" />
 	       
 	       <form:input id="lab" path="lab" class="form-control input-sm" name="lab" type="text" value="" style="height: 35px!important"/>
 	
-			<label class="control-label">Ders Dönemi</label>
+			<label class="control-label">Ders Dönemi</label><form:errors path="term" class="error-message" />
 	                   
         	<form:input id="term" path="term" class="form-control input-sm" name="term" type="text" value="" style="height: 35px!important"/>
 	<div class="clearfix"></div><br/>
